@@ -1,0 +1,206 @@
+version: '2'
+services:
+
+  consul:
+    image: mobileapps.vaftl.us:9250/ckm/consul-server
+    command: "consul agent -server -bootstrap-expect=1 -ui -client 0.0.0.0 -data-dir /consul/data -config-dir /consul/config"
+    volumes:
+     - "/consul/data"
+     - "/consul/config"
+    ports:
+     - "8500:8500"
+     - "8600:8600/udp"
+
+  # Registrator is a special container that monitors and registers other containers in Consul.
+  # https://github.com/gliderlabs/registrator
+  #
+
+  registrator:
+    image: mobileapps.vaftl.us:9250/ckm/registrator
+    command: "-tags local -internal consul://consul:8500"
+    volumes:
+    - /var/run/docker.sock:/tmp/docker.sock
+    environment:
+     - CONSUL_HTTP_TOKEN=7BE784A4-7498-4469-BE2F-9C3B9444DFEF
+    links:
+    - consul
+
+  # The API Gateway. Nginx with a few "enhancements":
+  #
+  # * Openresty: Framework that enables building Nginx plugins with Lua
+  # * Consul-Template: Rewrites _nginx.conf_ based on Consul configurations
+  #
+  apigateway:
+    image: mobileapps.vaftl.us:9250/ckm/apigateway:1.3
+    ports:
+      - "8089:80"
+    environment:
+    # Local consul instance. Point to central Consul server for non-development deployments
+    - CONSUL_HTTP_ADDR=consul:8500
+    - VAMF_ENVIRONMENT=local # The API Gateway will only map services tagged with same environment
+    - USERSVC_URL=http://user-services:8080/users/v1/session/jwt
+    - JWT_SECRET=testtesttest
+    - SERVICE_80_NAME=apigateway
+    - CONSUL_TOKEN=7BE784A4-7498-4469-BE2F-9C3B9444DFEF
+    - "REGEX_AUTH_PROXY=.*"
+    - "REGEX_RESTRICTED_HEADER=((^va_)|(^eauth_))/i"
+    links:
+    - registrator
+    - consul
+    - user-services
+    - roa-services
+
+  # Identity Provider Mock- Injects HTTP headers to simulate SSOi/SSOe proxy header injection
+  #
+  mock-idp:
+    image: mobileapps.vaftl.us:9250/ckm/docker-proxy-idp-mock
+    ports:
+      - "8080:80"
+    environment:
+    - "USER_ATTRIBUTES={\"va_eauth_dodedipnid\":\"1113138327\",\"va_eauth_firstname\":\"Test\",\"va_eauth_lastname\":\"User\"}"
+    - "SERVICE_NAME=proxy-idp"
+    links:
+    - apigateway
+
+  # Right of Access (ROA) service and oracle DB mock. ROA is an internal service that allows veterans to review and grant
+  # access to their medical information. Veteran users must complete ROA before they can use any other mobile app.
+  #
+  mock-roa:
+    image: mobileapps.vaftl.us:9250/ckm/docker-roa-mock:latest
+    ports:
+     - "1521:1521"
+
+  roa-services:
+    image: mobileapps.vaftl.us:9250/ckm/docker-roa-service:latest
+    links:
+    - mock-roa
+    depends_on: 
+     - mock-roa
+    ports:
+     - "8086:8080"
+    environment:
+    - DB_ROA_HOST=mock-roa
+    - DB_ROA_PORT=1521
+    - DB_ROA_SID=xe
+    - DB_ROA_USERNAME=HADB
+    - DB_ROA_PASSWORD=m0ckpass01
+    - SERVICE_TAGS=local
+    - JAVA_OPTS=-Xms256m -Xmx512m -XX:-TieredCompilation -Xss256k -XX:+UseG1GC -XX:+UseStringDeduplication
+    - JWT_SECRET=testtesttest
+    - CONSUL_SERVER=consul:8500
+    - CONSUL_TOKEN=7BE784A4-7498-4469-BE2F-9C3B9444DFEF
+    - CONSUL_PATH=appconfig/local/roa-service
+
+# User service and Mobile Veteran (Patient) Index (MVI/MPI)- The user service is responsible for processing requests
+  # to create JWT security tokens and augmenting user identities with other identifiers from the MVI (specifically ICN)
+  #
+  mock-mvi:
+    image: mobileapps.vaftl.us:9250/ckm/docker-mvi-mock
+
+  user-services:
+    image: mobileapps.vaftl.us:9250/ckm/docker-user-service:latest
+    links:
+    - mock-mvi
+    - roa-services
+    depends_on:
+     - mock-mvi
+    ports:
+     - "8081:8080"
+    environment:
+    - MVI_URL=http://mock-mvi:8080/mvi/mockVAIdMPort  
+    - ROA_HOST=http://roa-services:8080 
+    - MVI_SENDER_ID=CIH200
+    - MCI_PROCESSING_CODE=T
+    - JWT_SECRET=testtesttest
+    - JAVA_OPTS=-Xms256m -Xmx512m -XX:-TieredCompilation -Xss256k -XX:+UseG1GC -XX:+UseStringDeduplication
+    - SERVICE_TAGS=local
+    - CONSUL_SERVER=consul:8500
+    - CONSUL_TOKEN=7BE784A4-7498-4469-BE2F-9C3B9444DFEF
+    - CONSUL_PATH=appconfig/local/user-service
+    - APIGW_BASE_URL=http://localhost:8089
+    - WAYF_APP_URL=http://localhost:8089/wayf/v1/index.html
+    - "MVI_VISTA_FACILITIES=101,111,222,313,372,376,442,500,516,553,631,688,777"
+    - "JAVA_OPTS=-agentlib:jdwp=transport=dt_socket,address=8000,server=y,suspend=n"
+    - "JWTISSUER_CONFIG_JSON=[{\"rsaPublicKeyB64\":\"MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAtxwSTqAC49xXxWIX/kpb4EWXjnpN8ii5FbjAOmubKA32ZVHC+OSj14uRkKJp5EgU0aOO6cbm7jTnGjOFq+KC540qtBMP6/bd/rcXNCb7t8ajb2eWC1PdvYCrpXM/IAZvdrOGhc9sU+8DeZj2dJg+WIlWkrnXsHMbAd5ePt1mCx6NPADFBRVSJg9MAN04yzBAcgmAeOgcZGYqHcihov3hIi0UnAwi0wtBHIquGcRKhUAG5clOY3YxyNJZ2HWglrCHtz1sHe7OGFBfGGR18C+S6CK7GDB2zm3IkJ16uqf/F3s+tF7u88mE3t6gr/Y/1U6OH99xm1Ta0Yqzie351qEXSwIDAQAB\",\"iss\":\"gov.va.mhv.idp.v1\",\"userType\":\"VETERAN\"},{\"rsaPublicKeyB64\":\"MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAtxwSTqAC49xXxWIX/kpb4EWXjnpN8ii5FbjAOmubKA32ZVHC+OSj14uRkKJp5EgU0aOO6cbm7jTnGjOFq+KC540qtBMP6/bd/rcXNCb7t8ajb2eWC1PdvYCrpXM/IAZvdrOGhc9sU+8DeZj2dJg+WIlWkrnXsHMbAd5ePt1mCx6NPADFBRVSJg9MAN04yzBAcgmAeOgcZGYqHcihov3hIi0UnAwi0wtBHIquGcRKhUAG5clOY3YxyNJZ2HWglrCHtz1sHe7OGFBfGGR18C+S6CK7GDB2zm3IkJ16uqf/F3s+tF7u88mE3t6gr/Y/1U6OH99xm1Ta0Yqzie351qEXSwIDAQAB\",\"iss\":\"external.idp.test1\",\"userType\":\"VETERAN\"},{\"rsaPublicKeyB64\":\"MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA17igsXGfpg3BRv1dr9jAyhyjGUpDSQ1CCIjQI/NZD+OoxoTlvPMmY8yQ3OfisnpE7zR+dNAdj7CHCiCbKgQKjPmOzdobKJD7N8538lxZ2wlHNko0rG3iyCKJVRJFMXirZfrPERlFj0AQrwhobIpuwyFQfsNTZPaxeaN35Bexo7fowu0LBkzvCioZfKq6QPxx8qQ0/wJYxeh3D4b5NWR1eIbWpJE5NbWYx0ZSs/TD5HQTAGsIvJN5+EKzVB1RZAp0UwdxDQE7BjpXBXx0PjZidCY2kH2jVm1OHd/xzkZiIt2EYe5Cpd/CuLfWjzxHv6pCkC8I0a6qljQNS9iOQc6blwIDAQAB\",\"iss\":\"gov.va.vamf.service.saml-sts\",\"userType\":\"VETERAN\"}]"
+    - "IDP_CONFIG_JSON=[{\"idpId\": \"gov.va.iam.ssoe.v1\",\"friendlyName\": \"VAAFI SSOe\",\"description\": \"Veteran login supporting DSLogon, Symantec, and other CSPs.\",\"versionId\": \"v1\",\"scope\": \"VETERAN\",\"logoUrl\": \"img/dslogon-logo.png\",\"loginUrl\": \"http://localhost:9000/users/v1/landing\",\"logoutUrl\": \"http://localhost:9000/ssoeproxy/logout\",\"vamfLandingPage\": \"http://localhost/users/v1/landing\"},{\"idpId\": \"gov.va.iam.ssoi.v1\",\"friendlyName\": \"VAAFI SSOi\",\"description\": \"Staff login supporting PIV authentication.\",\"versionId\": \"v1\",\"scope\": \"STAFF\",\"logoUrl\": \"img/logo_navbar_ipad.png\",\"loginUrl\": \"http://localhost/vaafi/ssoimock/login\",\"logoutUrl\": \"http://localhost/vaafi/ssoemock/logout\",\"vamfLandingPage\": \"http://localhost/users/v1/landing\"},{\"idpId\": \"gov.va.mhv.v1\",\"friendlyName\": \"My HealtheVet\",\"description\": \"Staff login supporting PIV authentication.\",\"versionId\": \"v1\",\"scope\": \"VETERAN\",\"logoUrl\": \"img/mhv-logo.png\",\"loginUrl\": \"http://localhost/vaafi/ssoimock/login\",\"logoutUrl\": \"http://localhost/vaafi/ssoemock/logout\",\"vamfLandingPage\": \"http://localhost/users/v1/landing\"}]"
+
+## ROA WEB
+
+  roa-web:
+    image: mobileapps.vaftl.us:9250/ckm/docker-roa-web
+    ports:
+     - "8087:80"
+    environment:
+    - SERVICE_TAGS=local
+    - SERVICE_NAME=roa-web
+
+## Swagger UI for working with contracts
+  swagger-ui:
+    image: swaggerapi/swagger-ui
+    ports:
+     - "8091:8080"
+
+# Where Are You From? (WAYF) web App. WAYF is a CSS/HTML/JS client-side web application.
+  wayf-web:
+    image: mobileapps.vaftl.us:9250/ckm/wayf-app
+    ports:
+    - 8092:80
+    environment:
+    - SERVICE_TAGS=local
+    - SERVICE_80_NAME=wayf-web
+
+  # IAM SSOe Mock - Injects HTTP headers to simulate SSOe token header injection. Allows log in/out.
+  #
+  iamssoe-proxy-mock:
+    image: mobileapps.vaftl.us:9250/ckm/idp-mock/iamssoe-proxy-mock:latest
+    #image: local-idp
+    ports:
+      - 9000:80
+    environment:
+      - DB_HOST=iamssoe-db-mock
+      - DB_PASSWORD=MySqlAdmin$$
+      - API_GATEWAY_URL=http://apigateway
+    volumes:
+      - /tmp/ssoenothing:/usr/local/openresty/nginx/conf/secured
+
+  # Mock database to store identity information
+  iamssoe-db-mock:
+    image: mobileapps.vaftl.us:9250/ckm/idp-mock/iamssoe-db-mock:latest
+    environment:
+      - MYSQL_ROOT_PASSWORD=MySqlAdmin$$
+      - MYSQL_DATABASE=MockUser
+
+  var-web:
+    image: dev/var-web
+    ports:
+    - "9090:80"
+    environment:
+    - SERVICE_TAGS=local
+    - SERVICE_NAME=var-web
+
+  var-messaging-microservice:
+    image: dev/var-messaging-microservice
+    expose:
+    - "8080"
+    environment:
+    - SERVICE_TAGS=local
+    - SERVICE_NAME=var-messaging-microservice
+
+  var-resources:
+    image: dev/var-resources
+    links:
+     - var-messaging-microservice
+     - mock-mvi
+    depends_on:
+     - var-messaging-microservice
+     - mock-mvi
+    ports:
+     - "9092:8080"
+     - "64058:64058"
+    environment:
+     - SERVICE_64058_IGNORE=true
+     - SERVICE_TAGS=local
+     - SERVICE_NAME=var-resources
+     - mock.mvi=true
+     - JWT_SECRET=testtesttest
+     - JAVA_OPTS=-XX:+CMSClassUnloadingEnabled -Xrs -Dcom.sun.xml.ws.transport.http.client.HttpTransportPipe.dump=true -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=64058
