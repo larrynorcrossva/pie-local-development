@@ -186,13 +186,23 @@ services:
     - SERVICE_TAGS=local
     - SERVICE_NAME=var-messaging-microservice
 
+  facility-service:
+    image: dev/facility-service
+    expose:
+    - "8080"
+    environment:
+    - SERVICE_TAGS=local
+    - SERVICE_NAME=vfacility-service
+
   var-resources:
     image: dev/var-resources
     links:
      - var-messaging-microservice
+     - facility-service
      - mock-mvi
     depends_on:
      - var-messaging-microservice
+     - facility-service
      - mock-mvi
     ports:
      - "9092:8080"
