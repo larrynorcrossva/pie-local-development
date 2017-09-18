@@ -44,11 +44,13 @@ services:
     - CONSUL_TOKEN=7BE784A4-7498-4469-BE2F-9C3B9444DFEF
     - "REGEX_AUTH_PROXY=.*"
     - "REGEX_RESTRICTED_HEADER=((^va_)|(^eauth_))/i"
+    - "TRACE_URL=http://zipkin:9411/api/v1/spans"
     links:
     - registrator
     - consul
     - user-services
     - roa-services
+    - zipkin
 
   # Identity Provider Mock- Injects HTTP headers to simulate SSOi/SSOe proxy header injection
   #
@@ -102,11 +104,19 @@ services:
     links:
     - mock-mvi
     - roa-services
+    - zipkin
+    - vault
     depends_on:
      - mock-mvi
     ports:
      - "8081:8080"
     environment:
+    - "TRACE_URL=http://zipkin:9411/api/v1/spans"
+    - VAMF_ENVIRONMENT=local
+    - VAULT_ADDR=http://vault:8200
+    - SECRET_PATH=secret/local/user-services
+    - USE_ENVCONSUL=true
+    - SERVER_USE_FORWARD_HEADERS=true
     - MVI_URL=http://mock-mvi:8080/mvi/mockVAIdMPort  
     - ROA_HOST=http://roa-services:8080 
     - MVI_SENDER_ID=CIH200
@@ -169,6 +179,17 @@ services:
     environment:
       - MYSQL_ROOT_PASSWORD=MySqlAdmin$$
       - MYSQL_DATABASE=MockUser
+  
+  zipkin:
+    image: mobileapps.vaftl.us:9250/ckm/k8-pod-infra-containers/zipkin
+    ports:
+      - "9411:9411"
+
+  #vault server for managing secrets 
+  vault:
+    image: mobileapps.vaftl.us:9250/ckm/vault-server:latest
+    ports:
+      - 8202:8200
 
   var-web:
     image: dev/var-web
