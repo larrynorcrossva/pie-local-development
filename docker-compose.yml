@@ -109,7 +109,7 @@ services:
     depends_on:
      - mock-mvi
     ports:
-     - "8081:8080"
+     - "8017:8080"
     environment:
     - "TRACE_URL=http://zipkin:9411/api/v1/spans"
     - VAMF_ENVIRONMENT=local
