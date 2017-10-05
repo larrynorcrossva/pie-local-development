@@ -7,7 +7,7 @@ echo "\nCheck for and Pull the latest docker images..\n"
 docker-compose pull --ignore-pull-failures 
 
 #start consul first
-echo "\nStarting Consul and Vault…\n"
+echo "\nStarting Consul and Vault\n"
 docker-compose up -d consul vault || (echo "*** FAILED: Could not start Consul using docker-compose." && exit -1)
 
 # Wait 10s for consul to start up, then register endpoints
@@ -30,6 +30,9 @@ curl -H "X-Consul-Token: 7BE784A4-7498-4469-BE2F-9C3B9444DFEF" -s -X PUT localho
 
 echo "\nBootstrap Vault...\n"
 
+## Alow time for Vault to start
+sleep 15s
+
 VAMF_ENVIRNOMENT=local
 ADMIN_VAULT_TOKEN=92389390-D796-490A-A91F-44CA582AA661
 VAULT_ADDR=http://localhost:8202
@@ -42,7 +45,7 @@ curl -X POST -H "X-Vault-Token: $ADMIN_VAULT_TOKEN" -d @${VAMF_ENVIRNOMENT}.json
 ### MODIFY THE CIDR BLOCK TO MATCH THE ENVIROMMENT ######
 ## Create a Role and add the Policy
 #########################################################
-curl -X POST -H "X-Vault-Token: $ADMIN_VAULT_TOKEN" -d '{ "policies":"'${VAMF_ENVIRNOMENT}'-read", "bind_secret_id":false,"bound_cidr_list":"172.16.0.0/12", "role_id":"'${VAMF_ENVIRNOMENT}'-read"}' $VAULT_ADDR/v1/auth/approle/role/${VAMF_ENVIRNOMENT}-read
+curl -X POST -H "X-Vault-Token: $ADMIN_VAULT_TOKEN" -d '{ "policies":"'${VAMF_ENVIRNOMENT}'-read", "bind_secret_id":false,"bound_cidr_list":"0.0.0.0/0", "role_id":"'${VAMF_ENVIRNOMENT}'-read"}' $VAULT_ADDR/v1/auth/approle/role/${VAMF_ENVIRNOMENT}-read
 
 ### Add JWT secrets for microservice
 curl -X POST -H "X-Vault-Token: $ADMIN_VAULT_TOKEN" -d '{"JWT_SECRET" : "testtesttest"}' $VAULT_ADDR/v1/secret/${VAMF_ENVIRNOMENT}/user-services

@@ -18,12 +18,13 @@ This project if for developer convenience, any issues identified with micro serv
 ## To Run
 1. `git clone https://coderepo.mobilehealth.va.gov/scm/dev/docker-local-development.git`
 2. `cd docker-local-development`
-1. `docker login https://mobileapps.vaftl.us:9250`
-2. `sh run.sh`
+3. `docker login https://mobileapps.vaftl.us:9250`
+4. **Note:** The script no longer pulls the latest images by default, to force compose to check for the latest images in the registry run `sh run.sh latest` otherwise run: `sh run.sh`
+
 
 The script will check for the latest version of each docker image on https://mobileapps.vaftl.us. It will then stand up Consul, API GW a Mock IDP and the following:
 
-### Micro Services (offical Stash Repos):
+### Micro Services (official Stash Repos):
 - Clinical Data Warehouse (CDW) - https://coderepo.mobilehealth.va.gov/projects/CDWMS/repos/docker-cdw-service/browse
 - Administrative Data Repository (ADR) - https://coderepo.mobilehealth.va.gov/projects/VAMFC/repos/docker-adr-services/browse
 - Right of Access (ROA) - https://coderepo.mobilehealth.va.gov/projects/VDMS/repos/docker-roa-service/browse
@@ -33,7 +34,7 @@ The script will check for the latest version of each docker image on https://mob
 - Vista Data Services (VDS) - https://coderepo.mobilehealth.va.gov/projects/VDSMS/repos/vista-data-services/browse
 - Health Data Repository (HDR) Service - https://coderepo.mobilehealth.va.gov/projects/VAMFC/repos/hdr-mock/browse
 - Staff User Disclosure (SUD) Data Service - https://coderepo.mobilehealth.va.gov/projects/VDMS/repos/sud-service/browse
-- Notification Services - https://coderepo.mobilehealth.va.gov/projects/VDMS/repos/vamf-notification-services/browse
+- Patient Notification Services (PNS) - https://coderepo.mobilehealth.va.gov/projects/VDMS/repos/vamf-notification-services/browse
 
 ### Helper Apps
 - Where Are You From (WAYF) - https://coderepo.mobilehealth.va.gov/projects/IUMS/repos/wayf-app/browse
@@ -60,10 +61,10 @@ Swagger UI is available on http://localhost:8091
 - ADR: http://localhost:8083/adr/v1/
 - ROA: http://localhost:8086/roa/v1/
 - User Service: http://localhost:8081/users/v1/
-- VDS: http://localhost:8085/VistaDataServices
+- VDS: http://localhost:8085/VistaDataServices/v1/
 - HDR: http://localhost:8089/hdr/v1/
 - SUD: http://localhost:8089/sud/v1/
-- Notifications: http://localhost:8098/NotificationServices
+- PNS: http://localhost:8098/pns/v1/
 
 ## MBB Sample Application
 
@@ -80,10 +81,30 @@ We are simulating the redirect triggered by MBB:
 
 ## Working with the environment
 
+### Vault
+Vault is used to store secrets securely. The server is set up in dev mode and uses Consul for its storage backend. See the Vault [README](https://coderepo.mobilehealth.va.gov/projects/PPG/repos/vault-server/browse) for more detailed guides on working with Vault.
+
+- Vault **Server Address**: http://localhost:8202
+- Vault **Root Token**: 92389390-D796-490A-A91F-44CA582AA661 
+- Vault is bootstrapped with the following **Role ID**: local-read
+
+An application can login with this **Role ID** and receive a client token. This token will allow read access to the path `secret/local` in Vault
+
+Login API:
+```
+curl -X POST -d '{"role_id":"local-read" }' http://localhost:8202/v1/auth/approle/login
+```
+
+Applications can use this token with ENVCONSUL, Consul-Template, or with the Vault API to read secrets at container run time.
+
 ### Notification Services
 The notification REST service works with the Quartz scheduler container as well as the mongo mock (for streing notifications) and the ROA Mock. This is meant to be an internal service not exposed by the API Gateway. You can send a health check with a GET request to:
 
-`http://localhost:8098/NotificationServices/healthcheck/ping`
+`http://localhost:8098/pns/v1/healthcheck/ping`
+
+Check that PNS is talking to Quartz
+
+`http://localhost:8098/pns/v1/healthcheck/ping-quartz-scheduler`
 
 
 ### Testing SUD Service
@@ -139,10 +160,10 @@ You can work with Consul via its Web UI or via it's REST endpoints. You will nee
 Would store a Key Value pair of MY_ENV=value in the `appconfig/local/myapp/v1/` folder of Consul's KV store.
 
 
-## To Stop
-1. run `sh stop.sh`
-This will bring down all of the containers but not remove them. If you wish to remove them use:
-`docker-compose rm`
+### To Stop
+1. run `sh stop.sh` This will bring down all of the containers but not remove them. 
+
+2. If you wish to remove them use: `docker-compose rm`
 
 Full docker compose [cli reference](https://docs.docker.com/compose/reference/overview/) 
 

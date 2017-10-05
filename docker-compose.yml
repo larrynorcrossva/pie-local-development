@@ -74,9 +74,10 @@ services:
 
   roa-services:
     image: mobileapps.vaftl.us:9250/ckm/docker-roa-service:latest
+    restart: on-failure
     links:
     - mock-roa
-    depends_on: 
+    depends_on:
      - mock-roa
     ports:
      - "8086:8080"
@@ -92,6 +93,7 @@ services:
     - CONSUL_SERVER=consul:8500
     - CONSUL_TOKEN=7BE784A4-7498-4469-BE2F-9C3B9444DFEF
     - CONSUL_PATH=appconfig/local/roa-service
+    - DB_ROA_URL=jdbc:oracle:thin:@mock-roa:1521:xe #used in place of creating a url at startup
 
 # User service and Mobile Veteran (Patient) Index (MVI/MPI)- The user service is responsible for processing requests
   # to create JWT security tokens and augmenting user identities with other identifiers from the MVI (specifically ICN)
@@ -109,14 +111,14 @@ services:
     depends_on:
      - mock-mvi
     ports:
-     - "8017:8080"
+     - "8081:8080"
     environment:
-    - "TRACE_URL=http://zipkin:9411/api/v1/spans"
     - VAMF_ENVIRONMENT=local
     - VAULT_ADDR=http://vault:8200
     - SECRET_PATH=secret/local/user-services
     - USE_ENVCONSUL=true
     - SERVER_USE_FORWARD_HEADERS=true
+    - TRACE_URL=http://zipkin:9411/api/v1/spans
     - MVI_URL=http://mock-mvi:8080/mvi/mockVAIdMPort  
     - ROA_HOST=http://roa-services:8080 
     - MVI_SENDER_ID=CIH200
@@ -188,8 +190,12 @@ services:
   #vault server for managing secrets 
   vault:
     image: mobileapps.vaftl.us:9250/ckm/vault-server:latest
+    environment:
+      - VAULT_LOCAL_CONFIG={"storage":{"consul":{"address":"http://consul:8500", "token":"7BE784A4-7498-4469-BE2F-9C3B9444DFEF", "path":"vault", "scheme":"http"}}}
     ports:
       - 8202:8200
+    links:
+      - consul
 
   var-web:
     image: dev/var-web
