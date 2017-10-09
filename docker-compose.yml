@@ -114,7 +114,7 @@ services:
      - "8081:8080"
     environment:
     - VAMF_ENVIRONMENT=local
-    - VAULT_ADDR=http://vault:8200
+   # - VAULT_ADDR=http://vault:8200
     - SECRET_PATH=secret/local/user-services
     - USE_ENVCONSUL=true
     - SERVER_USE_FORWARD_HEADERS=true
