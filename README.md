@@ -15,11 +15,10 @@ This project if for developer convenience, any issues identified with micro serv
 3. WMSACT Innovations Gitlab Account https://wiki.mobilehealth.va.gov/display/WMSACT/Innovations
 4. At least 8G of RAM
 
-## To Run
-1. `git clone https://coderepo.mobilehealth.va.gov/scm/dev/docker-local-development.git`
-2. `cd docker-local-development`
-3. `docker login https://mobileapps.vaftl.us:9250`
-4. **Note:** The script no longer pulls the latest images by default, to force compose to check for the latest images in the registry run `sh run.sh latest` otherwise run: `sh run.sh`
+## To Run 
+Run from Project Directory:
+1. `docker login https://mobileapps.vaftl.us:9250`
+2. **Note:** The script no longer pulls the latest images by default, to force compose to check for the latest images in the registry run `sh run.sh latest` otherwise run: `sh run.sh`
 
 
 The script will check for the latest version of each docker image on https://mobileapps.vaftl.us. It will then stand up Consul, API GW a Mock IDP and the following:
