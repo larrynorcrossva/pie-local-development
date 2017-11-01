@@ -197,6 +197,20 @@ services:
     links:
       - consul
 
+  mongo:
+    image: mongo:3.0
+    volumes:
+      - ./var-mongo-db:/docker-entrypoint-initdb.d/
+    ports:
+      - "27017"
+
+  oracle:
+    image: sath89/oracle-xe-11g
+    ports:
+      - "1521"
+    volumes:
+      - ./var-oracle-db:/docker-entrypoint-initdb.d
+
   var-web:
     image: dev/var-web
     ports:
@@ -233,10 +247,14 @@ services:
      - var-messaging-microservice
      - facility-service
      - mock-mvi
+     - mongo
+     - oracle
     depends_on:
      - var-messaging-microservice
      - facility-service
      - mock-mvi
+     - mongo
+     - oracle
     ports:
      - "9092:8080"
      - "64058:64058"
@@ -250,3 +268,5 @@ services:
      - mock.mvi=true
      - JWT_SECRET=testtesttest
      - JAVA_OPTS=-XX:+CMSClassUnloadingEnabled -Xrs -Dcom.sun.xml.ws.transport.http.client.HttpTransportPipe.dump=true -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=64058
+     - vardb_url=jdbc:oracle:thin:@oracle:1521:xe
+     - mongo.host=mongo:27017
