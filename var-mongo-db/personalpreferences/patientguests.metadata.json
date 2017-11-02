@@ -1,0 +1,1 @@
+{"options":{},"indexes":[{"v":1,"key":{"_id":1},"name":"_id_","ns":"personalpreferences.patientguests"},{"v":1,"unique":true,"key":{"patient.identifier.value":1,"patient.identifier.type.coding.code":2,"_id":3},"name":"patientIdentifierIndex","ns":"personalpreferences.patientguests"}]}

@@ -1,0 +1,1 @@
+{"options":{},"indexes":[{"v":1,"key":{"_id":1},"name":"_id_","ns":"personalprofiledb.communicationlogs"},{"v":1,"unique":true,"key":{"type":1,"recorded":1,"patientIdentifier.uniqueId":1,"patientIdentifier.assigningAuthority":1,"deletedFlag":1},"name":"CommunicationLogQueryIndex","ns":"personalprofiledb.communicationlogs","sparse":true}]}

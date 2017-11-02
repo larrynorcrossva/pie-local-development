@@ -1,0 +1,1 @@
+{"options":{},"indexes":[{"v":1,"key":{"_id":1},"name":"_id_","ns":"personalpreferences.learningmethod"},{"v":1,"unique":true,"key":{"patientIdentifier.value":1,"patientIdentifier.type.coding.code":2},"name":"learningmehtodIndex","ns":"personalpreferences.learningmethod"}]}
