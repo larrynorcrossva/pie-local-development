@@ -197,19 +197,25 @@ services:
     links:
       - consul
 
-  mongo:
+  var-mongo-db-mock:
     image: mongo:3.0
     volumes:
-      - ./var-mongo-db:/docker-entrypoint-initdb.d/
+      - ./var-mongo-db-mock:/docker-entrypoint-initdb.d/
     ports:
-      - "27017"
+      - "27017:27017"
+    environment:
+      - SERVICE_TAGS=local
+      - SERVICE_NAME=var-mongo-db-mock
 
-  oracle:
+  var-oracle-db-mock:
     image: sath89/oracle-xe-11g
     ports:
-      - "1521"
+      - "1521:1521"
     volumes:
-      - ./var-oracle-db:/docker-entrypoint-initdb.d
+      - ./var-oracle-db-mock:/docker-entrypoint-initdb.d
+    environment:
+      - SERVICE_TAGS=local
+      - SERVICE_NAME=var-oracle-db-mock
 
   var-web:
     image: dev/var-web
@@ -247,14 +253,14 @@ services:
      - var-messaging-microservice
      - facility-service
      - mock-mvi
-     - mongo
-     - oracle
+     - var-mongo-db-mock
+     - var-oracle-db-mock
     depends_on:
+     - var-oracle-db-mock
+     - var-mongo-db-mock
      - var-messaging-microservice
      - facility-service
      - mock-mvi
-     - mongo
-     - oracle
     ports:
      - "9092:8080"
      - "64058:64058"
