@@ -70,7 +70,7 @@ services:
   mock-roa:
     image: mobileapps.vaftl.us:9250/ckm/docker-roa-mock:latest
     ports:
-     - "1521:1521"
+     - "1521"
 
   roa-services:
     image: mobileapps.vaftl.us:9250/ckm/docker-roa-service:latest
@@ -114,7 +114,7 @@ services:
      - "8081:8080"
     environment:
     - VAMF_ENVIRONMENT=local
-   # - VAULT_ADDR=http://vault:8200
+    #- VAULT_ADDR=http://vault:8200
     - SECRET_PATH=secret/local/user-services
     - USE_ENVCONSUL=true
     - SERVER_USE_FORWARD_HEADERS=true
@@ -131,7 +131,7 @@ services:
     - CONSUL_PATH=appconfig/local/user-service
     - APIGW_BASE_URL=http://localhost:8089
     - WAYF_APP_URL=http://localhost:8089/wayf/v1/index.html
-    - "MVI_VISTA_FACILITIES=101,111,222,313,372,376,442,500,516,553,631,688,777"
+    - "MVI_VISTA_FACILITIES=101,111,222,313,372,376,442,500,516,553,631,688,777,523"
     - "JAVA_OPTS=-agentlib:jdwp=transport=dt_socket,address=8000,server=y,suspend=n"
     - "JWTISSUER_CONFIG_JSON=[{\"rsaPublicKeyB64\":\"MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAtxwSTqAC49xXxWIX/kpb4EWXjnpN8ii5FbjAOmubKA32ZVHC+OSj14uRkKJp5EgU0aOO6cbm7jTnGjOFq+KC540qtBMP6/bd/rcXNCb7t8ajb2eWC1PdvYCrpXM/IAZvdrOGhc9sU+8DeZj2dJg+WIlWkrnXsHMbAd5ePt1mCx6NPADFBRVSJg9MAN04yzBAcgmAeOgcZGYqHcihov3hIi0UnAwi0wtBHIquGcRKhUAG5clOY3YxyNJZ2HWglrCHtz1sHe7OGFBfGGR18C+S6CK7GDB2zm3IkJ16uqf/F3s+tF7u88mE3t6gr/Y/1U6OH99xm1Ta0Yqzie351qEXSwIDAQAB\",\"iss\":\"gov.va.mhv.idp.v1\",\"userType\":\"VETERAN\"},{\"rsaPublicKeyB64\":\"MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAtxwSTqAC49xXxWIX/kpb4EWXjnpN8ii5FbjAOmubKA32ZVHC+OSj14uRkKJp5EgU0aOO6cbm7jTnGjOFq+KC540qtBMP6/bd/rcXNCb7t8ajb2eWC1PdvYCrpXM/IAZvdrOGhc9sU+8DeZj2dJg+WIlWkrnXsHMbAd5ePt1mCx6NPADFBRVSJg9MAN04yzBAcgmAeOgcZGYqHcihov3hIi0UnAwi0wtBHIquGcRKhUAG5clOY3YxyNJZ2HWglrCHtz1sHe7OGFBfGGR18C+S6CK7GDB2zm3IkJ16uqf/F3s+tF7u88mE3t6gr/Y/1U6OH99xm1Ta0Yqzie351qEXSwIDAQAB\",\"iss\":\"external.idp.test1\",\"userType\":\"VETERAN\"},{\"rsaPublicKeyB64\":\"MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA17igsXGfpg3BRv1dr9jAyhyjGUpDSQ1CCIjQI/NZD+OoxoTlvPMmY8yQ3OfisnpE7zR+dNAdj7CHCiCbKgQKjPmOzdobKJD7N8538lxZ2wlHNko0rG3iyCKJVRJFMXirZfrPERlFj0AQrwhobIpuwyFQfsNTZPaxeaN35Bexo7fowu0LBkzvCioZfKq6QPxx8qQ0/wJYxeh3D4b5NWR1eIbWpJE5NbWYx0ZSs/TD5HQTAGsIvJN5+EKzVB1RZAp0UwdxDQE7BjpXBXx0PjZidCY2kH2jVm1OHd/xzkZiIt2EYe5Cpd/CuLfWjzxHv6pCkC8I0a6qljQNS9iOQc6blwIDAQAB\",\"iss\":\"gov.va.vamf.service.saml-sts\",\"userType\":\"VETERAN\"}]"
     - "IDP_CONFIG_JSON=[{\"idpId\": \"gov.va.iam.ssoe.v1\",\"friendlyName\": \"VAAFI SSOe\",\"description\": \"Veteran login supporting DSLogon, Symantec, and other CSPs.\",\"versionId\": \"v1\",\"scope\": \"VETERAN\",\"logoUrl\": \"img/dslogon-logo.png\",\"loginUrl\": \"http://localhost:9000/users/v1/landing\",\"logoutUrl\": \"http://localhost:9000/ssoeproxy/logout\",\"vamfLandingPage\": \"http://localhost/users/v1/landing\"},{\"idpId\": \"gov.va.iam.ssoi.v1\",\"friendlyName\": \"VAAFI SSOi\",\"description\": \"Staff login supporting PIV authentication.\",\"versionId\": \"v1\",\"scope\": \"STAFF\",\"logoUrl\": \"img/logo_navbar_ipad.png\",\"loginUrl\": \"http://localhost/vaafi/ssoimock/login\",\"logoutUrl\": \"http://localhost/vaafi/ssoemock/logout\",\"vamfLandingPage\": \"http://localhost/users/v1/landing\"},{\"idpId\": \"gov.va.mhv.v1\",\"friendlyName\": \"My HealtheVet\",\"description\": \"Staff login supporting PIV authentication.\",\"versionId\": \"v1\",\"scope\": \"VETERAN\",\"logoUrl\": \"img/mhv-logo.png\",\"loginUrl\": \"http://localhost/vaafi/ssoimock/login\",\"logoutUrl\": \"http://localhost/vaafi/ssoemock/logout\",\"vamfLandingPage\": \"http://localhost/users/v1/landing\"}]"
@@ -275,7 +275,7 @@ services:
      - JWT_SECRET=testtesttest
      - JAVA_OPTS=-XX:+CMSClassUnloadingEnabled -Xrs -Dcom.sun.xml.ws.transport.http.client.HttpTransportPipe.dump=true -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=64058
      - vardb_url=jdbc:oracle:thin:@oracle:1521:xe
-     - mongo.host=mongo:27017
+     - mongo.host=var-mongo-db-mock:27017
 
   vmr-mock-service:
     image: dtr-demo.vaftl.us/vamis/vmr-mock-service:latest
@@ -306,7 +306,7 @@ services:
   video-visits-service:
     image: dtr-demo.vaftl.us/vamis/video-visits-service:3.0.0
     ports:
-      - 8079:8080
+      - "8079:8080"
     links:
       - vmr-mock-service
       - video-visits-mongo-mock
@@ -326,7 +326,7 @@ services:
   veteran-video-connect-service:
     image: dtr-demo.vaftl.us/vamis/veteran-video-connect-service:3.0.0
     ports:
-      - 8280:8080
+      - "8280:8080"
     environment:
       - constraint:nodetype==*service*
       - SERVICE_NAME=veteran-video-connect-service
