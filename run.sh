@@ -3,6 +3,9 @@
 #make sure there isn't anything running from previous deployments
 docker-compose down
 
+# removes cache file created by docker from var-oracle-db-mock
+rm ./var-oracle-db-mock/.cache
+
 echo "\nCheck for and Pull the latest docker images..\n"
 docker-compose pull --ignore-pull-failures 
 

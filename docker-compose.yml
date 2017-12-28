@@ -70,7 +70,7 @@ services:
   mock-roa:
     image: mobileapps.vaftl.us:9250/ckm/docker-roa-mock:latest
     ports:
-     - "1521"
+     - "1521:1521"
 
   roa-services:
     image: mobileapps.vaftl.us:9250/ckm/docker-roa-service:latest
@@ -210,7 +210,7 @@ services:
   var-oracle-db-mock:
     image: sath89/oracle-xe-11g
     ports:
-      - "1521:1521"
+      - "1522:1521"
     volumes:
       - ./var-oracle-db-mock:/docker-entrypoint-initdb.d
     environment:
