@@ -70,7 +70,7 @@ services:
   mock-roa:
     image: mobileapps.vaftl.us:9250/ckm/docker-roa-mock:latest
     ports:
-     - "1521:1521"
+     - "1521"
 
   roa-services:
     image: mobileapps.vaftl.us:9250/ckm/docker-roa-service:latest
