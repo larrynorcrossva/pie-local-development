@@ -198,9 +198,12 @@ services:
       - consul
 
   var-mongo-db-mock:
-    image: mongo:3.0
+    image: mongo:3.4
+    command: ["mongod", "--sslMode", "requireSSL", "--sslPEMKeyFile", "/etc/ssl/certs/server.pem", "--sslCAFile", "/etc/ssl/certs/ca.pem", "--sslAllowInvalidCertificates", "--sslAllowInvalidHostnames", "--auth"]
     volumes:
-      - ./var-mongo-db-mock:/docker-entrypoint-initdb.d/
+      - ./var-mongo-db-mock/data:/docker-entrypoint-initdb.d/
+      - ./var-mongo-db-mock/ssl/certs:/etc/ssl/certs/
+      - ./var-mongo-db-mock/conf/mongod.conf:/etc/mongod.conf
     ports:
       - "27017:27017"
     environment:
