@@ -202,6 +202,12 @@ CREATE TABLE "MOCKDB"."ALLINSTITUTIONS"
   PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1
   BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
   TABLESPACE "MOCKDB_DATA" ;
+
+/*
+  Commit the created tables and indices before altering tables that may not exist yet
+ */
+
+COMMIT;
 --------------------------------------------------------
 --  Constraints for Table MOCK_USER_PAT_ID
 --------------------------------------------------------
