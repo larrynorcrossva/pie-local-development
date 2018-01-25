@@ -100,7 +100,8 @@ services:
   #
   mock-mvi:
     image: dev/var-mock-mvi
-
+    ports:
+     - "8082:8080"
   user-services:
     image: mobileapps.vaftl.us:9250/ckm/docker-user-service:latest
     links:
@@ -119,8 +120,8 @@ services:
     - USE_ENVCONSUL=true
     - SERVER_USE_FORWARD_HEADERS=true
     - TRACE_URL=http://zipkin:9411/api/v1/spans
-    - MVI_URL=http://mock-mvi:8080/mvi/mockVAIdMPort  
-    - ROA_HOST=http://roa-services:8080 
+    - MVI_URL=http://mock-mvi:8080/mvi/mockVAIdMPort
+    - ROA_HOST=http://roa-services:8080
     - MVI_SENDER_ID=CIH200
     - MCI_PROCESSING_CODE=T
     - JWT_SECRET=testtesttest
@@ -181,13 +182,13 @@ services:
     environment:
       - MYSQL_ROOT_PASSWORD=MySqlAdmin$$
       - MYSQL_DATABASE=MockUser
-  
+
   zipkin:
     image: mobileapps.vaftl.us:9250/ckm/k8-pod-infra-containers/zipkin
     ports:
       - "9411:9411"
 
-  #vault server for managing secrets 
+  #vault server for managing secrets
   vault:
     image: mobileapps.vaftl.us:9250/ckm/vault-server:latest
     environment:
