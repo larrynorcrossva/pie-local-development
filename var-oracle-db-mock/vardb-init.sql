@@ -1,3 +1,7 @@
+-- noinspection SqlDialectInspectionForFile
+
+-- noinspection SqlNoDataSourceInspectionForFile
+
 /*
   Changelog:
   12/20/17 - Post SM-Resources-2.0.1 Merge, purged pre-2017 data, added CC_Appointment_Request Table

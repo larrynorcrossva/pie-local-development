@@ -70,7 +70,7 @@ services:
   mock-roa:
     image: mobileapps.vaftl.us:9250/ckm/docker-roa-mock:latest
     ports:
-     - "1521:1521"
+     - "1521"
 
   roa-services:
     image: mobileapps.vaftl.us:9250/ckm/docker-roa-service:latest
@@ -99,7 +99,10 @@ services:
   # to create JWT security tokens and augmenting user identities with other identifiers from the MVI (specifically ICN)
   #
   mock-mvi:
-    image: mobileapps.vaftl.us:9250/ckm/docker-mvi-mock
+    #image: dev/var-mock-mvi
+    image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ablevets/var-mock-mvi:latest
+    ports:
+     - "8082:8080"
 
   user-services:
     image: mobileapps.vaftl.us:9250/ckm/docker-user-service:latest
@@ -114,7 +117,7 @@ services:
      - "8081:8080"
     environment:
     - VAMF_ENVIRONMENT=local
-   # - VAULT_ADDR=http://vault:8200
+    #- VAULT_ADDR=http://vault:8200
     - SECRET_PATH=secret/local/user-services
     - USE_ENVCONSUL=true
     - SERVER_USE_FORWARD_HEADERS=true
@@ -131,7 +134,7 @@ services:
     - CONSUL_PATH=appconfig/local/user-service
     - APIGW_BASE_URL=http://localhost:8089
     - WAYF_APP_URL=http://localhost:8089/wayf/v1/index.html
-    - "MVI_VISTA_FACILITIES=101,111,222,313,372,376,442,500,516,553,631,688,777"
+    - "MVI_VISTA_FACILITIES=101,111,222,313,372,376,442,500,516,553,631,688,777,523"
     - "JAVA_OPTS=-agentlib:jdwp=transport=dt_socket,address=8000,server=y,suspend=n"
     - "JWTISSUER_CONFIG_JSON=[{\"rsaPublicKeyB64\":\"MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAtxwSTqAC49xXxWIX/kpb4EWXjnpN8ii5FbjAOmubKA32ZVHC+OSj14uRkKJp5EgU0aOO6cbm7jTnGjOFq+KC540qtBMP6/bd/rcXNCb7t8ajb2eWC1PdvYCrpXM/IAZvdrOGhc9sU+8DeZj2dJg+WIlWkrnXsHMbAd5ePt1mCx6NPADFBRVSJg9MAN04yzBAcgmAeOgcZGYqHcihov3hIi0UnAwi0wtBHIquGcRKhUAG5clOY3YxyNJZ2HWglrCHtz1sHe7OGFBfGGR18C+S6CK7GDB2zm3IkJ16uqf/F3s+tF7u88mE3t6gr/Y/1U6OH99xm1Ta0Yqzie351qEXSwIDAQAB\",\"iss\":\"gov.va.mhv.idp.v1\",\"userType\":\"VETERAN\"},{\"rsaPublicKeyB64\":\"MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAtxwSTqAC49xXxWIX/kpb4EWXjnpN8ii5FbjAOmubKA32ZVHC+OSj14uRkKJp5EgU0aOO6cbm7jTnGjOFq+KC540qtBMP6/bd/rcXNCb7t8ajb2eWC1PdvYCrpXM/IAZvdrOGhc9sU+8DeZj2dJg+WIlWkrnXsHMbAd5ePt1mCx6NPADFBRVSJg9MAN04yzBAcgmAeOgcZGYqHcihov3hIi0UnAwi0wtBHIquGcRKhUAG5clOY3YxyNJZ2HWglrCHtz1sHe7OGFBfGGR18C+S6CK7GDB2zm3IkJ16uqf/F3s+tF7u88mE3t6gr/Y/1U6OH99xm1Ta0Yqzie351qEXSwIDAQAB\",\"iss\":\"external.idp.test1\",\"userType\":\"VETERAN\"},{\"rsaPublicKeyB64\":\"MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA17igsXGfpg3BRv1dr9jAyhyjGUpDSQ1CCIjQI/NZD+OoxoTlvPMmY8yQ3OfisnpE7zR+dNAdj7CHCiCbKgQKjPmOzdobKJD7N8538lxZ2wlHNko0rG3iyCKJVRJFMXirZfrPERlFj0AQrwhobIpuwyFQfsNTZPaxeaN35Bexo7fowu0LBkzvCioZfKq6QPxx8qQ0/wJYxeh3D4b5NWR1eIbWpJE5NbWYx0ZSs/TD5HQTAGsIvJN5+EKzVB1RZAp0UwdxDQE7BjpXBXx0PjZidCY2kH2jVm1OHd/xzkZiIt2EYe5Cpd/CuLfWjzxHv6pCkC8I0a6qljQNS9iOQc6blwIDAQAB\",\"iss\":\"gov.va.vamf.service.saml-sts\",\"userType\":\"VETERAN\"}]"
     - "IDP_CONFIG_JSON=[{\"idpId\": \"gov.va.iam.ssoe.v1\",\"friendlyName\": \"VAAFI SSOe\",\"description\": \"Veteran login supporting DSLogon, Symantec, and other CSPs.\",\"versionId\": \"v1\",\"scope\": \"VETERAN\",\"logoUrl\": \"img/dslogon-logo.png\",\"loginUrl\": \"http://localhost:9000/users/v1/landing\",\"logoutUrl\": \"http://localhost:9000/ssoeproxy/logout\",\"vamfLandingPage\": \"http://localhost/users/v1/landing\"},{\"idpId\": \"gov.va.iam.ssoi.v1\",\"friendlyName\": \"VAAFI SSOi\",\"description\": \"Staff login supporting PIV authentication.\",\"versionId\": \"v1\",\"scope\": \"STAFF\",\"logoUrl\": \"img/logo_navbar_ipad.png\",\"loginUrl\": \"http://localhost/vaafi/ssoimock/login\",\"logoutUrl\": \"http://localhost/vaafi/ssoemock/logout\",\"vamfLandingPage\": \"http://localhost/users/v1/landing\"},{\"idpId\": \"gov.va.mhv.v1\",\"friendlyName\": \"My HealtheVet\",\"description\": \"Staff login supporting PIV authentication.\",\"versionId\": \"v1\",\"scope\": \"VETERAN\",\"logoUrl\": \"img/mhv-logo.png\",\"loginUrl\": \"http://localhost/vaafi/ssoimock/login\",\"logoutUrl\": \"http://localhost/vaafi/ssoemock/logout\",\"vamfLandingPage\": \"http://localhost/users/v1/landing\"}]"
@@ -197,70 +200,82 @@ services:
     links:
       - consul
 
-  var-mongo-db-mock:
-    image: mongo:3.4
-    command: ["mongod", "--sslMode", "requireSSL", "--sslPEMKeyFile", "/etc/ssl/certs/mongodb.pem", "--sslCAFile", "/etc/ssl/certs/mongodb-cert.crt", "--sslAllowInvalidCertificates", "--sslAllowInvalidHostnames",  "--sslAllowConnectionsWithoutCertificates", "--auth"]
+  var-mongo-data-seed:
+    image: dev/var-mongo-data-seed
     volumes:
-      - ./var-mongo-db-mock/ssl/certs:/etc/ssl/certs/
-      - ./var-mongo-db-mock/conf/mongod.conf:/etc/mongod.conf
       - ./var-mongo-db-mock/data:/docker-entrypoint-initdb.d/
+    links:
+      - var-mongo-db-mock
+
+  var-mongo-db-mock:
+    image: dev/var-mongo-db-mock
     ports:
-      - "10.2.2.1:27017:27017"
+      - "27017:27017"
     environment:
-      - SERVICE_TAGS=local
+      - constraint:nodetype==*service*
       - SERVICE_NAME=var-mongo-db-mock
+      - SERVICE_TAGS=local
+      - JWT_SECRET=testtesttest
+      - CONSUL_SERVER=consul:8500
+      - CONSUL_TOKEN=${CONSUL_MASTER_TOKEN}
+      - CONSUL_PATH=appconfig/${VAMF_ENVIRONMENT}/var-mongo-db-mock
 
   var-oracle-db-mock:
     image: sath89/oracle-xe-11g
     ports:
-      - "1522:1521"
+      - "1521:1521"
     volumes:
       - ./var-oracle-db-mock:/docker-entrypoint-initdb.d
     environment:
-      - SERVICE_TAGS=local
+      - constraint:nodetype==*service*
       - SERVICE_NAME=var-oracle-db-mock
+      - SERVICE_TAGS=local
+      - JWT_SECRET=testtesttest
+      - CONSUL_SERVER=consul:8500
+      - CONSUL_TOKEN=${CONSUL_MASTER_TOKEN}
+      - CONSUL_PATH=appconfig/${VAMF_ENVIRONMENT}/var-oracle-db-mock
 
   var-web:
     image: dev/var-web
     ports:
-    - "9090:80"
+      - "9090:80"
     environment:
-    - SERVICE_TAGS=local
-    - SERVICE_NAME=var-web
+      - SERVICE_TAGS=local
+      - SERVICE_NAME=var-web
 
   var-messaging-microservice:
     image: dev/var-messaging-microservice
     expose:
-    - "8080"
+      - "8080"
     environment:
-    - SERVICE_TAGS=local
-    - SERVICE_NAME=var-messaging-microservice
-    - CONSUL_SERVER=consul:8500
-    - CONSUL_TOKEN=7BE784A4-7498-4469-BE2F-9C3B9444DFEF
-    - CONSUL_PATH=appconfig/local/var-messaging-microservice
+      - SERVICE_TAGS=local
+      - SERVICE_NAME=var-messaging-microservice
+      - CONSUL_SERVER=consul:8500
+      - CONSUL_TOKEN=7BE784A4-7498-4469-BE2F-9C3B9444DFEF
+      - CONSUL_PATH=appconfig/local/var-messaging-microservice
 
   facility-service:
     image: dev/facility-service
     expose:
-    - "8080"
+      - "8080"
     environment:
-    - SERVICE_TAGS=local
-    - SERVICE_NAME=vfacility-service
-    - CONSUL_SERVER=consul:8500
-    - CONSUL_TOKEN=7BE784A4-7498-4469-BE2F-9C3B9444DFEF
-    - CONSUL_PATH=appconfig/local/facility-resources
+      - SERVICE_TAGS=local
+      - SERVICE_NAME=vfacility-service
+      - CONSUL_SERVER=consul:8500
+      - CONSUL_TOKEN=7BE784A4-7498-4469-BE2F-9C3B9444DFEF
+      - CONSUL_PATH=appconfig/local/facility-resources
 
   var-resources:
-    image: dev/var-resources
+    image: dev/var-resources:latest
     links:
      - var-messaging-microservice
      - facility-service
      - mock-mvi
-     - var-mongo-db-mock
      - var-oracle-db-mock
+     - var-mongo-db-mock
     depends_on:
-     - var-oracle-db-mock
      - var-mongo-db-mock
+     - var-oracle-db-mock
      - var-messaging-microservice
      - facility-service
      - mock-mvi
@@ -274,8 +289,98 @@ services:
      - CONSUL_SERVER=consul:8500
      - CONSUL_TOKEN=7BE784A4-7498-4469-BE2F-9C3B9444DFEF
      - CONSUL_PATH=appconfig/local/var-resources
-     - mock.mvi=true
+     - mock.mvi=false
      - JWT_SECRET=testtesttest
      - JAVA_OPTS=-XX:+CMSClassUnloadingEnabled -Xrs -Dcom.sun.xml.ws.transport.http.client.HttpTransportPipe.dump=true -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=64058
-     - vardb_url=jdbc:oracle:thin:@oracle:1521:xe
-     - mongo.host=mongo:27017
+
+  vmr-mock-service:
+    image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ablevets/vmr-mock-service:latest
+    ports:
+     - "8284:8080"
+    environment:
+     - constraint:nodetype==*service*
+     - SERVICE_NAME=vmr-mock-service
+     - SERVICE_TAGS=${VAMF_ENVIRONMENT}
+     - JWT_SECRET=testtesttest
+     - CONSUL_SERVER=consul:8500
+     - CONSUL_TOKEN=${CONSUL_MASTER_TOKEN}
+     - CONSUL_PATH=appconfig/${VAMF_ENVIRONMENT}/vmr-mock-service
+
+  video-visits-mongo-mock:
+    image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ablevets/video-visits-mongo-mock:latest
+    ports:
+      - "27015:27017"
+    environment:
+      - constraint:nodetype==*service*
+      - SERVICE_NAME=video-visits-mongo-mock
+      - SERVICE_TAGS=local
+      - JWT_SECRET=testtesttest
+      - CONSUL_SERVER=consul:8500
+      - CONSUL_TOKEN=${CONSUL_MASTER_TOKEN}
+      - CONSUL_PATH=appconfig/${VAMF_ENVIRONMENT}/video-visits-mongo-mock
+
+  video-visits-service:
+    image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ablevets/video-visits-service:3.0.0
+    ports:
+      - "8079:8080"
+    links:
+      - vmr-mock-service
+      - video-visits-mongo-mock
+    depends_on:
+      - vmr-mock-service
+      - video-visits-mongo-mock
+    environment:
+      - constraint:nodetype==*service*
+      - SERVICE_NAME=video-visits-service
+      - SERVICE_TAGS=local
+      - VAMF_ENVIRONMENT=local
+      - JWT_SECRET=testtesttest
+      - CONSUL_SERVER=consul:8500
+      - CONSUL_TOKEN=7BE784A4-7498-4469-BE2F-9C3B9444DFEF
+      - CONSUL_PATH=appconfig/local/video-visits-service
+      - "TRACE_URL=http://localhost:9411/api/v1/spans"
+
+  veteran-video-connect-service:
+    image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ablevets/veteran-video-connect-service:3.0.0
+    ports:
+      - "8280:8080"
+    environment:
+      - constraint:nodetype==*service*
+      - SERVICE_NAME=veteran-video-connect-service
+      - SERVICE_TAGS=local
+      - JWT_SECRET=testtesttest
+      - CONSUL_SERVER=consul:8500
+      - CONSUL_TOKEN=7BE784A4-7498-4469-BE2F-9C3B9444DFEF
+      - CONSUL_PATH=appconfig/${VAMF_ENVIRONMENT}/veteran-video-connect-service
+      - "TRACE_URL=http://localhost:9411/api/v1/spans"
+
+  personal-preference-service:
+    image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ablevets/personal-preference-service:1.0.0
+    ports:
+     - "8286:8080"
+    environment: #sub these with jenkins vars
+     - constraint:nodetype==*service*
+     - SERVICE_NAME=personal-preference-service
+     - SERVICE_TAGS=local
+     - VAMF_ENVIRONMENT=local
+     - JWT_SECRET=testtesttest
+     - CONSUL_SERVER=${CONSUL_SERVER}
+     - CONSUL_TOKEN=7BE784A4-7498-4469-BE2F-9C3B9444DFEF
+     - CONSUL_PATH=appconfig/${VAMF_ENVIRONMENT}/personal-preference-service
+     - "TRACE_URL=http://zipkin:9411/api/v1/spans"
+
+
+  messaging-publisher:
+    image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ablevets/messaging-publisher:latest
+    container_name: "messaging-publisher"
+    hostname: "messaging-publisher"
+    ports:
+     - "7090:8080"
+    environment: #sub these with jenkins vars
+     - constraint:nodetype==*service*
+     - SERVICE_NAME=messaging-publisher
+     - JWT_SECRET=${JWT_SECRET}
+     - CONSUL_SERVER=${CONSUL_SERVER}
+     - CONSUL_TOKEN=${CONSUL_MASTER_TOKEN}
+     - CONSUL_PATH=appconfig/${VAMF_ENVIRONMENT}/messaging-publisher
+     - "TRACE_URL=http://zipkin:9411/api/v1/spans"
