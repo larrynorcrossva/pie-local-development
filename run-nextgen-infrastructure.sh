@@ -2,6 +2,8 @@
 
 source app.env
 
+docker network create varnextgenlocalenvironment_default
+
 #make sure there isn't anything running from previous deployments
 docker-compose down
 
