@@ -1,4 +1,4 @@
-# NOTE: This is a stripped down version of the Docker Local Development (https://coderepo.mobilehealth.va.gov/projects/DEV/repos/docker-local-development/browse) code that ONLY stands up the services neceassry for VAR-Resouces, VMM, Facility Resources, and VAR-Web.
+# NOTE: This is a stripped down version of the Docker Local Development (https://coderepo.mobilehealth.va.gov/projects/DEV/repos/docker-local-development/browse) code that ONLY stands up the services required for VAR-related development
 
 
 ## Original README below.
@@ -64,18 +64,6 @@ Swagger UI is available on http://localhost:8091
 - HDR: http://localhost:8089/hdr/v1/
 - SUD: http://localhost:8089/sud/v1/
 - PNS: http://localhost:8098/pns/v1/
-
-## MBB Sample Application
-
-### Login Flow
-We are simulating the redirect triggered by MBB:
-- In a Browser go to `http://localhost:8089/users/v1/login?redirect_uri=/mbb/v1/`
-- This will redirect to `http://localhost:8089/wayf/v1/index.html?redirect_uri=/mbb/v1/`
-- Select SSOE (set up to login in to http://localhost:9000/users/v1/landing)
-- This will redirect t0 `http://localhost:9000/users/v1/landing?redirect_uri=/mbb/v1/`
-- Login: `mockuser01 / pass`
-- Final redirect to: `http://localhost:9000/mbb/v1/#eula`
-
 
 
 ## Working with the environment
@@ -185,9 +173,6 @@ docker-machine create --driver amazonec2 --amazonec2-access-key $AWS_ACCESS_KEY 
 **If you don't do this the run script will not set endpoints in consul**
 - `docker-machine ssh vamf-swarm-node -f -N -L 8500:localhost:8500` 
 
-### Stand up containers
-- `sh run.sh`
-
 ### Interacting with the services
 Docker machine allows you to ssh in to the new machine. You can also set up port forwarding or modify you AWS ACLs to expose ports on the public IP of the machine you created.
 
@@ -204,6 +189,44 @@ To clean it all up you can use:
 `killall ssh` Will kill all the tunnels 
 
 
+##VAR Development Environment Setup
+The stack is broken down into five main components
 
+- NextGen Core Infrastructure (long-running)
+- Fixtures (Mock Databases) (long-running)
+- Shared Services (long-running)
+- Data (Seeding mock databases) (short-running)
+- Applications (VAR, SM, VATS, etc) (development-centric)
+
+The stack should be stood up in this order to guarantee all dependencies are met at each segment of the infrastructure.
+Be sure to run the ECR login command such as
+`$(aws ecr get-login --no-include-email)` so the scripts are are able to properly pull prior to standing up each segment
+of the stack.
+
+1. Stand up NextGen Core Infrastructure:
+   
+   `./run-nextgen-infrastructure.sh`
+   
+2. Stand up mock fixtures:
+
+   `./run-fixtures.sh`
+   
+3. Stand up shared services:
+
+   `./run-shared-services.sh`
+   
+4. Seed mock fixtures
+
+   `./run-data-seed.sh`
+   
+5. Stand up necessary applications
+
+   `./run-var.sh`
+   
+   `./run-sm.sh`
+
+- (Experimental) To stand up the entire stack all in one go:
+
+   `./run-all.sh`
 
 

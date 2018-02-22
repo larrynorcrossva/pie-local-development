@@ -1,0 +1,11 @@
+version: '2'
+services:
+  var-mongo-data-seed:
+    image: dev/var-mongo-data-seed
+    volumes:
+      - ./var-mongo-db-mock/data:/docker-entrypoint-initdb.d/
+
+networks:
+  default:
+    external:
+      name: varnextgenlocalenvironment_default
