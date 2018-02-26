@@ -1,5 +1,69 @@
 # NOTE: This is a stripped down version of the Docker Local Development (https://coderepo.mobilehealth.va.gov/projects/DEV/repos/docker-local-development/browse) code that ONLY stands up the services required for VAR-related development
 
+##VAR Development Environment Setup
+The stack is broken down into five main components
+
+- NextGen Core Infrastructure (long-running)
+- Fixtures (Mock Databases) (long-running)
+- Shared Services (long-running)
+- Data (Seeding mock databases) (short-running)
+- Applications (VAR, SM, VATS, etc) (development-centric)
+
+The stack should be stood up in this order to guarantee all dependencies are met at each segment of the infrastructure.
+Be sure to run the ECR login command such as
+`$(aws ecr get-login --no-include-email)` so the scripts are are able to properly pull prior to standing up each segment
+of the stack.
+
+1. Stand up NextGen Core Infrastructure:
+   
+   `./run-nextgen-infrastructure.sh`
+   
+2. Stand up mock fixtures:
+
+   `./run-fixtures.sh`
+   
+3. Stand up shared services:
+
+   `./run-shared-services.sh`
+   
+4. Seed mock fixtures
+
+   `./run-data-seed.sh`
+   
+5. Stand up necessary applications
+
+   `./run-var.sh`
+   
+   `./run-sm.sh`
+
+- (Experimental) To stand up the entire stack all in one go:
+
+   `./run-all.sh`
+
+###Stopping containers
+To stop containers, run the stop script, adding additional parameters where necessary.  Note that running ./stop.sh
+will delete the Oracle container cache, and next startup will do a full rebuild
+
+- Stop all containers:
+   
+   `./stop.sh all`
+
+- Stop NextGen Core containers:
+   
+   `./stop.sh`
+
+- Stop fixtures containers:
+   
+   `./stop.sh fixtures`
+
+- Stop shared services containers:
+   
+   `./stop.sh shared-services`
+
+- Stop var containers:
+   
+   `./stop.sh var`
+
 
 ## Original README below.
 
@@ -13,7 +77,8 @@ This project if for developer convenience, any issues identified with micro serv
 1. Docker Engine https://docs.docker.com/engine/installation/
 2. Docker Compose https://docs.docker.com/compose/install/
 3. WMSACT Innovations Gitlab Account https://wiki.mobilehealth.va.gov/display/WMSACT/Innovations
-4. At least 8G of RAM
+4. At least 16G of RAM
+5. 10G of RAM allocated to Docker
 
 ## To Run 
 Run from Project Directory:
@@ -145,88 +210,4 @@ You can work with Consul via its Web UI or via it's REST endpoints. You will nee
 `curl -H "X-Consul-Token: 7BE784A4-7498-4469-BE2F-9C3B9444DFEF" -s -X PUT localhost:8500/v1/kv/appconfig/local/myapp/v1/MY_ENV -d 'value'`
 
 Would store a Key Value pair of MY_ENV=value in the `appconfig/local/myapp/v1/` folder of Consul's KV store.
-
-
-### To Stop
-1. run `sh stop.sh` This will bring down all of the containers but not remove them. 
-
-2. If you wish to remove them use: `docker-compose rm`
-
-Full docker compose [cli reference](https://docs.docker.com/compose/reference/overview/) 
-
-## Deploying to AWS EC2
-If you don't have enough resources on your local machine you can easily deploy to a Cloud provider with [Docker Machine](https://docs.docker.com/machine/get-started/). This example uses AWS but docker-machine also supports Azure, Digital Ocean, and many [others](https://docs.docker.com/machine/drivers/)   
-
-This example requires you to have docker-machine installed, have an AWS account and API keys with permission to create instances. We recommend a minimum instance size of **t2.large**
-
-### Create the machine with an ubuntu 16.04 base image
-```
-docker-machine create --driver amazonec2 --amazonec2-access-key $AWS_ACCESS_KEY --amazonec2-secret-key $AWS_SECRET_KEY --amazonec2-instance-type t2.xlarge --amazonec2-region us-east-1 --amazonec2-zone "b" vamf-worker-node
-```
-
-### Connect to newly created machine 
-`docker-machine env vamf-swarm-node`
-
-`eval $(docker-machine env vamf-swarm-node)`
-
-### Forward the port for Consul
-**If you don't do this the run script will not set endpoints in consul**
-- `docker-machine ssh vamf-swarm-node -f -N -L 8500:localhost:8500` 
-
-### Interacting with the services
-Docker machine allows you to ssh in to the new machine. You can also set up port forwarding or modify you AWS ACLs to expose ports on the public IP of the machine you created.
-
-- `docker-machine ssh vamf-swarm-node` To connect to the machine and interact with services on the host
-
-To work with the services via localhost, create ssh tunnels as background process:
-- `docker-machine ssh vamf-swarm-node  -f -N -L 8080:localhost:8080` Forwards the port For IDP
-- `docker-machine ssh vamf-swarm-node -f -N -L 8089:localhost:8089` Forwards the port For API GW
-
-To clean it all up you can use:
-
-`docker-machine rm vamf-swarm-node` Will terminate the instance
-
-`killall ssh` Will kill all the tunnels 
-
-
-##VAR Development Environment Setup
-The stack is broken down into five main components
-
-- NextGen Core Infrastructure (long-running)
-- Fixtures (Mock Databases) (long-running)
-- Shared Services (long-running)
-- Data (Seeding mock databases) (short-running)
-- Applications (VAR, SM, VATS, etc) (development-centric)
-
-The stack should be stood up in this order to guarantee all dependencies are met at each segment of the infrastructure.
-Be sure to run the ECR login command such as
-`$(aws ecr get-login --no-include-email)` so the scripts are are able to properly pull prior to standing up each segment
-of the stack.
-
-1. Stand up NextGen Core Infrastructure:
-   
-   `./run-nextgen-infrastructure.sh`
-   
-2. Stand up mock fixtures:
-
-   `./run-fixtures.sh`
-   
-3. Stand up shared services:
-
-   `./run-shared-services.sh`
-   
-4. Seed mock fixtures
-
-   `./run-data-seed.sh`
-   
-5. Stand up necessary applications
-
-   `./run-var.sh`
-   
-   `./run-sm.sh`
-
-- (Experimental) To stand up the entire stack all in one go:
-
-   `./run-all.sh`
-
 
