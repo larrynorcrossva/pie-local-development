@@ -1,7 +1,8 @@
 # NOTE: This is a stripped down version of the Docker Local Development (https://coderepo.mobilehealth.va.gov/projects/DEV/repos/docker-local-development/browse) code that ONLY stands up the services required for VAR-related development
 
 ##VAR Development Environment Setup
-The stack is broken down into five main components
+For best performance, it is recommended you allocate 10GB to Docker in a machine of a minimum 16GB available RAM.
+The stack is broken down into five main components:
 
 - NextGen Core Infrastructure (long-running)
 - Fixtures (Mock Databases) (long-running)
@@ -60,10 +61,24 @@ will delete the Oracle container cache, and next startup will do a full rebuild
    
    `./stop.sh shared-services`
 
-- Stop var containers:
+- Stop VAR containers:
    
    `./stop.sh var`
 
+###Building fixture and seed containers
+By default, the var-related fixtures and data seeds are pulled from the latst in the ECR, however it may be necessary to build
+and seed manually.  If this is the case, follow the steps to build the mocks out:
+
+- Build VAR Mongo mock
+
+   `docker build -t dev/var-mongo-db-mock ./var-mongo-db-mock`
+
+- Build VAR Mongo data seed
+
+   `docker build -t dev/var-mongo-data-seed ./var-mongo-data-seed`
+
+From here, swap the commented image definitions in the fixtures and data seed compose file accordingly.  This will enable
+the consumption of the locally built docker images.
 
 ## Original README below.
 

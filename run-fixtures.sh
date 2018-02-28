@@ -4,6 +4,8 @@ source app.env
 
 docker-compose -f docker-compose-fixtures.yml down
 
+docker-compose -f docker-compose-fixtures.yml pull
+
 docker-compose -f docker-compose-fixtures.yml up -d
 
 echo "\nOpening docker logs for fixtures... \n"

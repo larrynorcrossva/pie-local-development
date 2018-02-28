@@ -1,7 +1,8 @@
 version: '2'
 services:
   var-mongo-db-mock:
-    image: dev/var-mongo-db-mock
+    image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ablevets/var-mongo-db-mock:latest
+    #image: dev/var-mongo-db-mock
     ports:
       - "27016:27017"
     environment:
