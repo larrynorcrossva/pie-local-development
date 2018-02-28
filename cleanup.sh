@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# cleanus up images, containers, and volumnes that are dangling or exited
+# cleans up images, containers, and volumes that are dangling or exited
 echo -e "\nCleaning up dangling images"
 docker rmi -f $(docker images -f "dangling=true" -q)
 echo -e "\nCleaning up exited containers"

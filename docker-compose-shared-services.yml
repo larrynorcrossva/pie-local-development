@@ -1,0 +1,111 @@
+version: '2'
+services:
+
+  var-messaging-microservice:
+    image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ablevets/var-messaging-microservice:0.47
+    #image: dev/var-messaging-microservice
+    expose:
+      - "8080"
+    environment:
+      - SERVICE_TAGS=local
+      - SERVICE_NAME=var-messaging-microservice
+      - CONSUL_SERVER=consul:8500
+      - CONSUL_TOKEN=7BE784A4-7498-4469-BE2F-9C3B9444DFEF
+      - CONSUL_PATH=appconfig/local/var-messaging-microservice
+
+  facility-service:
+    image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ablevets/facility-resources:0.29
+    #image: dev/facility-service
+    expose:
+      - "8080"
+    environment:
+      - SERVICE_TAGS=local
+      - SERVICE_NAME=vfacility-service
+      - CONSUL_SERVER=consul:8500
+      - CONSUL_TOKEN=7BE784A4-7498-4469-BE2F-9C3B9444DFEF
+      - CONSUL_PATH=appconfig/local/facility-resources
+
+  vmr-mock-service:
+    image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ablevets/vmr-mock-service:latest
+    ports:
+     - "8284:8080"
+    environment:
+     - constraint:nodetype==*service*
+     - SERVICE_NAME=vmr-mock-service
+     - SERVICE_TAGS=${VAMF_ENVIRONMENT}
+     - JWT_SECRET=testtesttest
+     - CONSUL_SERVER=consul:8500
+     - CONSUL_TOKEN=${CONSUL_MASTER_TOKEN}
+     - CONSUL_PATH=appconfig/${VAMF_ENVIRONMENT}/vmr-mock-service
+
+  video-visits-service:
+    image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ablevets/video-visits-service:3.0.0
+    ports:
+      - "8079:8080"
+    links:
+      - vmr-mock-service
+#      - video-visits-mongo-mock
+    depends_on:
+      - vmr-mock-service
+#      - video-visits-mongo-mock
+    environment:
+      - constraint:nodetype==*service*
+      - SERVICE_NAME=video-visits-service
+      - SERVICE_TAGS=local
+      - VAMF_ENVIRONMENT=local
+      - JWT_SECRET=testtesttest
+      - CONSUL_SERVER=consul:8500
+      - CONSUL_TOKEN=7BE784A4-7498-4469-BE2F-9C3B9444DFEF
+      - CONSUL_PATH=appconfig/local/video-visits-service
+      - "TRACE_URL=http://localhost:9411/api/v1/spans"
+
+  veteran-video-connect-service:
+    image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ablevets/veteran-video-connect-service:3.0.0
+    ports:
+      - "8280:8080"
+    environment:
+      - constraint:nodetype==*service*
+      - SERVICE_NAME=veteran-video-connect-service
+      - SERVICE_TAGS=local
+      - JWT_SECRET=testtesttest
+      - CONSUL_SERVER=consul:8500
+      - CONSUL_TOKEN=7BE784A4-7498-4469-BE2F-9C3B9444DFEF
+      - CONSUL_PATH=appconfig/${VAMF_ENVIRONMENT}/veteran-video-connect-service
+      - "TRACE_URL=http://localhost:9411/api/v1/spans"
+
+  personal-preference-service:
+    image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ablevets/personal-preference-service:1.0.0
+    ports:
+     - "8286:8080"
+    environment: #sub these with jenkins vars
+     - constraint:nodetype==*service*
+     - SERVICE_NAME=personal-preference-service
+     - SERVICE_TAGS=local
+     - VAMF_ENVIRONMENT=local
+     - JWT_SECRET=testtesttest
+     - CONSUL_SERVER=${CONSUL_SERVER}
+     - CONSUL_TOKEN=7BE784A4-7498-4469-BE2F-9C3B9444DFEF
+     - CONSUL_PATH=appconfig/${VAMF_ENVIRONMENT}/personal-preference-service
+     - "TRACE_URL=http://zipkin:9411/api/v1/spans"
+
+
+  messaging-publisher:
+    image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ablevets/messaging-publisher:latest
+    container_name: "messaging-publisher"
+    hostname: "messaging-publisher"
+    ports:
+     - "7090:8080"
+    environment: #sub these with jenkins vars
+     - constraint:nodetype==*service*
+     - SERVICE_NAME=messaging-publisher
+     - JWT_SECRET=${JWT_SECRET}
+     - CONSUL_SERVER=${CONSUL_SERVER}
+     - CONSUL_TOKEN=${CONSUL_MASTER_TOKEN}
+     - CONSUL_PATH=appconfig/${VAMF_ENVIRONMENT}/messaging-publisher
+     - "TRACE_URL=http://zipkin:9411/api/v1/spans"
+
+
+networks:
+  default:
+    external:
+      name: varnextgenlocalenvironment_default
