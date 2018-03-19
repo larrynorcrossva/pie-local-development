@@ -2,19 +2,7 @@ version: '2'
 services:
 
   var-resources:
-    image: dev/var-resources:latest
-#    links:
-#     - var-messaging-microservice
-#     - facility-service
-#     - mock-mvi
-#     - var-oracle-db-mock
-#     - var-mongo-db-mock
-#    depends_on:
-#     - var-mongo-db-mock
-#     - var-oracle-db-mock
-#     - var-messaging-microservice
-#     - facility-service
-#     - mock-mvi
+    image: dev/var-resources:4.2.5
     ports:
      - "9092:8080"
      - "64058:64058"
@@ -30,7 +18,7 @@ services:
      - JAVA_OPTS=-XX:+CMSClassUnloadingEnabled -Xrs -Dcom.sun.xml.ws.transport.http.client.HttpTransportPipe.dump=true -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=64058
 
   var-web:
-     image: dev/var-web
+     image: dev/var-web:4.2.5
      ports:
        - "9090:80"
      environment:

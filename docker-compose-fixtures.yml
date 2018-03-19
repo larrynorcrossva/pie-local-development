@@ -1,7 +1,7 @@
 version: '2'
 services:
   var-mongo-db-mock:
-    image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ablevets/var-mongo-db-mock:latest
+    image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ablevets/var-mongo-db-mock:1.0.0
     #image: dev/var-mongo-db-mock
     ports:
       - "27016:27017"
@@ -15,7 +15,7 @@ services:
       - CONSUL_PATH=appconfig/${VAMF_ENVIRONMENT}/var-mongo-db-mock
 
   var-oracle-db-mock:
-    image: sath89/oracle-xe-11g
+    image: sath89/oracle-xe-11g:latest
     ports:
       - "1521:1521"
     volumes:
