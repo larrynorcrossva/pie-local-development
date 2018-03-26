@@ -2,7 +2,7 @@ version: '2'
 services:
 
   consul:
-    image: mobileapps.vaftl.us:9250/ckm/consul-server
+    image: mobileapps.vaftl.us:9250/ckm/consul-server:latest
     command: "consul agent -server -bootstrap-expect=1 -ui -client 0.0.0.0 -data-dir /consul/data -config-dir /consul/config"
     volumes:
      - "/consul/data"
@@ -16,7 +16,7 @@ services:
   #
 
   registrator:
-    image: mobileapps.vaftl.us:9250/ckm/registrator
+    image: mobileapps.vaftl.us:9250/ckm/registrator:1.1.1
     command: "-tags local -internal consul://consul:8500"
     volumes:
     - /var/run/docker.sock:/tmp/docker.sock
@@ -31,7 +31,7 @@ services:
   # * Consul-Template: Rewrites _nginx.conf_ based on Consul configurations
   #
   apigateway:
-    image: mobileapps.vaftl.us:9250/ckm/apigateway:1.3
+    image: mobileapps.vaftl.us:9250/ckm/apigateway:1.3.3
     ports:
       - "8089:80"
     environment:
@@ -68,12 +68,12 @@ services:
   # access to their medical information. Veteran users must complete ROA before they can use any other mobile app.
   #
   mock-roa:
-    image: mobileapps.vaftl.us:9250/ckm/docker-roa-mock:latest
+    image: mobileapps.vaftl.us:9250/ckm/docker-roa-mock:1.0.3
     ports:
-     - "1521:1521"
+     - "1521"
 
   roa-services:
-    image: mobileapps.vaftl.us:9250/ckm/docker-roa-service:latest
+    image: mobileapps.vaftl.us:9250/ckm/docker-roa-service:1.0.11
     restart: on-failure
     links:
     - mock-roa
@@ -95,14 +95,19 @@ services:
     - CONSUL_PATH=appconfig/local/roa-service
     - DB_ROA_URL=jdbc:oracle:thin:@mock-roa:1521:xe #used in place of creating a url at startup
 
-# User service and Mobile Veteran (Patient) Index (MVI/MPI)- The user service is responsible for processing requests
+
+  # User service and Mobile Veteran (Patient) Index (MVI/MPI)- The user service is responsible for processing requests
   # to create JWT security tokens and augmenting user identities with other identifiers from the MVI (specifically ICN)
   #
+
   mock-mvi:
-    image: dev/var-mock-mvi
+#    image: dev/var-mock-mvi
+    image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ablevets/var-mock-mvi:latest
+    ports:
+     - "8082:8080"
 
   user-services:
-    image: mobileapps.vaftl.us:9250/ckm/docker-user-service:latest
+    image: mobileapps.vaftl.us:9250/ckm/docker-user-service:1.6.19
     links:
     - mock-mvi
     - roa-services
@@ -114,7 +119,7 @@ services:
      - "8081:8080"
     environment:
     - VAMF_ENVIRONMENT=local
-   # - VAULT_ADDR=http://vault:8200
+    #- VAULT_ADDR=http://vault:8200
     - SECRET_PATH=secret/local/user-services
     - USE_ENVCONSUL=true
     - SERVER_USE_FORWARD_HEADERS=true
@@ -154,7 +159,7 @@ services:
 
 # Where Are You From? (WAYF) web App. WAYF is a CSS/HTML/JS client-side web application.
   wayf-web:
-    image: mobileapps.vaftl.us:9250/ckm/wayf-app
+    image: mobileapps.vaftl.us:9250/ckm/wayf-app:1.0.3
     ports:
     - 8092:80
     environment:
@@ -197,82 +202,7 @@ services:
     links:
       - consul
 
-#  var-mongo-db-mock:
-#    image: mongo:3.0
-#    volumes:
-#      - ./var-mongo-db-mock:/docker-entrypoint-initdb.d/
-#    ports:
-#      - "27017:27017"
-#    environment:
-#      - SERVICE_TAGS=local
-#      - SERVICE_NAME=var-mongo-db-mock
-#
-#  var-oracle-db-mock:
-#    image: sath89/oracle-xe-11g
-#    ports:
-#      - "1521:1521"
-#    volumes:
-#      - ./var-oracle-db-mock:/docker-entrypoint-initdb.d
-#    environment:
-#      - SERVICE_TAGS=local
-#      - SERVICE_NAME=var-oracle-db-mock
-
-  var-web:
-    image: dev/var-web
-    ports:
-    - "9090:80"
-    environment:
-    - SERVICE_TAGS=local
-    - SERVICE_NAME=var-web
-
-  var-messaging-microservice:
-    image: dev/var-messaging-microservice
-    expose:
-    - "8080"
-    environment:
-    - SERVICE_TAGS=local
-    - SERVICE_NAME=var-messaging-microservice
-    - CONSUL_SERVER=consul:8500
-    - CONSUL_TOKEN=7BE784A4-7498-4469-BE2F-9C3B9444DFEF
-    - CONSUL_PATH=appconfig/local/var-messaging-microservice
-
-  facility-service:
-    image: dev/facility-service
-    expose:
-    - "8080"
-    environment:
-    - SERVICE_TAGS=local
-    - SERVICE_NAME=vfacility-service
-    - CONSUL_SERVER=consul:8500
-    - CONSUL_TOKEN=7BE784A4-7498-4469-BE2F-9C3B9444DFEF
-    - CONSUL_PATH=appconfig/local/facility-resources
-
-  var-resources:
-    image: dev/var-resources
-    links:
-     - var-messaging-microservice
-     - facility-service
-     - mock-mvi
-#     - var-mongo-db-mock
-#     - var-oracle-db-mock
-    depends_on:
-#     - var-oracle-db-mock
-#     - var-mongo-db-mock
-     - var-messaging-microservice
-     - facility-service
-     - mock-mvi
-    ports:
-     - "9092:8080"
-     - "64058:64058"
-    environment:
-     - SERVICE_64058_IGNORE=true
-     - SERVICE_TAGS=local
-     - SERVICE_NAME=var-resources
-     - CONSUL_SERVER=consul:8500
-     - CONSUL_TOKEN=7BE784A4-7498-4469-BE2F-9C3B9444DFEF
-     - CONSUL_PATH=appconfig/local/var-resources
-     - mock.mvi=false
-     - JWT_SECRET=testtesttest
-     - JAVA_OPTS=-XX:+CMSClassUnloadingEnabled -Xrs -Dcom.sun.xml.ws.transport.http.client.HttpTransportPipe.dump=true -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=64058
-     - vardb_url=jdbc:oracle:thin:@10.2.2.3:1521:vamfdb
-     - mongo.host=10.2.2.2:27017
+networks:
+  default:
+    external:
+      name: varnextgenlocalenvironment_default
