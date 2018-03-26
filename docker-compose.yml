@@ -95,9 +95,11 @@ services:
     - CONSUL_PATH=appconfig/local/roa-service
     - DB_ROA_URL=jdbc:oracle:thin:@mock-roa:1521:xe #used in place of creating a url at startup
 
-# User service and Mobile Veteran (Patient) Index (MVI/MPI)- The user service is responsible for processing requests
+
+  # User service and Mobile Veteran (Patient) Index (MVI/MPI)- The user service is responsible for processing requests
   # to create JWT security tokens and augmenting user identities with other identifiers from the MVI (specifically ICN)
   #
+
   mock-mvi:
 #    image: dev/var-mock-mvi
     image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ablevets/var-mock-mvi:latest
