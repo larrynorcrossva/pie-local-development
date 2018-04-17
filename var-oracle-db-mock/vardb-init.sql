@@ -90,7 +90,7 @@ INSERT INTO VARDB.DETAIL_CODE (DETAIL_CODE_ID,PROVIDER_MESSAGE,VETERAN_MESSAGE) 
 INSERT INTO VARDB.DETAIL_CODE (DETAIL_CODE_ID,PROVIDER_MESSAGE,VETERAN_MESSAGE) VALUES ('DETCODE25', 'A provider has been found', 'Your request to find a community primary care provider has been completed and a provider has been found. Please review your provider information and contact your provider directly to schedule an appointment.');
 INSERT INTO VARDB.DETAIL_CODE (DETAIL_CODE_ID,PROVIDER_MESSAGE,VETERAN_MESSAGE) VALUES ('DETCODE26', 'Cancelled at Veteran request ', 'Your request to find a primary care provider has been cancelled at your request.');
 INSERT INTO VARDB.DETAIL_CODE (DETAIL_CODE_ID,PROVIDER_MESSAGE,VETERAN_MESSAGE) VALUES ('DETCODE27', 'Cancelled by VA - Not Eligible for Community Care', 'Your request to find a primary care provider has been cancelled because you did not meet eligibility requirements.');
-INSERT INTO VARDB.DETAIL_CODE (DETAIL_CODE_ID,PROVIDER_MESSAGE,VETERAN_MESSAGE) VALUES ('DETCODE28', 'Cancelled by VA - Unable to meet request', 'Your request to find a primary care provider has been cancelled because we have been unable to contact you to complete the request.');
+INSERT INTO VARDB.DETAIL_CODE (DETAIL_CODE_ID,PROVIDER_MESSAGE,VETERAN_MESSAGE) VALUES ('DETCODE28', 'Cancelled by VA - Unable to meet request; Veteran contacted but not available', 'Your request to find a primary care provider has been cancelled because we have been unable to contact you to complete the request.');
 
 REM INSERTING into VARDB.AR_DETAIL_CODE
 SET DEFINE OFF;
