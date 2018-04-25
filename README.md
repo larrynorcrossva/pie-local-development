@@ -7,6 +7,7 @@ The stack is broken down into five main components:
 - NextGen Core Infrastructure (long-running)
 - Fixtures (Mock Databases) (long-running)
 - Shared Services (long-running)
+- Vet/Staff Only Services (short-running)
 - Data (Seeding mock databases) (short-running)
 - Applications (VAR, SM, VATS, etc) (development-centric)
 
@@ -17,29 +18,33 @@ of the stack.
 
 1. Stand up NextGen Core Infrastructure:
    
-   `./run-nextgen-infrastructure.sh`
+   `./run.sh core`
    
 2. Stand up mock fixtures:
 
-   `./run-fixtures.sh`
+   `./run.sh fixtures`
    
 3. Stand up shared services:
 
-   `./run-shared-services.sh`
+   `./run.sh ss`
    
-4. Seed mock fixtures
+4. Stand up vet services:
 
-   `./run-data-seed.sh`
+  `./run.sh vet`
    
-5. Stand up necessary applications
+5. Seed mock fixtures
 
-   `./run-var.sh`
+   `./run.sh data`
    
-   `./run-sm.sh`
+6. Stand up necessary applications
+
+   `./run.sh var`
+   
+   `./run.sh sm`
 
 - (Experimental) To stand up the entire stack all in one go:
 
-   `./run-all.sh`
+   `./run.sh all`
 
 ###Stopping containers
 To stop containers, run the stop script, adding additional parameters where necessary.  Note that running ./stop.sh

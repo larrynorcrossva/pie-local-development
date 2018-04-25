@@ -4,7 +4,7 @@ services:
     image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ablevets/var-mongo-db-mock:1.0.0
     #image: dev/var-mongo-db-mock
     ports:
-      - "27016:27017"
+      - "27017:27017"
     environment:
       - constraint:nodetype==*service*
       - SERVICE_NAME=var-mongo-db-mock
