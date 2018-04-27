@@ -1,5 +1,10 @@
 version: '2'
 services:
+  mock-roa:
+      image: mobileapps.vaftl.us:9250/ckm/docker-roa-mock:1.0.3
+      ports:
+      - "1521"
+
   var-mongo-db-mock:
     image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ablevets/var-mongo-db-mock:1.0.0
     #image: dev/var-mongo-db-mock

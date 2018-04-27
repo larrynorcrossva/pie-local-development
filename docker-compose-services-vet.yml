@@ -4,16 +4,9 @@ services:
 # Right of Access (ROA) service and oracle DB mock. ROA is an internal service that allows veterans to review and grant
 # access to their medical information. Veteran users must complete ROA before they can use any other mobile app.
 #
-  mock-roa:
-    image: mobileapps.vaftl.us:9250/ckm/docker-roa-mock:1.0.3
-    ports:
-    - "1521"
-
   roa-services:
     image: mobileapps.vaftl.us:9250/ckm/docker-roa-service:1.0.11
     restart: on-failure
-    depends_on:
-     - mock-roa
     ports:
      - "8086:8080"
     environment:

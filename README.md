@@ -16,27 +16,31 @@ Be sure to run the ECR login command such as
 `$(aws ecr get-login --no-include-email)` so the scripts are are able to properly pull prior to standing up each segment
 of the stack.
 
-1. Stand up NextGen Core Infrastructure:
-   
-   `./run.sh core`
-   
-2. Stand up mock fixtures:
+1. Stand up mock fixtures:
 
    `./run.sh fixtures`
    
-3. Stand up shared services:
+2. Seed mock fixtures
+
+  `./run.sh data`
+   
+3. Stand up NextGen Core Infrastructure:
+   
+   `./run.sh core`
+   
+4. Stand up shared services:
 
    `./run.sh ss`
    
-4. Stand up vet services:
+5. Stand up vet services (if running vet apps):
 
   `./run.sh vet`
-   
-5. Seed mock fixtures
+  
+6. Stand up staff services (if running vet apps):
 
-   `./run.sh data`
+  `./run.sh staff`
    
-6. Stand up necessary applications
+7. Stand up necessary applications
 
    `./run.sh var`
    
