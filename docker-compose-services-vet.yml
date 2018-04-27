@@ -57,41 +57,6 @@ services:
       - CONSUL_PATH=appconfig/${VAMF_ENVIRONMENT}/veteran-video-connect-service
       - "TRACE_URL=http://localhost:9411/api/v1/spans"
 
-  # End User License Agreement (EULA) Service v1
-  eula-web:
-    image: mobileapps.vaftl.us:9250/ckm/eula-web:1.0.2
-    ports:
-      - 8101:80
-    environment:
-      - SERVICE_NAME=eula-web
-      - SERVICE_TAGS=local
-
-  eula-services_v1:
-    image: mobileapps.vaftl.us:9250/ckm/eula-service:1.0.1
-    expose:
-      - "8080"
-    ports:
-      - "8098:8080"
-    environment:
-      - VAMF_ENVIRONMENT=local
-      # No Secrets don't Use Vault
-      #- VAULT_ADDR=http://vault:8200
-      #- SECRET_PATH=secret/local/eula
-      # Use consul
-      - USE_ENVCONSUL=false
-      - CONSUL_SERVER=consul:8500
-      - CONSUL_TOKEN=7BE784A4-7498-4469-BE2F-9C3B9444DFEF
-      - CONSUL_PATH=appconfig/local/eula
-      - ORACLE_USERNAME=HADB
-      - ORACLE_PASSWORD=m0ckpass01
-      - ORACLE_URL=jdbc:oracle:thin:@//mock-roa:1521/xe
-      - JWT_PUBLIC_KEY=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAwRs7d+tRAuK4soDInuKp51lTTTXWN8okXR3/gSHiIB+q7vZeAGWA8ULjCYuECLde8tS6OxzZwSj/oM0kZBXuHKYq2ukWKjTEmOwlpQW4vBpX60bcx5rXwoEjbcWghK9oVWwY4OwbAJ4TYklkUHZC5buQ+8RU59u6FIWSv2N3D9VBkfYsHvp3O4aXVaE8dZ0dxldUdv/WePoLkCeUYgLsGyDg/zsZvDrX1+yvNsjNNmB/ksJSoptMv9CfyUpSXsfov+8GhBCtgzDvgn32kw79wPsrTkgnC0DRtuv+y3qCXX+ZJ6cbJ31tVus9AadUn2CrWJur6/KRYsniQaEnfA43hwIDAQAB
-      - EULA_LATEST_VERSION=1
-      #- JWT_SECRET=testtesttest
-      - ENABLE_ZIPKIN=false
-      - SERVICE_TAGS=local
-      - SERVICE_NAME=eula-services_v1
-
 # IAM SSOe Mock - Injects HTTP headers to simulate SSOe token header injection. Allows log in/out.
 #
   iamssoe-proxy-mock:
