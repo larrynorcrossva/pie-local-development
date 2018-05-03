@@ -77,7 +77,7 @@ function start_sm(){
 while [[ "$#" > 0 ]]; do case $1 in
   a|all|-a|--all) start_all; shift;;
   c|core|-c|--core) start_core; shift;;
-  f|-f|--fixtures) start_fixtures; shift;;
+  f|fixtures|-f|--fixtures) start_fixtures; shift;;
   s|ss|-s|--shared-services) start_shared_services; shift;;
   d|data|-d|--data-seed) start_data_seed; shift;;
   v|vet|-v|--vet) start_vet; shift;;
