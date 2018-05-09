@@ -20,7 +20,7 @@ services:
 
 # Mock SSOi
   ssoi-mock:
-    image: mobileapps.vaftl.us:9250/nguyen/ssoi-mock:latest
+    image: mobileapps.vaftl.us:9250/ckm/ssoi-mock:latest
     ports:
       - 9001:80
     environment:
@@ -34,7 +34,8 @@ services:
             \"MVIICN\": \"1008693670V746966\", \"VISTAIDRAW\": \"508|22228439^PN^508^USVHA|A^590|11128439^PN^590^USVHA|A\",
             \"ORGANIZATIONID\": \"urn:oid:2.16.840.1.113883.4.349\", \"ASSURLEVEL\": \"2\", \"ORGANIZATION\": \"Department of Veterans Affairs\",
             \"PROOFINGAUTH\": \"VA\", \"ROLE\": \"role1\", \"ISSUEINSTANT\": \"2017-06-19T13:37:16Z\", \"AUTHNTYPE\": \"Direct\",
-            \"ADUPN\": \"tstaff01@iam.va.local\", \"TRANSACTIONID\": \"00000000000000000000000036d0e30a-0ad4-5947d38c-3688-00fa4fca\",            \"SSOI_LANDING_URL\": \"http://not_set\",
+            \"ADUPN\": \"tstaff01@iam.va.local\", \"TRANSACTIONID\": \"00000000000000000000000036d0e30a-0ad4-5947d38c-3688-00fa4fca\",            
+            \"SSOI_LANDING_URL\": \"http://not_set\",
             \"SSOI_LOGGEDOUT_URL\": \"http://not_set\"
           } },
           {\"userId\": \"vhastaff02\", \"headers\": {
@@ -101,12 +102,17 @@ services:
       - VAMF_ENVIRONMENT=local
     ports:
       - 8095:8080
-    links:
-      - mock-roa
-      - vault
 
 # SUD Web
   sud-web:
     image: mobileapps.vaftl.us:9250/ckm/docker-sud-web:1222
     ports:
       - 8096:80
+
+  pcs-web:
+      image: mobileapps.vaftl.us:9250/ckm/pcs-web:1.0.1
+      ports:
+      - 8093:80
+      environment:
+      - SERVICE_TAGS=local
+      - SERVICE_80_NAME=pcs-web
