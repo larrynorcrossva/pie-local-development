@@ -121,71 +121,46 @@ services:
      - "8082:8080"
 
   user-services:
-    #image: mobileapps.vaftl.us:9250/ckm/docker-user-service:1.6.19
-    image: mobileapps.vaftl.us:9250/ckm/docker-user-service:1.7.0
+    image: mobileapps.vaftl.us:9250/ckm/docker-user-service:1.6.19
+    #image: mobileapps.vaftl.us:9250/ckm/docker-user-service:1.7.0
     depends_on:
       - eula-web
       - eula-service
     ports:
-     - "8081:8080"
+      - "8081:8080"
     environment:
       # 1.6.19 configuration
-      # - VAMF_ENVIRONMENT=local
-      # #- VAULT_ADDR=http://vault:8200
-      # - SECRET_PATH=secret/local/user-services
-      # - USE_ENVCONSUL=true
-      # - SERVER_USE_FORWARD_HEADERS=true
-      # - TRACE_URL=http://zipkin:9411/api/v1/spans
-      # - MVI_URL=http://mock-mvi:8080/mvi/mockVAIdMPort
-      # - ROA_HOST=http://roa-services:8080
-      # - MVI_SENDER_ID=CIH200
-      # - MCI_PROCESSING_CODE=T
-      # - JWT_SECRET=testtesttest
-      # - JAVA_OPTS=-Xms256m -Xmx512m -XX:-TieredCompilation -Xss256k -XX:+UseG1GC -XX:+UseStringDeduplication
-      # - SERVICE_TAGS=local
-      # - CONSUL_SERVER=consul:8500
-      # - CONSUL_TOKEN=7BE784A4-7498-4469-BE2F-9C3B9444DFEF
-      # - CONSUL_PATH=appconfig/local/user-service
-      # - APIGW_BASE_URL=http://localhost:8089
-      # - WAYF_APP_URL=http://localhost:8089/wayf/v1/index.html
-      # - "MVI_VISTA_FACILITIES=101,111,222,313,372,376,442,500,516,553,631,688,777,523"
-      # - "JAVA_OPTS=-agentlib:jdwp=transport=dt_socket,address=8000,server=y,suspend=n"
-      # - "JWTISSUER_CONFIG_JSON=[{\"rsaPublicKeyB64\":\"MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAtxwSTqAC49xXxWIX/kpb4EWXjnpN8ii5FbjAOmubKA32ZVHC+OSj14uRkKJp5EgU0aOO6cbm7jTnGjOFq+KC540qtBMP6/bd/rcXNCb7t8ajb2eWC1PdvYCrpXM/IAZvdrOGhc9sU+8DeZj2dJg+WIlWkrnXsHMbAd5ePt1mCx6NPADFBRVSJg9MAN04yzBAcgmAeOgcZGYqHcihov3hIi0UnAwi0wtBHIquGcRKhUAG5clOY3YxyNJZ2HWglrCHtz1sHe7OGFBfGGR18C+S6CK7GDB2zm3IkJ16uqf/F3s+tF7u88mE3t6gr/Y/1U6OH99xm1Ta0Yqzie351qEXSwIDAQAB\",\"iss\":\"gov.va.mhv.idp.v1\",\"userType\":\"VETERAN\"},{\"rsaPublicKeyB64\":\"MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAtxwSTqAC49xXxWIX/kpb4EWXjnpN8ii5FbjAOmubKA32ZVHC+OSj14uRkKJp5EgU0aOO6cbm7jTnGjOFq+KC540qtBMP6/bd/rcXNCb7t8ajb2eWC1PdvYCrpXM/IAZvdrOGhc9sU+8DeZj2dJg+WIlWkrnXsHMbAd5ePt1mCx6NPADFBRVSJg9MAN04yzBAcgmAeOgcZGYqHcihov3hIi0UnAwi0wtBHIquGcRKhUAG5clOY3YxyNJZ2HWglrCHtz1sHe7OGFBfGGR18C+S6CK7GDB2zm3IkJ16uqf/F3s+tF7u88mE3t6gr/Y/1U6OH99xm1Ta0Yqzie351qEXSwIDAQAB\",\"iss\":\"external.idp.test1\",\"userType\":\"VETERAN\"},{\"rsaPublicKeyB64\":\"MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA17igsXGfpg3BRv1dr9jAyhyjGUpDSQ1CCIjQI/NZD+OoxoTlvPMmY8yQ3OfisnpE7zR+dNAdj7CHCiCbKgQKjPmOzdobKJD7N8538lxZ2wlHNko0rG3iyCKJVRJFMXirZfrPERlFj0AQrwhobIpuwyFQfsNTZPaxeaN35Bexo7fowu0LBkzvCioZfKq6QPxx8qQ0/wJYxeh3D4b5NWR1eIbWpJE5NbWYx0ZSs/TD5HQTAGsIvJN5+EKzVB1RZAp0UwdxDQE7BjpXBXx0PjZidCY2kH2jVm1OHd/xzkZiIt2EYe5Cpd/CuLfWjzxHv6pCkC8I0a6qljQNS9iOQc6blwIDAQAB\",\"iss\":\"gov.va.vamf.service.saml-sts\",\"userType\":\"VETERAN\"}]"
-      # #- "IDP_CONFIG_JSON=[{\"idpId\": \"gov.va.iam.ssoe.v1\",\"friendlyName\": \"VAAFI SSOe\",\"description\": \"Veteran login supporting DSLogon, Symantec, and other CSPs.\",\"versionId\": \"v1\",\"scope\": \"VETERAN\",\"logoUrl\": \"img/dslogon-logo.png\",\"loginUrl\": \"http://localhost:9000/users/v1/landing\",\"logoutUrl\": \"http://localhost:9000/ssoeproxy/logout\",\"vamfLandingPage\": \"http://localhost/users/v1/landing\"},{\"idpId\": \"gov.va.iam.ssoi.v1\",\"friendlyName\": \"VAAFI SSOi\",\"description\": \"Staff login supporting PIV authentication.\",\"versionId\": \"v1\",\"scope\": \"STAFF\",\"logoUrl\": \"img/logo_navbar_ipad.png\",\"loginUrl\": \"http://localhost/vaafi/ssoimock/login\",\"logoutUrl\": \"http://localhost/vaafi/ssoemock/logout\",\"vamfLandingPage\": \"http://localhost/users/v1/landing\"},{\"idpId\": \"gov.va.mhv.v1\",\"friendlyName\": \"My HealtheVet\",\"description\": \"Staff login supporting PIV authentication.\",\"versionId\": \"v1\",\"scope\": \"VETERAN\",\"logoUrl\": \"img/mhv-logo.png\",\"loginUrl\": \"http://localhost/vaafi/ssoimock/login\",\"logoutUrl\": \"http://localhost/vaafi/ssoemock/logout\",\"vamfLandingPage\": \"http://localhost/users/v1/landing\"}]"
-      # - "IDP_CONFIG_JSON=[{\"idpId\": \"gov.va.iam.ssoe.v1\",\"friendlyName\": \"VAAFI SSOe\",\"description\": \"Veteran login supporting DSLogon, Symantec, and other CSPs.\",\"versionId\": \"v1\",\"scope\": \"VETERAN\",\"logoUrl\": \"img/dslogon-logo.png\",\"loginUrl\": \"http://${HOST_DOMAIN}:9000/users/v1/landing\",\"logoutUrl\": \"http://${HOST_DOMAIN}:9000/ssoeproxy/logout\",\"vamfLandingPage\": \"http://${HOST_DOMAIN}/users/v1/landing\"},{\"idpId\": \"gov.va.iam.ssoi.v1\",\"friendlyName\": \"VAAFI SSOi\",\"description\": \"Staff login supporting PIV authentication.\",\"versionId\": \"v1\",\"scope\": \"STAFF\",\"logoUrl\": \"img/logo_navbar_ipad.png\",\"loginUrl\": \"http://localhost:9001/users/v1/landing\",\"logoutUrl\": \"http://${HOST_DOMAIN}:9001/ssoiproxy/logout\",\"vamfLandingPage\": \"http://${HOST_DOMAIN}/users/v1/landing\"},{\"idpId\": \"gov.va.mhv.v1\",\"friendlyName\": \"My HealtheVet\",\"description\": \"Staff login supporting PIV authentication.\",\"versionId\": \"v1\",\"scope\": \"VETERAN\",\"logoUrl\": \"img/mhv-logo.png\",\"loginUrl\": \"http://${HOST_DOMAIN}:8080/ssoiproxy/login\",\"logoutUrl\": \"http://${HOST_DOMAIN}:8080/ssoiproxy/logout\",\"vamfLandingPage\": \"http://${HOST_DOMAIN}:8080/users/v1/landing\"}]"
-      # - "REDIS_HOST=redis"
-      # - "IAM_WST_URL=http://mock-wstrust:8080/services/sts"
-
-      # 1.7.0 configuration
-      # Uncomment this section to use Vault
-      #    - VAULT_ADDR=http://vault:8200
-      #    - SECRET_PATH=secret/local/user-services
-      - JWT_SECRET=testtesttest
-      #- JWT_PRIVATE_KEY=MIIEvwIBADANBgkqhkiG9w0BAQEFAASCBKkwggSlAgEAAoIBAQDBGzt361EC4riygMie4qnnWVNNNdY3yiRdHf+BIeIgH6ru9l4AZYDxQuMJi4QIt17y1Lo7HNnBKP+gzSRkFe4cpira6RYqNMSY7CWlBbi8GlfrRtzHmtfCgSNtxaCEr2hVbBjg7BsAnhNiSWRQdkLlu5D7xFTn27oUhZK/Y3cP1UGR9iwe+nc7hpdVoTx1nR3GV1R2/9Z4+guQJ5RiAuwbIOD/Oxm8OtfX7K82yM02YH+SwlKim0y/0J/JSlJex+i/7waEEK2DMO+CffaTDv3A+ytOSCcLQNG26/7LeoJdf5knpxsnfW1W6z0Bp1SfYKtYm6vr8pFiyeJBoSd8DjeHAgMBAAECggEATcnKiuQgHil2fXGjX12vU6KIC/JD+PVU8K3E3x/nF0mqcdiMxVweNRHco1uwNFKpzOgknOtiTI1XbE82+Zpb8O5/FPAQHbBkAbYe8/r6D8wM3poNFdsqTw/2VaHmp4yBWufQncp+liEXbeBiqIb7K9AC92h/S2cX7mxgUPigXZ+2V5Bvdjo2jAtdrq6nXFtzsqCxNKFpFifdV2TkFbq6vGB/mJdrFHspUiMZc2KAR7/pQCO/oR/WIyHRTBvWcM/zrd/7A6TZRKYMabYDn1dbyP/ATqyJ/rtx+7Josj+LogBVrdeD7USpdHj6FLbT/Z0N5o1tintUlj8eo1XqNupjAQKBgQD2VLTgiVphbju0YA65I1yWYuPYdDXJVkJjqv7lFndPdOGZsfysdc2fdkdAEkPVZhI5Tve8CvOW98WnVLkj/WRyfBVeVbekIGdsH/PWRTrLv5mXbpDGYP0z1c7FTMx6qiaE6ZLZATy4jWBLRPQcJj5rm70nO4Sajfo5TQW4BB+abQKBgQDIr7Dvq5AixiMSzbvhPIDqjIYQv+TCbzKoNm/JuRgE/1mxfgxuthNA8OLDBEmCa3SWUo9Slrq5KnynVMnxIMiTw9CSbLhUYxqlrP0ei6C7d1bv5N3tH4GD5ljCmobz04Dg56/bs/pbfJBjfE2qxtrEgzK51FazUzlFUwzf++vhQwKBgQCCUuRzWxfvLjP2RU/k0XmdsuoazbjbMYDkXEaJC27KIetttkYZNCY6tIgTtNYgo+UGXuogmaawe5wd4GwnR1uKWm2vwCftdJtjEDCgb3Yg79ihzoRYAF5Vu0uvBOe2Cilg7nabytTGSz3j9LI15mHl6rqTdCC+6Fi3UjGxXrUdrQKBgQCjPF0EJZ2A239N3TA0Hd2Saqjl2OA+0un2bwjwoPCLqBQRzkBYkRsKGKWqEMOmJLdZSmAvwlCxKoDoLoxv6MWdg4oUgABTC6VyG0pr3RDpS0HYsWVeaeEUI3oRGFYq39+VkH63iyZZ4fEkKsiV31e0vi61fqTjCg+sdsgjLCuKNwKBgQDhp8wfpcqYnvDvn7OKL52SiXfktTWe8xq6pVKLDrHScEUhj/vgcXkvOiELP+jnNivMU2AWObLq0Nf+JWpH4HrIH8R+Ag7sgy+mL53Ku+4I2et1JsHCc94AS59qY/C4AqZDgpFAFYKTNPRn+bQMAIRCh2dIayehKTgZpvhmxxSSvw==
-      #- JWT_PUBLIC_KEY=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAwRs7d+tRAuK4soDInuKp51lTTTXWN8okXR3/gSHiIB+q7vZeAGWA8ULjCYuECLde8tS6OxzZwSj/oM0kZBXuHKYq2ukWKjTEmOwlpQW4vBpX60bcx5rXwoEjbcWghK9oVWwY4OwbAJ4TYklkUHZC5buQ+8RU59u6FIWSv2N3D9VBkfYsHvp3O4aXVaE8dZ0dxldUdv/WePoLkCeUYgLsGyDg/zsZvDrX1+yvNsjNNmB/ksJSoptMv9CfyUpSXsfov+8GhBCtgzDvgn32kw79wPsrTkgnC0DRtuv+y3qCXX+ZJ6cbJ31tVus9AadUn2CrWJur6/KRYsniQaEnfA43hwIDAQAB
+      #- VAULT_ADDR=http://vault:8200
+      - SECRET_PATH=secret/local/user-services
       - USE_ENVCONSUL=true
-      - CONSUL_SERVER=consul:8500ss
-      - CONSUL_TOKEN=${CONSUL_TOKEN}
-      - CONSUL_PATH=appconfig/${VAMF_ENVIRONMENT}/user-services
-      - SERVER_USE_FORWARD_HEADERS=false
-      - SERVICE_NAME=docker-user-service
+      - SERVER_USE_FORWARD_HEADERS=true
+      - TRACE_URL=http://zipkin:9411/api/v1/spans
       - MVI_URL=http://mock-mvi:8080/mvi/mockVAIdMPort
-      - EULA_HOST=http://eula-service:8080
+      - ROA_HOST=http://roa-services:8080
       - SUD_HOST=http://sud-service:8080
       - MVI_SENDER_ID=CIH200
       - MVI_PROCESSING_CODE=T
-      - JAVA_OPTS=-agentlib:jdwp=transport=dt_socket,address=8000,server=y,suspend=n
-      - JAVA_OPTS=-Xms128m -Xmx512m -XX:-TieredCompilation -Xss256k -XX:+UseG1GC -XX:+UseStringDeduplication
-      - SERVICE_TAGS=${VAMF_ENVIRONMENT}
-      - APIGW_BASE_URL=http://${HOST_DOMAIN}:8089
-      - WAYF_APP_URL=http://${HOST_DOMAIN}:8089/wayf/v1/index.html
-      - "MVI_VISTA_FACILITIES=101,111,222,313,372,376,442,500,516,553,598,631,688,777,636"
-      - TRACE_URL=http://zipkin:9411/api/v1/spans
-      - VAMF_ENVIRONMENT=${VAMF_ENVIRONMENT}
-      - "JWTISSUER_CONFIG_JSON=[{\"rsaPublicKeyB64\":\"MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAtxwSTqAC49xXxWIX/kpb4EWXjnpN8ii5FbjAOmubKA32ZVHC+OSj14uRkKJp5EgU0aOO6cbm7jTnGjOFq+KC540qtBMP6/bd/rcXNCb7t8ajb2eWC1PdvYCrpXM/IAZvdrOGhc9sU+8DeZj2dJg+WIlWkrnXsHMbAd5ePt1mCx6NPADFBRVSJg9MAN04yzBAcgmAeOgcZGYqHcihov3hIi0UnAwi0wtBHIquGcRKhUAG5clOY3YxyNJZ2HWglrCHtz1sHe7OGFBfGGR18C+S6CK7GDB2zm3IkJ16uqf/F3s+tF7u88mE3t6gr/Y/1U6OH99xm1Ta0Yqzie351qEXSwIDAQAB\",\"iss\":\"gov.va.mhv.idp.v1\",\"userType\":\"VETERAN\"},{\"rsaPublicKeyB64\":\"MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAtxwSTqAC49xXxWIX/kpb4EWXjnpN8ii5FbjAOmubKA32ZVHC+OSj14uRkKJp5EgU0aOO6cbm7jTnGjOFq+KC540qtBMP6/bd/rcXNCb7t8ajb2eWC1PdvYCrpXM/IAZvdrOGhc9sU+8DeZj2dJg+WIlWkrnXsHMbAd5ePt1mCx6NPADFBRVSJg9MAN04yzBAcgmAeOgcZGYqHcihov3hIi0UnAwi0wtBHIquGcRKhUAG5clOY3YxyNJZ2HWglrCHtz1sHe7OGFBfGGR18C+S6CK7GDB2zm3IkJ16uqf/F3s+tF7u88mE3t6gr/Y/1U6OH99xm1Ta0Yqzie351qEXSwIDAQAB\",\"iss\":\"external.idp.test1\",\"userType\":\"VETERAN\"}]"
+      - JWT_SECRET=testtesttest
+      - SERVICE_TAGS=local
+      - SERVICE_NAME=docker-user-service
+      - CONSUL_SERVER=consul:8500
+      - CONSUL_TOKEN=7BE784A4-7498-4469-BE2F-9C3B9444DFEF
+      - CONSUL_PATH=appconfig/local/user-services
+      - APIGW_BASE_URL=http://localhost:8089
+      - WAYF_APP_URL=http://localhost:8089/wayf/v1/index.html
+      - "MVI_VISTA_FACILITIES=101,111,222,313,372,376,442,500,516,553,631,688,777,523, 636"
+      - JAVA_OPTS=-Xms256m -Xmx512m -XX:-TieredCompilation -Xss256k -XX:+UseG1GC -XX:+UseStringDeduplication
+      - "JAVA_OPTS=-agentlib:jdwp=transport=dt_socket,address=8000,server=y,suspend=n"
+      - "JWTISSUER_CONFIG_JSON=[{\"rsaPublicKeyB64\":\"MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAtxwSTqAC49xXxWIX/kpb4EWXjnpN8ii5FbjAOmubKA32ZVHC+OSj14uRkKJp5EgU0aOO6cbm7jTnGjOFq+KC540qtBMP6/bd/rcXNCb7t8ajb2eWC1PdvYCrpXM/IAZvdrOGhc9sU+8DeZj2dJg+WIlWkrnXsHMbAd5ePt1mCx6NPADFBRVSJg9MAN04yzBAcgmAeOgcZGYqHcihov3hIi0UnAwi0wtBHIquGcRKhUAG5clOY3YxyNJZ2HWglrCHtz1sHe7OGFBfGGR18C+S6CK7GDB2zm3IkJ16uqf/F3s+tF7u88mE3t6gr/Y/1U6OH99xm1Ta0Yqzie351qEXSwIDAQAB\",\"iss\":\"gov.va.mhv.idp.v1\",\"userType\":\"VETERAN\"},{\"rsaPublicKeyB64\":\"MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAtxwSTqAC49xXxWIX/kpb4EWXjnpN8ii5FbjAOmubKA32ZVHC+OSj14uRkKJp5EgU0aOO6cbm7jTnGjOFq+KC540qtBMP6/bd/rcXNCb7t8ajb2eWC1PdvYCrpXM/IAZvdrOGhc9sU+8DeZj2dJg+WIlWkrnXsHMbAd5ePt1mCx6NPADFBRVSJg9MAN04yzBAcgmAeOgcZGYqHcihov3hIi0UnAwi0wtBHIquGcRKhUAG5clOY3YxyNJZ2HWglrCHtz1sHe7OGFBfGGR18C+S6CK7GDB2zm3IkJ16uqf/F3s+tF7u88mE3t6gr/Y/1U6OH99xm1Ta0Yqzie351qEXSwIDAQAB\",\"iss\":\"external.idp.test1\",\"userType\":\"VETERAN\"},{\"rsaPublicKeyB64\":\"MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA17igsXGfpg3BRv1dr9jAyhyjGUpDSQ1CCIjQI/NZD+OoxoTlvPMmY8yQ3OfisnpE7zR+dNAdj7CHCiCbKgQKjPmOzdobKJD7N8538lxZ2wlHNko0rG3iyCKJVRJFMXirZfrPERlFj0AQrwhobIpuwyFQfsNTZPaxeaN35Bexo7fowu0LBkzvCioZfKq6QPxx8qQ0/wJYxeh3D4b5NWR1eIbWpJE5NbWYx0ZSs/TD5HQTAGsIvJN5+EKzVB1RZAp0UwdxDQE7BjpXBXx0PjZidCY2kH2jVm1OHd/xzkZiIt2EYe5Cpd/CuLfWjzxHv6pCkC8I0a6qljQNS9iOQc6blwIDAQAB\",\"iss\":\"gov.va.vamf.service.saml-sts\",\"userType\":\"VETERAN\"}]"
+      #- "IDP_CONFIG_JSON=[{\"idpId\": \"gov.va.iam.ssoe.v1\",\"friendlyName\": \"VAAFI SSOe\",\"description\": \"Veteran login supporting DSLogon, Symantec, and other CSPs.\",\"versionId\": \"v1\",\"scope\": \"VETERAN\",\"logoUrl\": \"img/dslogon-logo.png\",\"loginUrl\": \"http://localhost:9000/users/v1/landing\",\"logoutUrl\": \"http://localhost:9000/ssoeproxy/logout\",\"vamfLandingPage\": \"http://localhost/users/v1/landing\"},{\"idpId\": \"gov.va.iam.ssoi.v1\",\"friendlyName\": \"VAAFI SSOi\",\"description\": \"Staff login supporting PIV authentication.\",\"versionId\": \"v1\",\"scope\": \"STAFF\",\"logoUrl\": \"img/logo_navbar_ipad.png\",\"loginUrl\": \"http://localhost/vaafi/ssoimock/login\",\"logoutUrl\": \"http://localhost/vaafi/ssoemock/logout\",\"vamfLandingPage\": \"http://localhost/users/v1/landing\"},{\"idpId\": \"gov.va.mhv.v1\",\"friendlyName\": \"My HealtheVet\",\"description\": \"Staff login supporting PIV authentication.\",\"versionId\": \"v1\",\"scope\": \"VETERAN\",\"logoUrl\": \"img/mhv-logo.png\",\"loginUrl\": \"http://localhost/vaafi/ssoimock/login\",\"logoutUrl\": \"http://localhost/vaafi/ssoemock/logout\",\"vamfLandingPage\": \"http://localhost/users/v1/landing\"}]"
       - "IDP_CONFIG_JSON=[{\"idpId\": \"gov.va.iam.ssoe.v1\",\"friendlyName\": \"VAAFI SSOe\",\"description\": \"Veteran login supporting DSLogon, Symantec, and other CSPs.\",\"versionId\": \"v1\",\"scope\": \"VETERAN\",\"logoUrl\": \"img/dslogon-logo.png\",\"loginUrl\": \"http://${HOST_DOMAIN}:9000/users/v1/landing\",\"logoutUrl\": \"http://${HOST_DOMAIN}:9000/ssoeproxy/logout\",\"vamfLandingPage\": \"http://${HOST_DOMAIN}/users/v1/landing\"},{\"idpId\": \"gov.va.iam.ssoi.v1\",\"friendlyName\": \"VAAFI SSOi\",\"description\": \"Staff login supporting PIV authentication.\",\"versionId\": \"v1\",\"scope\": \"STAFF\",\"logoUrl\": \"img/logo_navbar_ipad.png\",\"loginUrl\": \"http://localhost:9001/users/v1/landing\",\"logoutUrl\": \"http://${HOST_DOMAIN}:9001/ssoiproxy/logout\",\"vamfLandingPage\": \"http://${HOST_DOMAIN}/users/v1/landing\"},{\"idpId\": \"gov.va.mhv.v1\",\"friendlyName\": \"My HealtheVet\",\"description\": \"Staff login supporting PIV authentication.\",\"versionId\": \"v1\",\"scope\": \"VETERAN\",\"logoUrl\": \"img/mhv-logo.png\",\"loginUrl\": \"http://${HOST_DOMAIN}:8080/ssoiproxy/login\",\"logoutUrl\": \"http://${HOST_DOMAIN}:8080/ssoiproxy/logout\",\"vamfLandingPage\": \"http://${HOST_DOMAIN}:8080/users/v1/landing\"}]"
       - "REDIS_HOST=redis"
       - "IAM_WST_URL=http://mock-wstrust:8080/services/sts"
+      
+      # 1.7.0 configuration
+      #- JWT_PRIVATE_KEY=MIIEvwIBADANBgkqhkiG9w0BAQEFAASCBKkwggSlAgEAAoIBAQDBGzt361EC4riygMie4qnnWVNNNdY3yiRdHf+BIeIgH6ru9l4AZYDxQuMJi4QIt17y1Lo7HNnBKP+gzSRkFe4cpira6RYqNMSY7CWlBbi8GlfrRtzHmtfCgSNtxaCEr2hVbBjg7BsAnhNiSWRQdkLlu5D7xFTn27oUhZK/Y3cP1UGR9iwe+nc7hpdVoTx1nR3GV1R2/9Z4+guQJ5RiAuwbIOD/Oxm8OtfX7K82yM02YH+SwlKim0y/0J/JSlJex+i/7waEEK2DMO+CffaTDv3A+ytOSCcLQNG26/7LeoJdf5knpxsnfW1W6z0Bp1SfYKtYm6vr8pFiyeJBoSd8DjeHAgMBAAECggEATcnKiuQgHil2fXGjX12vU6KIC/JD+PVU8K3E3x/nF0mqcdiMxVweNRHco1uwNFKpzOgknOtiTI1XbE82+Zpb8O5/FPAQHbBkAbYe8/r6D8wM3poNFdsqTw/2VaHmp4yBWufQncp+liEXbeBiqIb7K9AC92h/S2cX7mxgUPigXZ+2V5Bvdjo2jAtdrq6nXFtzsqCxNKFpFifdV2TkFbq6vGB/mJdrFHspUiMZc2KAR7/pQCO/oR/WIyHRTBvWcM/zrd/7A6TZRKYMabYDn1dbyP/ATqyJ/rtx+7Josj+LogBVrdeD7USpdHj6FLbT/Z0N5o1tintUlj8eo1XqNupjAQKBgQD2VLTgiVphbju0YA65I1yWYuPYdDXJVkJjqv7lFndPdOGZsfysdc2fdkdAEkPVZhI5Tve8CvOW98WnVLkj/WRyfBVeVbekIGdsH/PWRTrLv5mXbpDGYP0z1c7FTMx6qiaE6ZLZATy4jWBLRPQcJj5rm70nO4Sajfo5TQW4BB+abQKBgQDIr7Dvq5AixiMSzbvhPIDqjIYQv+TCbzKoNm/JuRgE/1mxfgxuthNA8OLDBEmCa3SWUo9Slrq5KnynVMnxIMiTw9CSbLhUYxqlrP0ei6C7d1bv5N3tH4GD5ljCmobz04Dg56/bs/pbfJBjfE2qxtrEgzK51FazUzlFUwzf++vhQwKBgQCCUuRzWxfvLjP2RU/k0XmdsuoazbjbMYDkXEaJC27KIetttkYZNCY6tIgTtNYgo+UGXuogmaawe5wd4GwnR1uKWm2vwCftdJtjEDCgb3Yg79ihzoRYAF5Vu0uvBOe2Cilg7nabytTGSz3j9LI15mHl6rqTdCC+6Fi3UjGxXrUdrQKBgQCjPF0EJZ2A239N3TA0Hd2Saqjl2OA+0un2bwjwoPCLqBQRzkBYkRsKGKWqEMOmJLdZSmAvwlCxKoDoLoxv6MWdg4oUgABTC6VyG0pr3RDpS0HYsWVeaeEUI3oRGFYq39+VkH63iyZZ4fEkKsiV31e0vi61fqTjCg+sdsgjLCuKNwKBgQDhp8wfpcqYnvDvn7OKL52SiXfktTWe8xq6pVKLDrHScEUhj/vgcXkvOiELP+jnNivMU2AWObLq0Nf+JWpH4HrIH8R+Ag7sgy+mL53Ku+4I2et1JsHCc94AS59qY/C4AqZDgpFAFYKTNPRn+bQMAIRCh2dIayehKTgZpvhmxxSSvw==
+      #- JWT_PUBLIC_KEY=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAwRs7d+tRAuK4soDInuKp51lTTTXWN8okXR3/gSHiIB+q7vZeAGWA8ULjCYuECLde8tS6OxzZwSj/oM0kZBXuHKYq2ukWKjTEmOwlpQW4vBpX60bcx5rXwoEjbcWghK9oVWwY4OwbAJ4TYklkUHZC5buQ+8RU59u6FIWSv2N3D9VBkfYsHvp3O4aXVaE8dZ0dxldUdv/WePoLkCeUYgLsGyDg/zsZvDrX1+yvNsjNNmB/ksJSoptMv9CfyUpSXsfov+8GhBCtgzDvgn32kw79wPsrTkgnC0DRtuv+y3qCXX+ZJ6cbJ31tVus9AadUn2CrWJur6/KRYsniQaEnfA43hwIDAQAB
+      #- EULA_HOST=http://eula-service:8080
 
   # End User License Agreement (EULA) Service v1
   eula-web:

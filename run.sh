@@ -99,7 +99,29 @@ function start_sm(){
     docker-compose -f docker-compose-sm.yml up -d
 }
 
+function use_vpn(){
+    # URLs for CDW, MDWS, and VIA will reference internal URLs based on this setting.  Note that VPN use is required when
+    #   working outside of AbleVets HQ
+    export USE_VPN_URLS=true
+}
+
+function set_stack_mode_dev(){
+    # In dev mode, all applications will pull from dev as the DTR PREFIX/ORG
+    export STACK_MODE=dev
+}
+
+function set_stack_mode_test(){
+    # In test mode, all applications will pull from the ECR based on the version tagged in this dev/release branch.
+    export STACK_MODE=test
+}
+
 while [[ "$#" > 0 ]]; do case $1 in
+  ### VPN Mode
+  --vpn) use_vpn; shift;;
+
+  --test|--test-mode) set_stack_mode_test; shift;;
+  --dev|--dev-mode) set_stack_mode_dev; shift;;
+
   a|all|-a|--all) start_all; shift;;
   av|all-vet|-av|--all-vet) start_all_vet; shift;;
   as|all-staff|-as|--all-staff) start_all_staff; shift;;
