@@ -2,7 +2,8 @@ version: '2'
 services:
 
   scheduling-manager-resources:
-    image: dev/scheduling-manager-resources
+#    image: dev/scheduling-manager-resources
+    image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ablevets/scheduling-manager-resources:3.0.0
     ports:
      - "9070:8080"
      - "64059:64059"
@@ -17,7 +18,8 @@ services:
      - JAVA_OPTS=-XX:+CMSClassUnloadingEnabled -Xrs -Dcom.sun.xml.ws.transport.http.client.HttpTransportPipe.dump=true -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=64059
 
   scheduling-manager-web:
-     image: dev/scheduling-manager-web
+#     image: dev/scheduling-manager-web
+     image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ablevets/scheduling-manager-web:3.0.0
      ports:
        - "9071:80"
      environment:
