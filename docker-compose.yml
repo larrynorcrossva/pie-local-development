@@ -118,7 +118,10 @@ services:
     image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ablevets/var-mock-mvi-shared:latest
 #    image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ablevets/var-mock-mvi:latest
     ports:
-     - "8082:8080"
+      - "8082:8080"
+    environment:
+      - SERVICE_TAGS=local
+      - SERVICE_NAME=mock-mvi
 
   user-services:
     image: mobileapps.vaftl.us:9250/ckm/docker-user-service:1.6.19
