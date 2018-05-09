@@ -431,14 +431,14 @@ services:
 #    - mongo
 
 #vault server for managing secrets
-  vault:
-    image: mobileapps.vaftl.us:9250/ckm/vault-server:latest
-    environment:
-      - VAULT_LOCAL_CONFIG={"storage":{"consul":{"address":"http://consul:8500", "token":"${CONSUL_TOKEN}", "path":"vault", "scheme":"http"}}}
-    ports:
-      - 8202:8200
-    links:
-      - consul
+# vault:
+#   image: mobileapps.vaftl.us:9250/ckm/vault-server:latest
+#   environment:
+#     - VAULT_LOCAL_CONFIG={"storage":{"consul":{"address":"http://consul:8500", "token":"${CONSUL_TOKEN}", "path":"vault", "scheme":"http"}}}
+#   ports:
+#     - 8202:8200
+#   links:
+#     - consul
 
 # redis for container state
   redis:

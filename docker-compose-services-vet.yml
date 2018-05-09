@@ -11,8 +11,8 @@ services:
      - "8086:8080"
     environment:
     # Use Vault
-    - VAULT_ADDR=http://vault:8200
-    - SECRET_PATH=secret/local/roa-service
+    # - VAULT_ADDR=http://vault:8200
+    # - SECRET_PATH=secret/local/roa-service
     # Use Consul
     - USE_ENVCONSUL=true
     - CONSUL_SERVER=consul:8500
