@@ -4,15 +4,39 @@ source app.env
 
 docker network create varnextgenlocalenvironment_default
 
+function start_all_shared(){
+    start_core
+    sleep 15
+    start_fixtures
+    sleep 15
+    start_data_seed
+    start_shared_services
+}
+
 function start_all(){
-    ./run-nextgen-infrastructure.sh
-    ./run-fixtures.sh
-    sleep 10
-    ./run-data-seed.sh
-    ./run-shared-services.sh
-    sleep 10
-    ./run-var.sh
-    ./run-sm.sh
+    start_all_shared
+    sleep 15
+    start_vet
+    start_staff
+    sleep 15
+    start_var
+    start_sm
+}
+
+function start_all_vet(){
+    start_all_shared
+    sleep 15
+    start_vet
+    sleep 15
+    start_var
+}
+
+function start_all_staff(){
+    start_all_shared
+    sleep 15
+    start_staff
+    sleep 15
+    start_sm
 }
 
 function start_core(){
@@ -55,9 +79,9 @@ function start_vet(){
 }
 
 function start_staff(){
-    docker-compose -f docker-compose-staff.yml down
-    docker-compose -f docker-compose-staff.yml pull
-    docker-compose -f docker-compose-staff.yml up -d
+    docker-compose -f docker-compose-services-staff.yml down
+    docker-compose -f docker-compose-services-staff.yml pull
+    docker-compose -f docker-compose-services-staff.yml up -d
 }
 
 function start_var(){
@@ -76,6 +100,8 @@ function start_sm(){
 
 while [[ "$#" > 0 ]]; do case $1 in
   a|all|-a|--all) start_all; shift;;
+  av|all-vet|-av|--all-vet) start_all_vet; shift;;
+  as|all-staff|-as|--all-staff) start_all_staff; shift;;
   c|core|-c|--core) start_core; shift;;
   f|-f|--fixtures) start_fixtures; shift;;
   s|ss|-s|--shared-services) start_shared_services; shift;;
