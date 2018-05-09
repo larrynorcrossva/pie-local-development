@@ -102,7 +102,9 @@ function start_sm(){
 function use_vpn(){
     # URLs for CDW, MDWS, and VIA will reference internal URLs based on this setting.  Note that VPN use is required when
     #   working outside of AbleVets HQ
-    export USE_VPN_URLS=true
+    echo "\nSetting VPN configuration\n"
+    CDW_HOST=${CDW_HOST_AV_VPN}
+    MDWS_HOST=${MDWS_HOST_AV_VPN}
 }
 
 function set_stack_mode_dev(){
