@@ -3,7 +3,7 @@ services:
 
   var-resources:
 #    image: dev/var-resources:4.2.7
-    image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ablevets/var-web:4.2.7
+    image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ablevets/var-resources:4.2.7
     ports:
      - "9092:8080"
      - "64058:64058"
