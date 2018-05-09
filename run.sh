@@ -42,7 +42,8 @@ function start_all_staff(){
 function start_core(){
     ## Start Consul first
     echo "\nStarting Consul and Vault\n"
-    docker-compose up -d consul vault || (echo "*** FAILED: Could not start Consul or Vault using docker-compose." && exit -1)
+    # docker-compose up -d consul vault || (echo "*** FAILED: Could not start Consul or Vault using docker-compose." && exit -1)
+    docker-compose up -d consul || (echo "*** FAILED: Could not start Consul or Vault using docker-compose." && exit -1)
 
     echo "\nWaiting 15s for Consul and Vault...\n"
     sleep 15s
