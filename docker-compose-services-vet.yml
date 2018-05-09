@@ -71,3 +71,8 @@ services:
     environment:
       - MYSQL_ROOT_PASSWORD=MySqlAdmin$$
       - MYSQL_DATABASE=MockUser
+
+networks:
+  default:
+    external:
+      name: varnextgenlocalenvironment_default

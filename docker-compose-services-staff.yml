@@ -116,3 +116,8 @@ services:
       environment:
       - SERVICE_TAGS=local
       - SERVICE_80_NAME=pcs-web
+
+networks:
+  default:
+    external:
+      name: varnextgenlocalenvironment_default
