@@ -1,4 +1,3 @@
-source ../app.env
 
 if [ -z $1 ] || [ "$1" == "all" ]; then
     echo -e "\nShutting down NextGen platform services...\n"
