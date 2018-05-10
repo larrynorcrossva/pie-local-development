@@ -18,8 +18,8 @@ services:
     - CONSUL_SERVER=consul:8500
     - CONSUL_TOKEN=7BE784A4-7498-4469-BE2F-9C3B9444DFEF
     - CONSUL_PATH=appconfig/local/roa-service
-    #- DB_ROA_USERNAME=HADB # pulled from vault
-    #- DB_ROA_PASSWORD=m0ckpass01 # pulled from vault
+    - DB_ROA_USERNAME=HADB # pulled from vault
+    - DB_ROA_PASSWORD=m0ckpass01 # pulled from vault
     - SERVICE_TAGS=local
     - JAVA_OPTS=-Xms256m -Xmx512m -XX:-TieredCompilation -Xss256k -XX:+UseG1GC -XX:+UseStringDeduplication
     - JWT_SECRET=testtesttest
