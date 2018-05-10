@@ -3,7 +3,7 @@ services:
 
 #Patient context service
   patient-context:
-    image: mobileapps.vaftl.us:9250/shared/patient-context
+    image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ablevets/patient-context:2.0.5
     ports:
       - '3001:3001'
     environment:
@@ -118,7 +118,7 @@ services:
       - SERVICE_80_NAME=pcs-web
 
   personal-preference-service:
-    image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ablevets/personal-preference-service:1.0.0
+    image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ablevets/personal-preference-service:1.0.5
     ports:
      - "8286:8080"
     environment: #sub these with jenkins vars
