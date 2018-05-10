@@ -59,36 +59,22 @@ services:
       - CONSUL_PATH=appconfig/local/video-visits-service
       - "TRACE_URL=http://localhost:9411/api/v1/spans"
 
-  personal-preference-service:
-    image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ablevets/personal-preference-service:1.0.0
-    ports:
-     - "8286:8080"
-    environment: #sub these with jenkins vars
-     - constraint:nodetype==*service*
-     - SERVICE_NAME=personal-preference-service
-     - SERVICE_TAGS=local
-     - VAMF_ENVIRONMENT=local
-     - JWT_SECRET=testtesttest
-     - CONSUL_SERVER=${CONSUL_SERVER}
-     - CONSUL_TOKEN=7BE784A4-7498-4469-BE2F-9C3B9444DFEF
-     - CONSUL_PATH=appconfig/${VAMF_ENVIRONMENT}/personal-preference-service
-     - "TRACE_URL=http://zipkin:9411/api/v1/spans"
-
-
-  messaging-publisher:
-    image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ablevets/messaging-publisher:latest
-    container_name: "messaging-publisher"
-    hostname: "messaging-publisher"
-    ports:
-     - "7090:8080"
-    environment: #sub these with jenkins vars
-     - constraint:nodetype==*service*
-     - SERVICE_NAME=messaging-publisher
-     - JWT_SECRET=${JWT_SECRET}
-     - CONSUL_SERVER=${CONSUL_SERVER}
-     - CONSUL_TOKEN=${CONSUL_MASTER_TOKEN}
-     - CONSUL_PATH=appconfig/${VAMF_ENVIRONMENT}/messaging-publisher
-     - "TRACE_URL=http://zipkin:9411/api/v1/spans"
+#
+#
+#  messaging-publisher:
+#    image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ablevets/messaging-publisher:latest
+#    container_name: "messaging-publisher"
+#    hostname: "messaging-publisher"
+#    ports:
+#     - "7090:8080"
+#    environment: #sub these with jenkins vars
+#     - constraint:nodetype==*service*
+#     - SERVICE_NAME=messaging-publisher
+#     - JWT_SECRET=${JWT_SECRET}
+#     - CONSUL_SERVER=${CONSUL_SERVER}
+#     - CONSUL_TOKEN=${CONSUL_MASTER_TOKEN}
+#     - CONSUL_PATH=appconfig/${VAMF_ENVIRONMENT}/messaging-publisher
+#     - "TRACE_URL=http://zipkin:9411/api/v1/spans"
 
 
 networks:

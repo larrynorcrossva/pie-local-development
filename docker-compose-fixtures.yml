@@ -48,6 +48,26 @@ services:
       - CONSUL_PATH=appconfig/${VAMF_ENVIRONMENT}/video-visits-mongo-mock
 
 
+# fixtures used for upcoming shared services
+
+# Mongo mock for quartz and notifications, username/pass authentication turned on by default
+# SSL turned off by default
+#  mongo:
+#    image: mobileapps.vaftl.us:9250/ckm/mock-mongo:1.0.0
+#    expose:
+#     - "27017"
+#    ports:
+#     - "27017"
+#    environment:
+#    - MONGODB_ADMIN_USER=admin
+#    - MONGODB_ADMIN_PASS=adminpass
+#    - MONGODB_APPLICATION_DATABASE=notificationsdb, remindersdb, taskresourcesdb
+#    - MONGODB_APPLICATION_USER=testuser
+#    - MONGODB_APPLICATION_PASS=testpass
+#    - SSL_ENABLED=false
+#    - AUTH_ENABLED=true
+#    - JOURNALING=true
+
 networks:
   default:
     external:
