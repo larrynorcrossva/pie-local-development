@@ -41,7 +41,6 @@ function stop_all(){
     stop_staff;
     stop_var;
     stop_sm;
-    stop_all;
 }
 
 while [[ "$#" > 0 ]]; do case $1 in
