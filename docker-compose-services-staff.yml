@@ -43,7 +43,7 @@ services:
             \"ADUPN\": \"tstaff01@iam.va.local\",
             \"VISTAID\": \"590|10300252^PN^590^USVHA|A,500|12744^PN^500^USVHA|A\"
           } }
-          ] }"
+        ] }"
 
 #SAML mock
   mock-saml-idp:
@@ -103,19 +103,20 @@ services:
     ports:
       - 8095:8080
 
-# SUD Web
+# SUD Web Application
   sud-web:
     image: mobileapps.vaftl.us:9250/ckm/docker-sud-web:1222
     ports:
       - 8096:80
 
+# Provider Context Selector Web Application
   pcs-web:
-      image: mobileapps.vaftl.us:9250/ckm/pcs-web:1.0.1
-      ports:
-      - 8093:80
-      environment:
-      - SERVICE_TAGS=local
-      - SERVICE_80_NAME=pcs-web
+    image: mobileapps.vaftl.us:9250/ckm/pcs-web:1.0.1
+    ports:
+    - 8093:80
+    environment:
+    - SERVICE_TAGS=local
+    - SERVICE_80_NAME=pcs-web
 
   personal-preference-service:
     image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ablevets/personal-preference-service:1.0.5
@@ -140,9 +141,6 @@ services:
   vista-data-services:
     image: mobileapps.vaftl.us:9250/ckm/docker-vista-data-services:1.6.3
     #image: vista-data-services
-    links:
-     - mdws-via-adapter
-     - user-services
     ports:
      - 8085:8080
     environment:
@@ -164,9 +162,6 @@ services:
     image: mobileapps.vaftl.us:9250/ckm/mdws-via-adapter:1.2.15
     ports:
      - 8180:8180
-    depends_on:
-     - user-services
-     - redis
     environment:
     # Vault
     #- "VAULT_ADDR=http://vault:8200"
