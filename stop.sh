@@ -1,35 +1,37 @@
 #!/usr/bin/env bash
 
+. app.env
+
 function stop_core(){
-    docker-compose down
+    docker-compose stop registrator apigateway mock-mvi user-services swagger-ui wayf-web redis zipkin consul
 }
 
 function stop_fixtures(){
-    docker-compose -f docker-compose-fixtures.yml down
+    docker-compose stop mock-roa var-mongo-db-mock var-oracle-db-mock video-visits-mongo-mock mongo
 }
 
 function stop_data_seed(){
-    docker-compose -f docker-compose-data-seed.yml down
+    docker-compose stop var-mongo-data-seed
 }
 
 function stop_shared_services(){
-    docker-compose -f docker-compose-shared-services.yml down
+    docker-compose stop var-messaging-microservice facility-service vmr-mock-service video-visits-service #messaging-publisher
 }
 
 function stop_vet(){
-    docker-compose -f docker-compose-services-vet.yml down
+    docker-compose stop roa-services roa-web veteran-video-connect-service iamssoe-proxy-mock iamssoe-db-mock
 }
 
 function stop_staff(){
-    docker-compose -f docker-compose-services-staff.yml down
+    docker-compose stop patient-context mock-wstrust ssoi-mock mock-saml-idp saml-sts sud-service sud-web pcs-web personal-preference-service vista-data-services mdws-via-adapter
 }
 
 function stop_var(){
-    docker-compose -f docker-compose-var.yml down
+    docker-compose stop var-resources var-web
 }
 
 function stop_sm(){
-    docker-compose -f docker-compose-sm.yml down
+    docker-compose stop scheduling-manager-resources scheduling-manager-web
 }
 
 function stop_all(){
