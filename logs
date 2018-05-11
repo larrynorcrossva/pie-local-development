@@ -44,5 +44,5 @@ while [[ "$#" > 0 ]]; do case $1 in
   staff|--staff) logs_staff; shift;;
   var|--var) logs_var; shift;;
   sm|--sm) logs_sm; shift;;
-  *) echo "Unknown parameter: $1"; exit 1;;
+  *) docker-compose logs -f $1;
 esac; shift; done

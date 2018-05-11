@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 . app.env
-. start.sh
+. start
 
 docker network create varnextgenlocalenvironment_default
 

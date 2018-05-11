@@ -512,6 +512,7 @@ services:
       - DB_SUD_URL=jdbc:oracle:thin:@//mock-roa:1521/xe
       - DB_SUD_USERNAME=HADB
       - DB_SUD_PASSWORD=m0ckpass01
+      - JWT_SECRET=testtesttest
       - APP_LOGGING_LEVEL=INFO
       - ROOT_LOGGING_LEVEL=INFO
       - VAMF_ENVIRONMENT=local
