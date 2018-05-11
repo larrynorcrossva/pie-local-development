@@ -3,12 +3,18 @@
 . app.env
 . start
 
+export PULL=false
+
 docker network create varnextgenlocalenvironment_default
+
+function set_pull(){
+    export PULL=true
+}
 
 function use_vpn(){
     # URLs for CDW, MDWS, and VIA will reference internal URLs based on this setting.  Note that VPN use is required when
     #   working outside of AbleVets HQ
-    echo "\nSetting VPN configuration\n"
+    echo -e "\nSetting VPN configuration...\n"
     CDW_HOST=${CDW_HOST_AV_VPN}
     MDWS_HOST=${MDWS_HOST_AV_VPN}
 }
@@ -26,6 +32,7 @@ function set_stack_mode_test(){
 while [[ "$#" > 0 ]]; do case $1 in
   ### VPN Mode
   --vpn) use_vpn; shift;;
+  --pull) set_pull; shift;;
 
   --test|--test-mode) set_stack_mode_test; shift;;
   --dev|--dev-mode) set_stack_mode_dev; shift;;
@@ -41,5 +48,6 @@ while [[ "$#" > 0 ]]; do case $1 in
   staff|--staff) start_staff; shift;;
   var|--var) start_var; shift;;
   sm|--sm) start_sm; shift;;
+
   *) echo "Unknown parameter: $1"; exit 1;;
 esac; shift; done
