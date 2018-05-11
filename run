@@ -49,5 +49,5 @@ while [[ "$#" > 0 ]]; do case $1 in
   var|--var) start_var; shift;;
   sm|--sm) start_sm; shift;;
 
-  *) echo "Unknown parameter: $1"; exit 1;;
-esac; shift; done
+  *) echo "Unknown parameter: $1"; shift;;
+esac; done

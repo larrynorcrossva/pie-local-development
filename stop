@@ -55,7 +55,7 @@ while [[ "$#" > 0 ]]; do case $1 in
   var|--var) stop_var; shift;;
   sm|--sm) stop_sm; shift;;
   *) echo "Unknown parameter: $1"; exit 1;;
-esac; shift; done
+esac; done
 
 echo -e "\nCleaning up dangling volumes"
 docker volume rm $(docker volume ls -f dangling=true -q)
