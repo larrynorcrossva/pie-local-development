@@ -1,3 +1,5 @@
+. app.env
+
 function start_all_shared(){
     start_core
     sleep 15
@@ -78,9 +80,9 @@ function start_vet(){
 }
 
 function start_staff(){
-    docker-compose stop patient-context mock-wstrust ssoi-mock mock-saml-idp saml-sts sud-service sud-web pcs-web personal-preference-service vista-data-services mdws-via-adapter
-    docker-compose pull patient-context mock-wstrust ssoi-mock mock-saml-idp saml-sts sud-service sud-web pcs-web personal-preference-service vista-data-services mdws-via-adapter
-    docker-compose up -d patient-context mock-wstrust ssoi-mock mock-saml-idp saml-sts sud-service sud-web pcs-web personal-preference-service vista-data-services mdws-via-adapter
+    docker-compose stop patient-context mock-wstrust ssoi-mock mock-saml-idp saml-sts sud-service sud-web pcs-web personal-preference-service vista-data-services mdws-via-adapter staff-video-connect-service
+    docker-compose pull patient-context mock-wstrust ssoi-mock mock-saml-idp saml-sts sud-service sud-web pcs-web personal-preference-service vista-data-services mdws-via-adapter staff-video-connect-service
+    docker-compose up -d patient-context mock-wstrust ssoi-mock mock-saml-idp saml-sts sud-service sud-web pcs-web personal-preference-service vista-data-services mdws-via-adapter staff-video-connect-service
 }
 
 function start_var(){
