@@ -1,6 +1,6 @@
 #!/bin/bash
 
-mongorestore --host var-mongod-db-mock --dir /data/
+mongorestore --host var-mongo-db-mock --dir /data/
 
 JSON_DIR=/opt/mongo-init/json
 
