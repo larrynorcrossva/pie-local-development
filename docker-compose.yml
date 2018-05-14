@@ -49,7 +49,6 @@ services:
       - user-services
       - roa-services
       - zipkin
-
     environment:
       # Local consul instance. Point to central Consul server for non-development deployments
       - CONSUL_HTTP_ADDR=consul:8500
@@ -469,6 +468,7 @@ services:
     ports:
     - 80:8080
     environment:
+    - REDIS_HOST=redis
     - SERVER_USE_FORWARD_HEADERS=true
     - STS_EXTERNAL_ADDR=http://ec2-54-152-177-13.compute-1.amazonaws.com
     - "STS_SP_PUBLICKEY=MIIDkTCCAnmgAwIBAgIJAO5DUXArAG/VMA0GCSqGSIb3DQEBBQUAMDkxNzA1BgNVBAMTLm1vY2stc2FtbC1pZHAsZGM9c2VydmljZXMsZGM9dmFtZixkYz12YSxkYz1nb3YwHhcNMTcwNjMwMDExNDA3WhcNMzcwNjMwMDExNDA3WjA5MTcwNQYDVQQDEy5tb2NrLXNhbWwtaWRwLGRjPXNlcnZpY2VzLGRjPXZhbWYsZGM9dmEsZGM9Z292MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAsyEeemzH9sVeyaXziWaXRw1pG7uLkr/pT4NBfNF/Ejcsj/Kbvbi7WK4i1g2w/3R9CdVPCFtHBMpcI2uN5Z5blSqwBulJ9BMF/HAp7ImYQhMuZLzgy7iA7z1rdLzzmqvVTPeGm1SjNuc0J2fe/+s/HhJJ+Xo5+v4EeZNegDzyEVpHc9PQzQjmLzPnjNsAWVy/jBmwQPoV3VcGDWkccaxVwcS6OS/oGTxs1Ax4dKvfGqf+/IuVFyBrWniLLdiwtupROBvxK8X6D+GyLY0o1fhsF9oenG3JbboPtIAPhU52XdxLrf8o4a6i7SDkgp1EtPE+z9vMgVmQxxd7JNqhwbtfaQIDAQABo4GbMIGYMB0GA1UdDgQWBBR6ZBYnkNbj5rOQEUSVZEzzCXfQPTBpBgNVHSMEYjBggBR6ZBYnkNbj5rOQEUSVZEzzCXfQPaE9pDswOTE3MDUGA1UEAxMubW9jay1zYW1sLWlkcCxkYz1zZXJ2aWNlcyxkYz12YW1mLGRjPXZhLGRjPWdvdoIJAO5DUXArAG/VMAwGA1UdEwQFMAMBAf8wDQYJKoZIhvcNAQEFBQADggEBAG89Yf3u4gepc19A5rwYxvjrmdhrqptETDhczLveAeoY0bdl/GQzw8L+QiNhAbH35wfelOD/rzIC+D1ScFzYQqtA0Ov0VPdztV11CmUyangYexySn7Il/Fv4AGIMmmVO8T7VD0giP0lwO7g3WrD1xm11QEORSODoCJygoFjlf2OpP82zDf+EpNo8Rr9Y8s+oDiS29bRE0t6ODSxUtLWOoQ+fgFH5jKe1k00xOytPdaNlUd8/rZpkiZosu5rU7IZ/Eqpmr2CBBk6BQcSTk5Qf01Sfo0b/7ssoaIrYZK6yH5E3PKhS+18ruVEvNkcXrJfGS6F/yW4QXjba8kYmZJYLQ9E="
