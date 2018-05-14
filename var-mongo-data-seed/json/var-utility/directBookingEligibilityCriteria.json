@@ -1,0 +1,342 @@
+[
+	{
+	"_class" : "gov.va.vamf.scheduling.direct.domain.DirectBookingEligibilityCriteria",
+	"_id" : "523",
+	"coreSettings" : [
+		{
+			"_id" : "323",
+			"typeOfCare" : "PRIMARY CARE",
+			"patientHistoryRequired" : "No",
+			"patientHistoryDuration" : 0,
+			"submittedRequestLimit" : 0,
+			"canCancel" : "true"
+		},
+		{
+			"_id" : "203",
+			"typeOfCare" : "AUDIOLOGY",
+			"patientHistoryRequired" : "No",
+			"patientHistoryDuration" : 0,
+			"submittedRequestLimit" : 0
+		},
+		{
+			"_id" : "408",
+			"typeOfCare" : "OPTOMETRY",
+			"patientHistoryRequired" : "No",
+			"patientHistoryDuration" : 0,
+			"submittedRequestLimit" : 0
+		},
+		{
+			"_id" : "502",
+			"typeOfCare" : "OUTPATIENT MENTAL HEALTH",
+			"patientHistoryRequired" : "No",
+			"patientHistoryDuration" : 0,
+			"submittedRequestLimit" : 0
+		}
+	]
+},
+{
+	"_class" : "gov.va.vamf.scheduling.direct.domain.DirectBookingEligibilityCriteria",
+	"_id" : "523BZ",
+	"coreSettings" : [
+		{
+			"_id" : "323",
+			"typeOfCare" : "PRIMARY CARE",
+			"patientHistoryRequired" : "No",
+			"patientHistoryDuration" : 0.0,
+			"canCancel" : true
+		},
+		{
+			"_id" : "203",
+			"typeOfCare" : "AUDIOLOGY",
+			"patientHistoryRequired" : "No",
+			"patientHistoryDuration" : 0.0,
+			"canCancel" : true
+		},
+		{
+			"_id" : "408",
+			"typeOfCare" : "OPTOMETRY",
+			"patientHistoryRequired" : "No",
+			"patientHistoryDuration" : 0.0,
+			"canCancel" : true
+		},
+		{
+			"_id" : "502",
+			"typeOfCare" : "OUTPATIENT MENTAL HEALTH",
+			"patientHistoryRequired" : "No",
+			"patientHistoryDuration" : 0.0,
+			"canCancel" : true
+		}
+	]
+},
+{
+	"_class" : "gov.va.vamf.scheduling.direct.domain.DirectBookingEligibilityCriteria",
+	"_id" : "523GA",
+	"coreSettings" : [
+		{
+			"_id" : "323",
+			"typeOfCare" : "PRIMARY CARE",
+			"patientHistoryRequired" : "No",
+			"canCancel" : true
+		},
+		{
+			"_id" : "203",
+			"typeOfCare" : "AUDIOLOGY",
+			"patientHistoryRequired" : "No",
+			"patientHistoryDuration" : 0.0,
+			"canCancel" : true
+		},
+		{
+			"_id" : "408",
+			"typeOfCare" : "OPTOMETRY",
+			"patientHistoryRequired" : "No",
+			"patientHistoryDuration" : 0.0,
+			"canCancel" : true
+		},
+		{
+			"_id" : "502",
+			"typeOfCare" : "OUTPATIENT MENTAL HEALTH",
+			"patientHistoryRequired" : "No",
+			"patientHistoryDuration" : 0.0,
+			"canCancel" : true
+		}
+	]
+},
+{
+	"_class" : "gov.va.vamf.scheduling.direct.domain.DirectBookingEligibilityCriteria",
+	"_id" : "523GC",
+	"coreSettings" : [
+		{
+			"_id" : "323",
+			"typeOfCare" : "PRIMARY CARE",
+			"patientHistoryRequired" : "No",
+			"patientHistoryDuration" : 0.0,
+			"canCancel" : true
+		},
+		{
+			"_id" : "203",
+			"typeOfCare" : "AUDIOLOGY",
+			"patientHistoryRequired" : "No",
+			"patientHistoryDuration" : 0.0,
+			"canCancel" : true
+		},
+		{
+			"_id" : "408",
+			"typeOfCare" : "OPTOMETRY",
+			"patientHistoryRequired" : "No",
+			"patientHistoryDuration" : 0.0,
+			"canCancel" : true
+		},
+		{
+			"_id" : "502",
+			"typeOfCare" : "OUTPATIENT MENTAL HEALTH",
+			"patientHistoryRequired" : "No",
+			"patientHistoryDuration" : 0.0,
+			"canCancel" : true
+		}
+	]
+},
+{
+	"_class" : "gov.va.vamf.scheduling.direct.domain.DirectBookingEligibilityCriteria",
+	"_id" : "523A4",
+	"coreSettings" : [
+		{
+			"_id" : "323",
+			"typeOfCare" : "PRIMARY CARE",
+			"patientHistoryRequired" : "No",
+			"patientHistoryDuration" : 0.0,
+			"canCancel" : true
+		},
+		{
+			"_id" : "203",
+			"typeOfCare" : "AUDIOLOGY",
+			"patientHistoryRequired" : "No",
+			"patientHistoryDuration" : 0.0,
+			"canCancel" : true
+		},
+		{
+			"_id" : "408",
+			"typeOfCare" : "OPTOMETRY",
+			"patientHistoryRequired" : "No",
+			"patientHistoryDuration" : 0.0,
+			"canCancel" : true
+		},
+		{
+			"_id" : "502",
+			"typeOfCare" : "OUTPATIENT MENTAL HEALTH",
+			"patientHistoryRequired" : "No",
+			"patientHistoryDuration" : 0.0,
+			"canCancel" : true
+		}
+	]
+},
+{
+	"_class" : "gov.va.vamf.scheduling.direct.domain.DirectBookingEligibilityCriteria",
+	"_id" : "523A5",
+	"coreSettings" : [
+		{
+			"_id" : "323",
+			"typeOfCare" : "PRIMARY CARE",
+			"patientHistoryRequired" : "No",
+			"patientHistoryDuration" : 0.0,
+			"canCancel" : true
+		},
+		{
+			"_id" : "203",
+			"typeOfCare" : "AUDIOLOGY",
+			"patientHistoryRequired" : "No",
+			"patientHistoryDuration" : 0.0,
+			"canCancel" : true
+		},
+		{
+			"_id" : "408",
+			"typeOfCare" : "OPTOMETRY",
+			"patientHistoryRequired" : "No",
+			"patientHistoryDuration" : 0.0,
+			"canCancel" : true
+		},
+		{
+			"_id" : "502",
+			"typeOfCare" : "OUTPATIENT MENTAL HEALTH",
+			"patientHistoryRequired" : "No",
+			"patientHistoryDuration" : 0.0,
+			"canCancel" : true
+		}
+	]
+},
+{
+	"_class" : "gov.va.vamf.scheduling.direct.domain.DirectBookingEligibilityCriteria",
+	"_id" : "523BY",
+	"coreSettings" : [
+		{
+			"_id" : "323",
+			"typeOfCare" : "PRIMARY CARE",
+			"patientHistoryRequired" : "No",
+			"patientHistoryDuration" : 0.0,
+			"canCancel" : true
+		},
+		{
+			"_id" : "203",
+			"typeOfCare" : "AUDIOLOGY",
+			"patientHistoryRequired" : "No",
+			"patientHistoryDuration" : 0.0,
+			"canCancel" : true
+		},
+		{
+			"_id" : "408",
+			"typeOfCare" : "OPTOMETRY",
+			"patientHistoryRequired" : "No",
+			"patientHistoryDuration" : 0.0,
+			"canCancel" : true
+		},
+		{
+			"_id" : "502",
+			"typeOfCare" : "OUTPATIENT MENTAL HEALTH",
+			"patientHistoryRequired" : "No",
+			"patientHistoryDuration" : 0.0,
+			"canCancel" : true
+		}
+	]
+},
+{
+	"_class" : "gov.va.vamf.scheduling.direct.domain.DirectBookingEligibilityCriteria",
+	"_id" : "523GD",
+	"coreSettings" : [
+		{
+			"_id" : "323",
+			"typeOfCare" : "PRIMARY CARE",
+			"patientHistoryRequired" : "No",
+			"patientHistoryDuration" : 0.0,
+			"canCancel" : true
+		},
+		{
+			"_id" : "203",
+			"typeOfCare" : "AUDIOLOGY",
+			"patientHistoryRequired" : "No",
+			"patientHistoryDuration" : 0.0,
+			"canCancel" : true
+		},
+		{
+			"_id" : "408",
+			"typeOfCare" : "OPTOMETRY",
+			"patientHistoryRequired" : "No",
+			"patientHistoryDuration" : 0.0,
+			"canCancel" : true
+		},
+		{
+			"_id" : "502",
+			"typeOfCare" : "OUTPATIENT MENTAL HEALTH",
+			"patientHistoryRequired" : "No",
+			"patientHistoryDuration" : 0.0,
+			"canCancel" : true
+		}
+	]
+},
+{
+	"_class" : "gov.va.vamf.scheduling.direct.domain.DirectBookingEligibilityCriteria",
+	"_id" : "636",
+	"coreSettings" : [
+		{
+			"_id" : "323",
+			"typeOfCare" : "PRIMARY CARE",
+			"patientHistoryRequired" : "No",
+			"patientHistoryDuration" : 0.0,
+			"canCancel" : true
+		},
+		{
+			"_id" : "203",
+			"typeOfCare" : "AUDIOLOGY",
+			"patientHistoryRequired" : "No",
+			"patientHistoryDuration" : 0.0,
+			"canCancel" : true
+		},
+		{
+			"_id" : "408",
+			"typeOfCare" : "OPTOMETRY",
+			"patientHistoryRequired" : "No",
+			"patientHistoryDuration" : 0.0,
+			"canCancel" : true
+		},
+		{
+			"_id" : "502",
+			"typeOfCare" : "OUTPATIENT MENTAL HEALTH",
+			"patientHistoryRequired" : "No",
+			"patientHistoryDuration" : 0.0,
+			"canCancel" : true
+		}
+	]
+},
+{
+	"_class" : "gov.va.vamf.scheduling.direct.domain.DirectBookingEligibilityCriteria",
+	"_id" : "636GG",
+	"coreSettings" : [
+		{
+			"_id" : "323",
+			"typeOfCare" : "PRIMARY CARE",
+			"patientHistoryRequired" : "No",
+			"patientHistoryDuration" : 0.0,
+			"canCancel" : true
+		},
+		{
+			"_id" : "203",
+			"typeOfCare" : "AUDIOLOGY",
+			"patientHistoryRequired" : "No",
+			"patientHistoryDuration" : 0.0,
+			"canCancel" : true
+		},
+		{
+			"_id" : "408",
+			"typeOfCare" : "OPTOMETRY",
+			"patientHistoryRequired" : "No",
+			"patientHistoryDuration" : 0.0,
+			"canCancel" : true
+		},
+		{
+			"_id" : "502",
+			"typeOfCare" : "OUTPATIENT MENTAL HEALTH",
+			"patientHistoryRequired" : "No",
+			"patientHistoryDuration" : 0.0,
+			"canCancel" : true
+		}
+	]
+}
+]
