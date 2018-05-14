@@ -3,11 +3,10 @@
 . app.env
 
 function start_all_shared(){
-    start_core
-    sleep 15
     start_fixtures
     sleep 15
-    start_data_seed
+    start_core
+    sleep 15
     start_shared_services
 }
 
