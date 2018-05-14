@@ -18,37 +18,37 @@ of the stack.
 
 1. Stand up mock fixtures:
 
-   `./run.sh fixtures`
+   `./run fixtures`
    
 2. Seed mock fixtures
 
-  `./run.sh data`
+  `./run data`
    
 3. Stand up NextGen Core Infrastructure:
    
-   `./run.sh core`
+   `./run core`
    
 4. Stand up shared services:
 
-   `./run.sh ss`
+   `./run ss`
    
 5. Stand up vet services (if running vet apps):
 
-  `./run.sh vet`
+  `./run vet`
   
 6. Stand up staff services (if running vet apps):
 
-  `./run.sh staff`
+  `./run staff`
    
 7. Stand up necessary applications
 
-   `./run.sh var`
+   `./run var`
    
-   `./run.sh sm`
+   `./run sm`
 
-- (Experimental) To stand up the entire stack all in one go:
+- To stand up the entire stack all in one go:
 
-   `./run.sh all`
+   `./run all`
 
 ###Stopping containers
 To stop containers, run the stop script, adding additional parameters where necessary.  Note that running ./stop.sh
