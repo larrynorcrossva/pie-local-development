@@ -571,7 +571,7 @@ services:
      - MDWS_ADAPTER_BASE_URL=http://mdws-via-adapter:8080/MdwsViaAdapter/v1/services
      - JAVA_OPTS=-Xms256m -Xmx512m -XX:-TieredCompilation -Xss256k -XX:+UseG1GC -XX:+UseStringDeduplication
      - USER_SVC_URL=http://user-services:8080/users/v1
-     - JWT_SECRET=secretsecretsecret
+     - JWT_SECRET=testtesttest
 
   ### MDWS to VIA adapter
   mdws-via-adapter:
