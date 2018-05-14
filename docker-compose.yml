@@ -68,7 +68,7 @@ services:
     image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ablevets/var-mock-mvi-shared:latest
 #    image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ablevets/var-mock-mvi:latest
     ports:
-      - "8082:8080"
+      - "35219:8080"
     environment:
       - SERVICE_TAGS=local
       - SERVICE_NAME=mock-mvi
