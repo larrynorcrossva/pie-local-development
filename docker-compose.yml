@@ -562,7 +562,7 @@ services:
     # Mock Via
     #- VIA_BASE_URL=http://mock-via:8080/via-webservices/via-webservices/services
     # Live Via (AV)
-    - VIA_BASE_URL=http://10.1.0.8:8089/via-webservices/via-webservices/services
+    - VIA_BASE_URL=http://10.1.0.8:8089/via-webservices/services
     - JAVA_OPTS=-Xms256m -Xmx512m -XX:-TieredCompilation -Xss256k -XX:+UseG1GC -XX:+UseStringDeduplication -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=64087
     - TRUSTSTORE_PASSWORD=password
     - REDIS_HOST=redis
