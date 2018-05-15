@@ -49,7 +49,6 @@ services:
       - user-services
       - roa-services
       - zipkin
-
     environment:
       # Local consul instance. Point to central Consul server for non-development deployments
       - CONSUL_HTTP_ADDR=consul:8500
@@ -60,6 +59,7 @@ services:
       - CONSUL_TOKEN=7BE784A4-7498-4469-BE2F-9C3B9444DFEF
       - "REGEX_AUTH_PROXY=.*"
       - "REGEX_RESTRICTED_HEADER=((^va_)|(^eauth_))/i"
+      - "REGEX_EXCLUDE_JWT_URL=((js$$)|(css$$)|(gif$$)|(jpg$$)|(^/users)|(^/saml)|(^/eula))"
       - "TRACE_URL=http://zipkin:9411/api/v1/spans"
 
   # User service and Mobile Veteran (Patient) Index (MVI/MPI)- The user service is responsible for processing requests
@@ -427,6 +427,9 @@ services:
 # Mock for IAM SAML token
   mock-wstrust:
     image: mobileapps.vaftl.us:9250/ckm/sts-mock:latest
+    environment:
+      - SERVICE_TAGS=local
+      - SERVICE_NAME=mock-wstrust
 
 # Mock SSOi
   ssoi-mock:
