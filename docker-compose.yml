@@ -449,7 +449,8 @@ services:
             \"PROOFINGAUTH\": \"VA\", \"ROLE\": \"role1\", \"ISSUEINSTANT\": \"2017-06-19T13:37:16Z\", \"AUTHNTYPE\": \"Direct\",
             \"ADUPN\": \"tstaff01@iam.va.local\", \"TRANSACTIONID\": \"00000000000000000000000036d0e30a-0ad4-5947d38c-3688-00fa4fca\",
             \"SSOI_LANDING_URL\": \"http://not_set\",
-            \"SSOI_LOGGEDOUT_URL\": \"http://not_set\"
+            \"SSOI_LOGGEDOUT_URL\": \"http://not_set\",
+            \"IAMSESSION\": \"test\"
           } },
           {\"userId\": \"vhastaff02\", \"headers\": {
             \"LASTNAME\": \"Staff02\", \"FIRSTNAME\": \"Test02\",
