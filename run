@@ -17,6 +17,7 @@ function use_vpn(){
     echo -e "\nSetting VPN configuration...\n"
     CDW_HOST=${CDW_HOST_AV_VPN}
     MDWS_HOST=${MDWS_HOST_AV_VPN}
+    SMTP_HOST=${SMTP_HOST_AV_VPN}
 }
 
 function set_stack_mode_dev(){

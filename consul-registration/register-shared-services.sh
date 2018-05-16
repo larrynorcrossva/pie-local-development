@@ -40,11 +40,11 @@ curl -H "Content-Type: application/json" -H "X-Consul-Token: ${CONSUL_MASTER_TOK
 curl -H "Content-Type: application/json" -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -X PUT -d "mongodb://personalpreferences:1234@video-visits-mongo-mock:27017/personalpreferences?maxPoolSize=20&ssl=false" http://${HOST_DOMAIN}:8500/v1/kv/appconfig/local/personal-preference-service/APP_PPS_MONGO_PPS_CONNECTIONURI > /dev/null
 
 echo "********************* Register NextGen consul variables for messaging-publisher  *********************"
-curl  -H "Content-Type: application/json" -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -X PUT -d "test@test.local" http://${HOST_DOMAIN}:8500/v1/kv/appconfig/${VAMF_ENVIRONMENT}/messaging-publisher/APP_PUBLISHER_EMAIL_FROM   > /dev/null
-curl  -H "Content-Type: application/json" -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -X PUT -d "52.52.65.44" http://${HOST_DOMAIN}:8500/v1/kv/appconfig/${VAMF_ENVIRONMENT}/messaging-publisher/APP_PUBLISHER_SMTP_HOST  > /dev/null
-curl  -H "Content-Type: application/json" -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -X PUT -d "2525" http://${HOST_DOMAIN}:8500/v1/kv/appconfig/${VAMF_ENVIRONMENT}/messaging-publisher/APP_PUBLISHER_SMTP_PORT   > /dev/null
+curl  -H "Content-Type: application/json" -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -X PUT -d "relay_machine@ablevets.com" http://${HOST_DOMAIN}:8500/v1/kv/appconfig/${VAMF_ENVIRONMENT}/messaging-publisher/APP_PUBLISHER_EMAIL_FROM   > /dev/null
+curl  -H "Content-Type: application/json" -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -X PUT -d ${SMTP_HOST} http://${HOST_DOMAIN}:8500/v1/kv/appconfig/${VAMF_ENVIRONMENT}/messaging-publisher/APP_PUBLISHER_SMTP_HOST  > /dev/null
+curl  -H "Content-Type: application/json" -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -X PUT -d "25" http://${HOST_DOMAIN}:8500/v1/kv/appconfig/${VAMF_ENVIRONMENT}/messaging-publisher/APP_PUBLISHER_SMTP_PORT   > /dev/null
 curl  -H "Content-Type: application/json" -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -X PUT -d "test" http://${HOST_DOMAIN}:8500/v1/kv/appconfig/${VAMF_ENVIRONMENT}/messaging-publisher/APP_PUBLISHER_SMTP_USERNAME   > /dev/null
-curl  -H "Content-Type: application/json" -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -X PUT -d "test" http://${HOST_DOMAIN}:8500/v1/kv/appconfig/${VAMF_ENVIRONMENT}/messaging-publisher/APP_PUBLISHER_SMTP_SECRETKEY  > /dev/null
+curl  -H "Content-Type: application/json" -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -X PUT -d "o8_WoYL" http://${HOST_DOMAIN}:8500/v1/kv/appconfig/${VAMF_ENVIRONMENT}/messaging-publisher/APP_PUBLISHER_SMTP_SECRETKEY  > /dev/null
 curl  -H "Content-Type: application/json" -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -X PUT -d "true" http://${HOST_DOMAIN}:8500/v1/kv/appconfig/${VAMF_ENVIRONMENT}/messaging-publisher/APP_PUBLISHER_SMTP_AUTH       > /dev/null
 curl  -H "Content-Type: application/json" -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -X PUT -d "smtp" http://${HOST_DOMAIN}:8500/v1/kv/appconfig/${VAMF_ENVIRONMENT}/messaging-publisher/APP_PUBLISHER_SMTP_TRANSPORT_PROTOCOL  > /dev/null
 curl  -H "Content-Type: application/json" -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -X PUT -d "false" http://${HOST_DOMAIN}:8500/v1/kv/appconfig/${VAMF_ENVIRONMENT}/messaging-publisher/APP_PUBLISHER_SMTP_START_TLS_ENABLE > /dev/null
@@ -63,7 +63,7 @@ curl -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -s -X PUT localhost:8500/v1/kv/
 curl -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -s -X PUT localhost:8500/v1/kv/appconfig/local/var-messaging-microservice/app.vmm.mongo.connection -d 'mongodb://vmm:vmm@var-mongo-db-mock:27017/vmm' > /dev/null
 
 #if you prefer internal vpn, use this to override. if you want emails.
-#curl  -H "Content-Type: application/json" -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -X PUT -d "10.0.0.55" http://${HOST_DOMAIN}:8500/v1/kv/appconfig/${VAMF_ENVIRONMENT}/var-messaging-microservice/app.vmm.smtp.host   > /dev/null
+curl  -H "Content-Type: application/json" -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -X PUT -d ${SMTP_HOST} http://${HOST_DOMAIN}:8500/v1/kv/appconfig/${VAMF_ENVIRONMENT}/var-messaging-microservice/app.vmm.smtp.host   > /dev/null
 curl  -H "Content-Type: application/json" -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -X PUT -d "25" http://${HOST_DOMAIN}:8500/v1/kv/appconfig/${VAMF_ENVIRONMENT}/var-messaging-microservice/app.vmm.smtp.port   > /dev/null
 curl  -H "Content-Type: application/json" -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -X PUT -d "false" http://${HOST_DOMAIN}:8500/v1/kv/appconfig/${VAMF_ENVIRONMENT}/var-messaging-microservice/app.vmm.smtp.useSSL  > /dev/null
 curl  -H "Content-Type: application/json" -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -X PUT -d "o8_WoYL" http://${HOST_DOMAIN}:8500/v1/kv/appconfig/${VAMF_ENVIRONMENT}/var-messaging-microservice/app.vmm.smtp.from.password  > /dev/null
