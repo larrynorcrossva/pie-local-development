@@ -1,6 +1,10 @@
 version: '2'
 services:
 
+###########################
+### CORE SERVICES START ###
+###########################
+
   # Consul is our service registry. (https://github.com/hashicorp/consul)
   # Consul is configured to be exposed locally (http://${HOST_DOMAIN}:8500) to make it easier to change and manage configurations.
   consul:
@@ -184,6 +188,14 @@ services:
     ports:
       - "9411:9411"
 
+#########################
+### CORE SERVICES END ###
+#########################
+
+#########################
+### DB FIXTURES START ###
+#########################
+
   mock-roa:
     image: mobileapps.vaftl.us:9250/ckm/docker-roa-mock:1.0.3
     ports:
@@ -250,6 +262,13 @@ services:
     - AUTH_ENABLED=true
     - JOURNALING=true
 
+#######################
+### DB FIXTURES END ###
+#######################
+
+#######################
+### DATA SEED START ###
+#######################
   var-mongo-data-seed:
     image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ablevets/var-mongo-data-seed:1.0.0
 #    image: dev/var-mongo-data-seed
@@ -258,6 +277,13 @@ services:
     depends_on:
       - var-mongo-db-mock
 
+#####################
+### DATA SEED END ###
+#####################
+
+#############################
+### SHARED SERVICES START ###
+#############################
   var-messaging-microservice:
     image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ablevets/var-messaging-microservice:0.47
     #image: dev/var-messaging-microservice
@@ -330,6 +356,32 @@ services:
 #     - CONSUL_TOKEN=${CONSUL_MASTER_TOKEN}
 #     - CONSUL_PATH=appconfig/${VAMF_ENVIRONMENT}/messaging-publisher
 #     - "TRACE_URL=http://zipkin:9411/api/v1/spans"
+
+  task-resources:
+    image: mobileapps.vaftl.us:9250/ckm/task-resources:1.0.5
+    hostname: "task-resources"
+    expose:
+      - "8080"
+    ports:
+      - "8080"
+    environment:
+      - "constraint:nodetype==*service*"
+      - "SERVICE_NAME=task-resources"
+      - "SERVICE_TAGS=local"
+      - "CONSUL_SERVER=consul:8500"
+      - "CONSUL_TOKEN=7BE784A4-7498-4469-BE2F-9C3B9444DFEF"
+      - "CONSUL_PATH=appconfig/${VAMF_ENVIRONMENT}/trs"
+      - "JAVA_OPTS=-Xms256m -Xmx512m -XX:-TieredCompilation -Xss256k -XX:+UseG1GC -XX:+UseStringDeduplication"
+      - "USE_ENVCONSUL=true"
+      - JWT_SECRET=testtesttest
+
+###########################
+### SHARED SERVICES END ###
+###########################
+
+##############################
+### VETERAN SERVICES START ###
+##############################
 
 # Right of Access (ROA) service and oracle DB mock. ROA is an internal service that allows veterans to review and grant
 # access to their medical information. Veteran users must complete ROA before they can use any other mobile app.
@@ -405,6 +457,14 @@ services:
     environment:
       - MYSQL_ROOT_PASSWORD=MySqlAdmin$$
       - MYSQL_DATABASE=MockUser
+
+############################
+### VETERAN SERVICES END ###
+############################
+
+############################
+### STAFF SERVICES START ###
+############################
 
 #Patient context service
   patient-context:
@@ -580,6 +640,10 @@ services:
      - CONSUL_TOKEN=7BE784A4-7498-4469-BE2F-9C3B9444DFEF
      - CONSUL_PATH=appconfig/local/staff-video-connect-service
      - "TRACE_URL=http://zipkin:9411/api/v1/spans"
+
+##########################
+### STAFF SERVICES END ###
+##########################
 
   var-resources:
 #    image: dev/var-resources

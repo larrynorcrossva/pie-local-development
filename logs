@@ -15,6 +15,11 @@ function logs_data_seed(){
     docker-compose logs -f var-mongo-data-seed
 }
 
+function logs_shared_services(){
+    echo "\nOpening docker logs for shared services... \n"
+    docker-compose logs -f var-messaging-microservice facility-service vmr-mock-service video-visits-service task-resources #messaging-publisher
+}
+
 function logs_vet(){
     echo "\nOpening docker logs for vet services... \n"
     docker-compose logs -f roa-services roa-web veteran-video-connect-service iamssoe-proxy-mock iamssoe-db-mock
