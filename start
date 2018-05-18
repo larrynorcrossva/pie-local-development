@@ -77,11 +77,11 @@ function start_core(){
 
 function start_shared_services(){
     ./consul-registration/register-shared-services.sh
-    docker-compose stop var-messaging-microservice facility-service vmr-mock-service video-visits-service task-resources #messaging-publisher
+    docker-compose stop var-messaging-microservice facility-service vmr-mock-service video-visits-service task-resources messaging-publisher
     if [ "$PULL" = true ] ; then
-        docker-compose pull var-messaging-microservice facility-service vmr-mock-service video-visits-service task-resources #messaging-publisher
+        docker-compose pull var-messaging-microservice facility-service vmr-mock-service video-visits-service task-resources messaging-publisher
     fi
-    docker-compose up -d var-messaging-microservice facility-service vmr-mock-service video-visits-service task-resources #messaging-publisher
+    docker-compose up -d var-messaging-microservice facility-service vmr-mock-service video-visits-service task-resources messaging-publisher
 }
 
 function start_vet(){
