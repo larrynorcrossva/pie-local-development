@@ -411,9 +411,9 @@ services:
     ports:
       - '3001:3001'
     links:
-      - mongo
+      - var-mongo-db-mock
     depends_on:
-      - mongo
+      - var-mongo-db-mock
     environment:
       - "constraint:nodetype==*service*"
       - "CONSUL_SERVER=consul:8500"
