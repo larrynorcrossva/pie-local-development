@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+. app.env
+
 echo "********************* Register SM with API Gateway *********************"
 curl -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -s -X PUT http://${HOST_DOMAIN}:8500/v1/kv/vamf/${VAMF_ENVIRONMENT}/apigateway/1.0/services/scheduling-manager-resources -d '{"location":"/SchedulingManagerService","service":"scheduling-manager-resources-8080","redirect":"off","headers":{"X-Real-IP":"$remote_addr"}}' > /dev/null && \
 curl -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -s -X PUT http://${HOST_DOMAIN}:8500/v1/kv/vamf/${VAMF_ENVIRONMENT}/apigateway/1.0/services/scheduling-manager -d '{"location":"/scheduling-manager","service":"scheduling-manager-web","redirect":"off","headers":{"X-Real-IP":"$remote_addr"}}' > /dev/null && \
