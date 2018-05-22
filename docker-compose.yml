@@ -66,8 +66,7 @@ services:
   # to create JWT security tokens and augmenting user identities with other identifiers from the MVI (specifically ICN)
   #
   mock-mvi:
-    image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ablevets/var-mock-mvi-shared:latest
-#    image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ablevets/var-mock-mvi:latest
+    image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ablevets/var-mock-mvi:1.0.0
     ports:
       - "35219:8080"
     environment:
@@ -317,20 +316,19 @@ services:
       - CONSUL_PATH=appconfig/local/video-visits-service
       - "TRACE_URL=http://localhost:9411/api/v1/spans"
 
-#  messaging-publisher:
-#    image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ablevets/messaging-publisher:latest
-#    container_name: "messaging-publisher"
-#    hostname: "messaging-publisher"
-#    ports:
-#     - "7090:8080"
-#    environment: #sub these with jenkins vars
-#     - constraint:nodetype==*service*
-#     - SERVICE_NAME=messaging-publisher
-#     - JWT_SECRET=${JWT_SECRET}
-#     - CONSUL_SERVER=${CONSUL_SERVER}
-#     - CONSUL_TOKEN=${CONSUL_MASTER_TOKEN}
-#     - CONSUL_PATH=appconfig/${VAMF_ENVIRONMENT}/messaging-publisher
-#     - "TRACE_URL=http://zipkin:9411/api/v1/spans"
+  messaging-publisher:
+    image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ablevets/messaging-publisher:1.0.1
+    hostname: "messaging-publisher"
+    ports:
+     - "7090:8080"
+    environment: #sub these with jenkins vars
+     - constraint:nodetype==*service*
+     - SERVICE_NAME=messaging-publisher
+     - JWT_SECRET=${JWT_SECRET}
+     - CONSUL_SERVER=${CONSUL_SERVER}
+     - CONSUL_TOKEN=${CONSUL_MASTER_TOKEN}
+     - CONSUL_PATH=appconfig/${VAMF_ENVIRONMENT}/messaging-publisher
+     - "TRACE_URL=http://zipkin:9411/api/v1/spans"
 
 # Right of Access (ROA) service and oracle DB mock. ROA is an internal service that allows veterans to review and grant
 # access to their medical information. Veteran users must complete ROA before they can use any other mobile app.
@@ -595,8 +593,7 @@ services:
      - "TRACE_URL=http://zipkin:9411/api/v1/spans"
 
   var-resources:
-#    image: dev/var-resources
-    image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ablevets/var-resources:4.2.8-bsonfix
+    image: ${ENV_IMAGE_ROOT}/var-resources:${VAR_RESOURCES_VERSION}
     ports:
      - "9092:8080"
      - "64058:64058"
@@ -620,8 +617,7 @@ services:
      - JAVA_OPTS=-XX:+CMSClassUnloadingEnabled -Xrs -Dcom.sun.xml.ws.transport.http.client.HttpTransportPipe.dump=true -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=64058
 
   var-web:
-#     image: dev/var-web:4.2.7
-    image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ablevets/var-web:4.2.7
+    image: ${ENV_IMAGE_ROOT}/var-web:${VAR_WEB_VERSION}
     ports:
       - "9090:80"
     environment:
@@ -629,8 +625,7 @@ services:
       - SERVICE_NAME=var-web
 
   scheduling-manager-resources:
-#    image: dev/scheduling-manager-resources
-    image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ablevets/scheduling-manager-resources:3.0.0
+    image: ${ENV_IMAGE_ROOT}/scheduling-manager-resources:${SM_RESOURCES_VERSION}
     ports:
      - "9070:8080"
      - "64059:64059"
@@ -645,13 +640,12 @@ services:
      - JAVA_OPTS=-XX:+CMSClassUnloadingEnabled -Xrs -Dcom.sun.xml.ws.transport.http.client.HttpTransportPipe.dump=true -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=64059
 
   scheduling-manager-web:
-#     image: dev/scheduling-manager-web
-     image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ablevets/scheduling-manager-web:3.0.0
-     ports:
-       - "9071:80"
-     environment:
-       - SERVICE_TAGS=local
-       - SERVICE_NAME=scheduling-manager-web
+    image: ${ENV_IMAGE_ROOT}/scheduling-manager-web:${SM_WEB_VERSION}
+    ports:
+      - "9071:80"
+    environment:
+      - SERVICE_TAGS=local
+      - SERVICE_NAME=scheduling-manager-web
 
 networks:
   default:
