@@ -94,6 +94,7 @@ function start_vet(){
 }
 
 function start_staff(){
+    ./consul-registration/register-staff.sh
     docker-compose stop patient-context mock-wstrust ssoi-mock sud-service sud-web pcs-web personal-preference-service vista-data-services mdws-via-adapter staff-video-connect-service
     if [ "$PULL" = true ] ; then
         docker-compose pull patient-context mock-wstrust ssoi-mock sud-service sud-web pcs-web personal-preference-service vista-data-services mdws-via-adapter staff-video-connect-service
