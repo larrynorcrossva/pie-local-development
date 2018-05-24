@@ -573,6 +573,9 @@ services:
     # Debug configuration (Ensure port ignored below is exposed for debugging in ports section)
     - SERVICE_8080_NAME=mdws-via-adapter
     - SERVICE_64087_IGNORE=true
+    - REQUESTING_APP=VAR_App
+    - CONSUMING_APP_TOKEN=APP_TOKEN
+    - CONSUMING_APP_PASSWORD=passw0rd123
 
 # Staff Video Connect Resources (SVC Services/Resource)
   staff-video-connect-service:
