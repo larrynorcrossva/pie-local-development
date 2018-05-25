@@ -72,7 +72,7 @@ curl -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -X PUT http://${HOST_DOMAIN}:85
 curl -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -X PUT http://${HOST_DOMAIN}:8500/v1/kv/appconfig/${VAMF_ENVIRONMENT}/apt-reminder-publisher/APP_ARP_DB_CONNECTION_URL       -d "jdbc:oracle:thin:@video-visits-oracle-mock:1521:xe"  > /dev/null
 curl -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -X PUT http://${HOST_DOMAIN}:8500/v1/kv/appconfig/${VAMF_ENVIRONMENT}/apt-reminder-publisher/APP_ARP_DB_QUARTZ_USERNAME      -d "quartz"  > /dev/null
 curl -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -X PUT http://${HOST_DOMAIN}:8500/v1/kv/appconfig/${VAMF_ENVIRONMENT}/apt-reminder-publisher/APP_ARP_DB_QUARTZ_SECRET        -d "m0ckpass01"  > /dev/null
-curl -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -X PUT http://${HOST_DOMAIN}:8500/v1/kv/appconfig/${VAMF_ENVIRONMENT}/apt-reminder-publisher/APP_ARP_RABBIT_ADDRESSES        -d "telehealth-rabbitmq:5672"  > /dev/null
+curl -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -X PUT http://${HOST_DOMAIN}:8500/v1/kv/appconfig/${VAMF_ENVIRONMENT}/apt-reminder-publisher/APP_ARP_RABBIT_ADDRESSES        -d "video-visits-rabbitmq:5672"  > /dev/null
 curl -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -X PUT http://${HOST_DOMAIN}:8500/v1/kv/appconfig/${VAMF_ENVIRONMENT}/apt-reminder-publisher/APP_ARP_RABBIT_USER_NAME        -d "apt_reminder_user"  > /dev/null
 curl -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -X PUT http://${HOST_DOMAIN}:8500/v1/kv/appconfig/${VAMF_ENVIRONMENT}/apt-reminder-publisher/APP_ARP_RABBIT_SECRET_KEY       -d "changeit"  > /dev/null
 curl -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -X PUT http://${HOST_DOMAIN}:8500/v1/kv/appconfig/${VAMF_ENVIRONMENT}/apt-reminder-publisher/APP_ARP_RABBIT_MESSAGING_VHOST  -d "vhost.apt_reminder"  > /dev/null
@@ -85,7 +85,7 @@ curl -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -X PUT http://${HOST_DOMAIN}:85
 echo "********************* Register NextGen consul variables for apt-reminder-subscriber *********************"
 curl -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -X PUT http://${HOST_DOMAIN}:8500/v1/kv/appconfig/${VAMF_ENVIRONMENT}/apt-reminder-subscriber/APP_ARS_MONGO_ARS_DATABASE_NAME -d "video-visits"  > /dev/null
 curl -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -X PUT http://${HOST_DOMAIN}:8500/v1/kv/appconfig/${VAMF_ENVIRONMENT}/apt-reminder-subscriber/APP_ARS_MONGO_ARS_CONNECTIONURI -d "mongodb://video-visits:1234@video-visits-mongo-mock:27017/video-visits?maxPoolSize=20&ssl=false"  > /dev/null
-curl -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -X PUT http://${HOST_DOMAIN}:8500/v1/kv/appconfig/${VAMF_ENVIRONMENT}/apt-reminder-subscriber/APP_ARS_RABBIT_ADDRESSES        -d "telehealth-rabbitmq:5672"  > /dev/null
+curl -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -X PUT http://${HOST_DOMAIN}:8500/v1/kv/appconfig/${VAMF_ENVIRONMENT}/apt-reminder-subscriber/APP_ARS_RABBIT_ADDRESSES        -d "video-visits-rabbitmq:5672"  > /dev/null
 curl -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -X PUT http://${HOST_DOMAIN}:8500/v1/kv/appconfig/${VAMF_ENVIRONMENT}/apt-reminder-subscriber/APP_ARS_RABBIT_USER_NAME        -d "apt_reminder_user"  > /dev/null
 curl -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -X PUT http://${HOST_DOMAIN}:8500/v1/kv/appconfig/${VAMF_ENVIRONMENT}/apt-reminder-subscriber/APP_ARS_RABBIT_SECRET_KEY       -d "changeit"  > /dev/null
 curl -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -X PUT http://${HOST_DOMAIN}:8500/v1/kv/appconfig/${VAMF_ENVIRONMENT}/apt-reminder-subscriber/APP_ARS_RABBIT_MESSAGING_VHOST  -d "vhost.apt_reminder"  > /dev/null
