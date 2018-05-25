@@ -15,7 +15,7 @@ function stop_data_seed(){
 }
 
 function stop_shared_services(){
-    docker-compose stop var-messaging-microservice facility-service vmr-mock-service video-visits-service messaging-publisher apt-reminder-publisher apt-reminder-subscriber
+    docker-compose stop var-messaging-microservice facility-service vmr-mock-service video-visits-service task-resources messaging-publisher apt-reminder-publisher apt-reminder-subscriber
 }
 
 function stop_vet(){
