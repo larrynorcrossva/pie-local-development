@@ -697,42 +697,42 @@ services:
      - CONSUL_PATH=appconfig/local/staff-video-connect-service
      - "TRACE_URL=http://zipkin:9411/api/v1/spans"
 
-  apt-reminder-publisher:
-    image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ablevets/apt-reminder-publisher:1.0.1
-    depends_on:
-#     - video-visits-oracle-mock
-     - video-visits-mongo-mock
-    ports:
-     - "8285:8080"
-    environment: #sub these with jenkins vars
-     - constraint:nodetype==*service*
-     - SERVICE_NAME=apt-reminder-publisher
-     - SERVICE_TAGS=local
-     - VAMF_ENVIRONMENT=local
-     - JWT_SECRET=${JWT_SECRET}
-     - CONSUL_SERVER=consul:8500
-     - CONSUL_TOKEN=7BE784A4-7498-4469-BE2F-9C3B9444DFEF
-     - CONSUL_PATH=appconfig/local/apt-reminder-publisher
-     - "TRACE_URL=http://zipkin:9411/api/v1/spans"
-#     - JWT_PUBLIC_KEY=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAwRs7d+tRAuK4soDInuKp51lTTTXWN8okXR3/gSHiIB+q7vZeAGWA8ULjCYuECLde8tS6OxzZwSj/oM0kZBXuHKYq2ukWKjTEmOwlpQW4vBpX60bcx5rXwoEjbcWghK9oVWwY4OwbAJ4TYklkUHZC5buQ+8RU59u6FIWSv2N3D9VBkfYsHvp3O4aXVaE8dZ0dxldUdv/WePoLkCeUYgLsGyDg/zsZvDrX1+yvNsjNNmB/ksJSoptMv9CfyUpSXsfov+8GhBCtgzDvgn32kw79wPsrTkgnC0DRtuv+y3qCXX+ZJ6cbJ31tVus9AadUn2CrWJur6/KRYsniQaEnfA43hwIDAQAB
+  # apt-reminder-publisher:
+  #   image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ablevets/apt-reminder-publisher:1.0.1
+  #   depends_on:
+  #    - video-visits-oracle-mock
+  #    - video-visits-mongo-mock
+  #   ports:
+  #    - "8285:8080"
+  #   environment: #sub these with jenkins vars
+  #    - constraint:nodetype==*service*
+  #    - SERVICE_NAME=apt-reminder-publisher
+  #    - SERVICE_TAGS=local
+  #    - VAMF_ENVIRONMENT=local
+  #    - JWT_SECRET=${JWT_SECRET}
+  #    - CONSUL_SERVER=consul:8500
+  #    - CONSUL_TOKEN=7BE784A4-7498-4469-BE2F-9C3B9444DFEF
+  #    - CONSUL_PATH=appconfig/local/apt-reminder-publisher
+  #    - "TRACE_URL=http://zipkin:9411/api/v1/spans"
+  #    - JWT_PUBLIC_KEY=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAwRs7d+tRAuK4soDInuKp51lTTTXWN8okXR3/gSHiIB+q7vZeAGWA8ULjCYuECLde8tS6OxzZwSj/oM0kZBXuHKYq2ukWKjTEmOwlpQW4vBpX60bcx5rXwoEjbcWghK9oVWwY4OwbAJ4TYklkUHZC5buQ+8RU59u6FIWSv2N3D9VBkfYsHvp3O4aXVaE8dZ0dxldUdv/WePoLkCeUYgLsGyDg/zsZvDrX1+yvNsjNNmB/ksJSoptMv9CfyUpSXsfov+8GhBCtgzDvgn32kw79wPsrTkgnC0DRtuv+y3qCXX+ZJ6cbJ31tVus9AadUn2CrWJur6/KRYsniQaEnfA43hwIDAQAB
 
-  apt-reminder-subscriber:
-    image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ablevets/apt-reminder-subscriber:1.0.1
-    depends_on:
-     - video-visits-mongo-mock
-#     - video-visits-rabbitmq
-#     - hdr-service
-    ports:
-     - "8286:8080"
-    environment:
-     - constraint:nodetype==*service*
-     - SERVICE_NAME=apt-reminder-subscriber
-     - SERVICE_TAGS=local
-     - VAMF_ENVIRONMENT=local
-     - JWT_SECRET=${JWT_SECRET}
-     - CONSUL_SERVER=consul:8500
-     - CONSUL_TOKEN=7BE784A4-7498-4469-BE2F-9C3B9444DFEF
-     - CONSUL_PATH=appconfig/local/apt-reminder-subscriber
+  # apt-reminder-subscriber:
+  #   image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ablevets/apt-reminder-subscriber:1.0.1
+  #   depends_on:
+  #    - video-visits-mongo-mock
+  #    - video-visits-rabbitmq
+  #    - hdr-service
+  #   ports:
+  #    - "8286:8080"
+  #   environment:
+  #    - constraint:nodetype==*service*
+  #    - SERVICE_NAME=apt-reminder-subscriber
+  #    - SERVICE_TAGS=local
+  #    - VAMF_ENVIRONMENT=local
+  #    - JWT_SECRET=${JWT_SECRET}
+  #    - CONSUL_SERVER=consul:8500
+  #    - CONSUL_TOKEN=7BE784A4-7498-4469-BE2F-9C3B9444DFEF
+  #    - CONSUL_PATH=appconfig/local/apt-reminder-subscriber
 
 ##########################
 ### STAFF SERVICES END ###
