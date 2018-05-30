@@ -17,7 +17,7 @@ function logs_data_seed(){
 
 function logs_shared_services(){
     echo "\nOpening docker logs for shared services... \n"
-    docker-compose logs -f var-messaging-microservice facility-service vmr-mock-service video-visits-service task-resources messaging-publisher
+    docker-compose logs -f var-messaging-microservice facility-service vmr-mock-service video-visits-service task-resources messaging-publisher apt-reminder-publisher apt-reminder-subscriber
 }
 
 function logs_vet(){
