@@ -16,7 +16,7 @@ curl -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -s -X PUT ${HOST_DOMAIN}:8500/v
 curl -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -s -X PUT ${HOST_DOMAIN}:8500/v1/kv/vamf/${VAMF_ENVIRONMENT}/apigateway/1.0/services/sud -d '{"location":"/sud","service":"docker-sud-service","redirect":"off","headers":{"X-Real-IP":"$remote_addr"}}' > /dev/null && \
 curl -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -s -X PUT ${HOST_DOMAIN}:8500/v1/kv/vamf/${VAMF_ENVIRONMENT}/apigateway/1.0/services/sud-web -d '{"location":"/sud-web","service":"docker-sud-web-80","redirect":"off","headers":{"X-Real-IP":"$remote_addr"}}' > /dev/null && \
 curl -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -s -X PUT ${HOST_DOMAIN}:8500/v1/kv/vamf/${VAMF_ENVIRONMENT}/apigateway/1.0/services/vistadataservices -d '{  "location":"/VistaDataServices",  "service":"vista-data-services_v1",  "redirect":"off",  "request_headers":"on",  "headers": { "X-Real-IP":"$remote_addr", "X-Forwarded-Host" : "$host" }}' > /dev/null && \
-curl -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -s -X PUT ${HOST_DOMAIN}:8500/v1/kv/vamf/${VAMF_ENVIRONMENT}/apigateway/1.0/services/pns -d '{"location":"/pns","service":"vamf-notification-services","redirect":"off","headers":{"X-Real-IP":"$remote_addr"}}' > /dev/null && \
+curl -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -s -X PUT ${HOST_DOMAIN}:8500/v1/kv/vamf/${VAMF_ENVIRONMENT}/apigateway/1.0/services/pns -d '{"location":"/pns","service":"vamf-notification-services","redirect":"off","headers":{"X-Real-IP":"$remote_addr"}}' > /dev/null
 
 # echo '{"rules":"{\"path\": {\"secret/'${VAMF_ENVIRONMENT}'/*\":{\"policy\":\"read\"}}}"}' > ${VAMF_ENVIRONMENT}.json
 
