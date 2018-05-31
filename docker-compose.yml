@@ -345,7 +345,7 @@ services:
      - CONSUL_PATH=appconfig/${VAMF_ENVIRONMENT}/vmr-mock-service
 
   video-visits-service:
-    image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ablevets/video-visits-service:3.0.0
+    image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ablevets/video-visits-service:2.2.0
     ports:
       - "8079:8080"
     links:
