@@ -3,7 +3,7 @@
 . app.env
 
 function stop_core(){
-    docker-compose stop registrator apigateway mock-mvi user-services swagger-ui wayf-web redis zipkin consul
+    docker-compose stop registrator apigateway mock-mvi user-services swagger-ui wayf-web redis zipkin consul eula-web eula-service
 }
 
 function stop_fixtures(){
