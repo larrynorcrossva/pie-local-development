@@ -549,8 +549,8 @@ services:
           {\"userId\": \"vhastaff01\", \"headers\": {
             \"ADDOMAIN\": \"vha\", \"ADEMAIL\": \"test01.Staff01@va.gov\", \"LASTNAME\": \"Staff01\", \"FIRSTNAME\": \"Test01\",
             \"SESSIONSCOPE\": \"B\", \"VAUID\": \"1984\", \"ADSAMACCOUNTNAME\": \"staff01t\", \"ACCESSROLES\": \"CBSS_Access\",
-            \"DODEDIPNID\": \"1020002350\", \"VISTAID\": \"523|22228439^PN^508^USVHA|A,590|11128439^PN^590^USVHA|A\", \"SECID\": \"0000028347\",
-            \"MVIICN\": \"1008693670V746966\", \"VISTAIDRAW\": \"523|22228439^PN^508^USVHA|A^590|11128439^PN^590^USVHA|A\",
+            \"DODEDIPNID\": \"1020002350\", \"VISTAID\": \"523|22228439^PN^523^USVHA|A,590|11128439^PN^590^USVHA|A\", \"SECID\": \"0000028347\",
+            \"MVIICN\": \"1008693670V746966\", \"VISTAIDRAW\": \"523|22228439^PN^523^USVHA|A^590|11128439^PN^590^USVHA|A\",
             \"ORGANIZATIONID\": \"urn:oid:2.16.840.1.113883.4.349\", \"ASSURLEVEL\": \"2\", \"ORGANIZATION\": \"Department of Veterans Affairs\",
             \"PROOFINGAUTH\": \"VA\", \"ROLE\": \"role1\", \"ISSUEINSTANT\": \"2017-06-19T13:37:16Z\", \"AUTHNTYPE\": \"Direct\",
             \"ADUPN\": \"tstaff01@iam.va.local\", \"TRANSACTIONID\": \"00000000000000000000000036d0e30a-0ad4-5947d38c-3688-00fa4fca\",
