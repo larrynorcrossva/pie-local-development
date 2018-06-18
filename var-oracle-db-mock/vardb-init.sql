@@ -92,8 +92,6 @@ INSERT INTO VARDB.DETAIL_CODE (DETAIL_CODE_ID,PROVIDER_MESSAGE,VETERAN_MESSAGE) 
 INSERT INTO VARDB.DETAIL_CODE (DETAIL_CODE_ID,PROVIDER_MESSAGE,VETERAN_MESSAGE) VALUES ('DETCODE27', 'Cancelled by VA - Not Eligible for Community Care', 'Your request to find a primary care provider has been cancelled because you did not meet eligibility requirements.');
 INSERT INTO VARDB.DETAIL_CODE (DETAIL_CODE_ID,PROVIDER_MESSAGE,VETERAN_MESSAGE) VALUES ('DETCODE28', 'Cancelled by VA - Unable to meet request; Veteran contacted but not available', 'Your request to find a primary care provider has been cancelled because we have been unable to contact you to complete the request.');
 
-Insert into VARDB.EULA_DOCUMENTS (VERSION_ID,AGREEMENT_TEXT) values (1,'This is the AV mock Eula');
-
 REM INSERTING into VARDB.AR_DETAIL_CODE
 SET DEFINE OFF;
 Insert into VARDB.AR_DETAIL_CODE (AR_DETAIL_CODE_ID,DETAIL_CODE_ID,APPOINTMENT_REQUEST_ID,CREATED_DATE,USER_ID) values ('8a828284606fb7a801607094b8cd0014','DETCODE1','ff80808146c63d290146c94b6b010001',to_timestamp('19-DEC-17 04.01.22.984000000 PM','DD-MON-RR HH.MI.SSXFF AM'),'1253');

@@ -231,21 +231,6 @@ GRANT UNLIMITED TABLESPACE TO VARDB;
   PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1
   BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
   TABLESPACE "VARDB_DATA" ;
-
---------------------------------------------------------
---  DDL for Table EULA_DOCUMENTS
---------------------------------------------------------
-
-CREATE TABLE "VARDB"."EULA_DOCUMENTS" (
-  	"VERSION_ID" NUMBER(*,0),
-	"AGREEMENT_TEXT" VARCHAR2(100 BYTE)
-);
-
-CREATE TABLE "VARDB"."PATIENT_AGREEMENTS" (
-   	"DATE_SIGNED" DATE,
-	"USER_ICN" VARCHAR2(100 BYTE),
-	"EULA_VERSION" NUMBER
-);
 --------------------------------------------------------
 --  DDL for Table FACILITY
 --------------------------------------------------------
