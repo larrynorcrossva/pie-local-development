@@ -2,7 +2,7 @@
 
 function logs_core(){
     echo "\nOpening docker logs for NextGen core services... \n"
-    docker-compose logs -f consul registrator apigateway mock-mvi user-services swagger-ui wayf-web redis zipkin
+    docker-compose logs -f consul registrator apigateway mock-mvi user-services swagger-ui wayf-web redis zipkin eula-service eula-web
 }
 
 function logs_fixtures(){
