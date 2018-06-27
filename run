@@ -15,9 +15,9 @@ function set_pull(){
 #   working outside of AbleVets HQ
 function use_vpn(){
     echo -e "\nSetting VPN configuration...\n"
-    CDW_HOST=${CDW_HOST_AV_VPN}
-    MDWS_HOST=${MDWS_HOST_AV_VPN}
-    SMTP_HOST=${SMTP_HOST_AV_VPN}
+    export CDW_HOST=${CDW_HOST_AV_VPN}
+    export MDWS_HOST=${MDWS_HOST_AV_VPN}
+    export SMTP_HOST=${SMTP_HOST_AV_VPN}
 }
 
 # In dev mode, all applications will pull from "dev" as the DTR PREFIX/ORG and use the latest local build
