@@ -119,3 +119,12 @@ function start_sm(){
     docker-compose up -d scheduling-manager-resources scheduling-manager-web
 }
 
+function start_vats(){
+    ./consul-regristration/register-vats.sh
+    docker-compose stop var-utility-resources
+    if [ "$PULL" = true ] ; then
+        docker-compose pull var-utility-resources
+    fi
+    docker-compose up -d var-utility-resources
+}
+
