@@ -5,6 +5,7 @@
 function start_all_shared(){
     start_fixtures
     sleep 15
+    start_data_seed
     start_core
     sleep 15
     start_shared_services
@@ -63,8 +64,8 @@ function start_core(){
     fi
     docker-compose up -d consul || (echo "*** FAILED: Could not start Consul or Vault using docker-compose." && exit -1)
 
-    echo -e "\nWaiting 15s for Consul and Vault...\n"
-    sleep 15s
+    echo -e "\nWaiting 30s for Consul and Vault...\n"
+    sleep 30s
 
     echo -e "\nRegistering core services to Consul... \n"
     ./consul-registration/register-core.sh
