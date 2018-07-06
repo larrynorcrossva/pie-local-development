@@ -29,6 +29,7 @@ function set_stack_mode_dev(){
     export VAR_WEB_VERSION=latest
     export SM_RESOURCES_VERSION=latest
     export SM_WEB_VERSION=latest
+    export VARUT_RESOURCES_VERSION=latest
 }
 
 # In test mode, all applications will pull from the ECR based on the version tagged in this dev/release branch.
@@ -57,7 +58,7 @@ while [[ "$#" > 0 ]]; do
         staff|--staff) start_staff; shift;;
         var|--var) start_var; shift;;
         sm|--sm) start_sm; shift;;
-
+        vats|--vats) start_vats; shift;;
         *) echo "Unknown parameter: $1"; shift;;
     esac;
 done
