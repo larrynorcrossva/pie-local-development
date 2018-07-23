@@ -3,7 +3,7 @@
 . app.env
 
 function stop_core(){
-    docker-compose stop registrator apigateway mock-mvi user-services swagger-ui wayf-web redis zipkin consul
+    docker-compose stop registrator apigateway mock-mvi user-services swagger-ui wayf-web redis zipkin consul eula-web eula-service
 }
 
 function stop_fixtures(){
@@ -15,7 +15,7 @@ function stop_data_seed(){
 }
 
 function stop_shared_services(){
-    docker-compose stop var-messaging-microservice facility-service vmr-mock-service video-visits-service messaging-publisher
+    docker-compose stop var-messaging-microservice facility-service vmr-mock-service video-visits-service task-resources messaging-publisher
 }
 
 function stop_vet(){
@@ -34,6 +34,9 @@ function stop_sm(){
     docker-compose stop scheduling-manager-resources scheduling-manager-web
 }
 
+function stop_vats(){
+    docker-compose stop var-utility-resources
+}
 function stop_all(){
     stop_core;
     stop_fixtures;
@@ -43,6 +46,7 @@ function stop_all(){
     stop_staff;
     stop_var;
     stop_sm;
+    stop_vats;
 }
 
 while [[ "$#" > 0 ]]; do case $1 in
@@ -54,6 +58,7 @@ while [[ "$#" > 0 ]]; do case $1 in
   staff|--staff) stop_staff; shift;;
   var|--var) stop_var; shift;;
   sm|--sm) stop_sm; shift;;
+  vats|--vats) stop_vats; shift;;
   *) echo "Unknown parameter: $1"; exit 1;;
 esac; done
 
