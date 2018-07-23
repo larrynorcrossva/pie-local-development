@@ -815,7 +815,7 @@ services:
       - JAVA_OPTS=-XX:+CMSClassUnloadingEnabled -Xrs -Dcom.sun.xml.ws.transport.http.client.HttpTransportPipe.dump=true -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=64060
 
   var-utility-web:
-    image: dev/var-utility-web:latest
+    image: ${ENV_IMAGE_ROOT}/var-utility-web:${VARUT_WEB_VERSION}
     ports:
       - "9075:80"
     environment:
