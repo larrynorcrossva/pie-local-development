@@ -814,6 +814,14 @@ services:
       - JWT_SECRET=testtesttest
       - JAVA_OPTS=-XX:+CMSClassUnloadingEnabled -Xrs -Dcom.sun.xml.ws.transport.http.client.HttpTransportPipe.dump=true -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=64060
 
+  var-utility-web:
+    image: dev/var-utility-web:latest
+    ports:
+      - "9075:80"
+    environment:
+      - SERVICE_TAGS=local
+      - SERVICE_NAME=var-utility-web
+
 
 networks:
   default:
