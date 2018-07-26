@@ -121,11 +121,11 @@ function start_sm(){
 }
 
 function start_vats(){
-    ./consul-regristration/register-vats.sh
-    docker-compose stop var-utility-resources
+    ./consul-registration/register-vats.sh
+    docker-compose stop var-utility-resources var-utility-web
     if [ "$PULL" = true ] ; then
-        docker-compose pull var-utility-resources
+        docker-compose pull var-utility-resources var-utility-web
     fi
-    docker-compose up -d var-utility-resources
+    docker-compose up -d var-utility-resources var-utility-web
 }
 
