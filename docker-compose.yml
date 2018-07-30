@@ -665,6 +665,8 @@ services:
     - "CONSUL_SERVER=consul:8500"
     - "CONSUL_TOKEN=7BE784A4-7498-4469-BE2F-9C3B9444DFEF"
     - "CONSUL_PATH=appconfig/local/mdws-via-adapter"
+    - "CONSUL_HTTP_ADDR=consul:8500"
+    - "VAMF_ENVIRONMENT=local"
     # Mock Via
     #- VIA_BASE_URL=http://mock-via:8080/via-webservices/via-webservices/services
     # Live Via (AV)
