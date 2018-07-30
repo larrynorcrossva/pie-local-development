@@ -535,7 +535,7 @@ services:
 
 # Mock SSOi
   ssoi-mock:
-    image: mobileapps.vaftl.us:9250/ckm/ssoi-mock:latest
+    image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ckm/ssoi-mock:latest
     ports:
       - 9001:80
     environment:
