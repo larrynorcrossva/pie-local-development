@@ -4,7 +4,7 @@ fixtures=(mock-roa var-mongo-db-mock var-oracle-db-mock video-visits-mongo-mock 
 
 via=(via-mock-engine via-oracle via-vista via-weblogic)
 
-core=(registrator apigateway user-services mock-mvi wayf-web redis )
+core=(registrator apigateway user-services mock-mvi wayf-web authorization-rules-service redis)
 
 utilities=(swagger-ui zipkin)
 

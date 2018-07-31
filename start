@@ -128,3 +128,4 @@ function start_sm(){
     fi
     docker-compose up -d --force-recreate --no-deps "${sm[@]}"
 }
+
