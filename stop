@@ -23,7 +23,7 @@ function stop_vet(){
 }
 
 function stop_staff(){
-    docker-compose stop patient-context mock-wstrust ssoi-mock sud-service sud-web pcs-web personal-preference-service vista-data-services mdws-via-adapter staff-video-connect-service
+    docker-compose stop patient-context mock-wstrust ssoi-mock sud-service sud-web pcs-web personal-preference-service vista-data-services mdws-via-adapter staff-video-connect-service vista-scheduling-service
 }
 
 function stop_var(){
