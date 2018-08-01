@@ -15,7 +15,7 @@ function stop_data_seed(){
 }
 
 function stop_shared_services(){
-    docker-compose stop var-messaging-microservice facility-service vmr-mock-service video-visits-service task-resources messaging-publisher
+    docker-compose stop var-messaging-microservice facility-service vmr-mock-service video-visits-service task-resources messaging-publisher vista-scheduling-service mobile-appointment-service
 }
 
 function stop_vet(){
@@ -23,7 +23,7 @@ function stop_vet(){
 }
 
 function stop_staff(){
-    docker-compose stop patient-context mock-wstrust ssoi-mock sud-service sud-web pcs-web personal-preference-service vista-data-services mdws-via-adapter staff-video-connect-service vista-scheduling-service
+    docker-compose stop patient-context mock-wstrust ssoi-mock sud-service sud-web pcs-web personal-preference-service vista-data-services mdws-via-adapter staff-video-connect-service
 }
 
 function stop_var(){
