@@ -2,36 +2,38 @@
 
 . app.env
 
-function stop_core(){
-    docker-compose stop registrator apigateway mock-mvi user-services swagger-ui wayf-web redis zipkin consul eula-web eula-service
-}
+. composed-services.sh
 
 function stop_fixtures(){
-    docker-compose stop mock-roa var-mongo-db-mock var-oracle-db-mock video-visits-mongo-mock mongo
+    docker-compose rm -v -s -f "${fixtures[@]}"
+}
+
+function stop_core(){
+    docker-compose rm -v -s -f "${core[@]}"
 }
 
 function stop_data_seed(){
-    docker-compose stop var-mongo-data-seed
+    docker-compose rm -v -s -f var-mongo-data-seed
 }
 
 function stop_shared_services(){
-    docker-compose stop var-messaging-microservice facility-service vmr-mock-service video-visits-service task-resources messaging-publisher vista-scheduling-service mobile-appointment-service
+    docker-compose rm -v -s -f "${ss[@]}"
 }
 
 function stop_vet(){
-    docker-compose stop roa-services roa-web veteran-video-connect-service iamssoe-proxy-mock iamssoe-db-mock
+    docker-compose rm -v -s -f "${vet[@]}"
 }
 
 function stop_staff(){
-    docker-compose stop patient-context mock-wstrust ssoi-mock sud-service sud-web pcs-web personal-preference-service vista-data-services mdws-via-adapter staff-video-connect-service
+    docker-compose rm -v -s -f "${staff[@]}"
 }
 
 function stop_var(){
-    docker-compose stop var-resources var-web
+    docker-compose rm -v -s -f "${var[@]}"
 }
 
 function stop_sm(){
-    docker-compose stop scheduling-manager-resources scheduling-manager-web
+    docker-compose rm -v -s -f "${stop[@]}"
 }
 
 function stop_all(){

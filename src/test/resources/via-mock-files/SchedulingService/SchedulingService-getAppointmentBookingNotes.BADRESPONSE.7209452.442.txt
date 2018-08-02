@@ -1,0 +1,43 @@
+---- BEGIN REQUEST ----
+
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+  <soap:Body>
+    <ns2:getAppointmentsBookingNotes xmlns:ns2="http://service.via.med.va.gov/">
+      <ns2:queryBean>
+        <provider>
+          <name>ALEXANDER,ROBERT</name>
+          <userId>0y13ZjiB/gLEMyc9QxpdKs5YS6yS2Gi0aDN1rduOMD4=</userId>
+          <loginSiteCode>442</loginSiteCode>
+        </provider>
+        <patient>
+          <localPid>7209452</localPid>
+          <localSiteId>442</localSiteId>
+          <mpiPid>7209452</mpiPid>
+        </patient>
+        <requestingApp>TEST_APP</requestingApp>
+        <startDate>20190101.100000</startDate>
+        <multiSiteQuery>false</multiSiteQuery>
+        <consumingAppToken>TEST_TOKEN</consumingAppToken>
+        <consumingAppPassword>TEST_PASSWORD</consumingAppPassword>
+      </ns2:queryBean>
+    </ns2:getAppointmentsBookingNotes>
+  </soap:Body>
+</soap:Envelope>
+
+
+---- END REQUEST ----
+
+---- BEGIN RESPONSE ----
+
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+   <soap:Body>
+      <ns2:getAppointmentsBookingNotesResponse xmlns:ns2="http://service.via.med.va.gov/">
+         <ns2:TaggedAppointmentArrays>
+            <fault>
+               <message>queryBean.patient cannot be null, queryBean.patient.localPid not in input or not an Object</message>
+            </fault>
+         </ns2:TaggedAppointmentArrays>
+      </ns2:getAppointmentsBookingNotesResponse>
+   </soap:Body>
+</soap:Envelope>
+---- END RESPONSE ----

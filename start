@@ -2,6 +2,9 @@
 
 . app.env
 
+. composed-services.sh
+
+
 function start_all_shared(){
     start_fixtures
     sleep 15
@@ -42,7 +45,7 @@ function start_fixtures(){
     if [ "$PULL" = true ] ; then
         docker-compose pull mock-roa var-mongo-db-mock var-oracle-db-mock video-visits-mongo-mock mongo
     fi
-    docker-compose up -d mock-roa var-mongo-db-mock var-oracle-db-mock video-visits-mongo-mock mongo
+    docker-compose up -d --force-recreate --no-deps "${fixtures[@]}"
 }
 
 function start_data_seed(){
