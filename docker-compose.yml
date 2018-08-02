@@ -677,8 +677,9 @@ services:
      # Debug configuration (Ensure port ignored below is exposed for debugging in ports section)
      - SERVICE_8080_NAME=vista-scheduling-service
      - SERVICE_64085_IGNORE=true
-
-
+     - REQUESTING_APP=VAR_App
+     - CONSUMING_APP_TOKEN=APP_TOKEN
+     - CONSUMING_APP_PASSWORD=passw0rd123
 
   ### MDWS to VIA adapter
   mdws-via-adapter:
@@ -835,11 +836,13 @@ services:
     image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ckm/mobile-appointment-service:1.0.0
     ports:
       - "9097:8080"
+      - "19097:5005"
     depends_on:
       - video-visits-mongo-mock
       - vista-scheduling-service
       - video-visits-service
     environment:
+      - JAVA_OPTS=-Xms256m -Xmx512m -XX:-TieredCompilation -Xss256k -XX:+UseG1GC -XX:+UseStringDeduplication -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005
       - "USE_ENVCONSUL=true"
       - "CONSUL_SERVER=consul:8500"
       - "CONSUL_HTTP_ADDR=consul:8500"
@@ -850,33 +853,7 @@ services:
       - VVS_BASE_URL=http://video-visits-service:8080/video-visit-resources/v2
       - VDS_SCH_SERVICE_URL=http://vista-scheduling-service:8080/VistaSchedulingService/v2
       - VIA_BASE_URL=http://10.1.0.8:8089/via-webservices/services
-
-  vista-scheduling-service:
-    image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ckm/vista-scheduling-service:2.0.0
-    ports:
-     - 8185:8080
-     - 18096:5005
-    environment:
-     # Don't use Vault
-     #- "VAULT_ADDR=http://vault:8200"
-     #- "SECRET_PATH=secret/local/vista-data-services"
-     # Use Consul
-     - "USE_ENVCONSUL=true"
-     - REDIS_HOST=redis
-     - "CONSUL_SERVER=consul:8500"
-     - "CONSUL_HTTP_ADDR=consul:8500"
-     - "CONSUL_TOKEN=7BE784A4-7498-4469-BE2F-9C3B9444DFEF"
-     - "CONSUL_PATH=appconfig/local/VistaSchedulingService"
-     - "VAMF_ENVIRONMENT=local"
-     - MDWS_ADAPTER_BASE_URL=http://mdws-via-adapter:8080/MdwsViaAdapter/v1/services
-     - JAVA_OPTS=-Xms256m -Xmx512m -XX:-TieredCompilation -Xss256k -XX:+UseG1GC -XX:+UseStringDeduplication -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005
-     - USER_SVC_URL=http://user-services:8080/users/v1
-     - JWT_SECRET=testtesttest
-     - "SERVER_USE_FORWARD_HEADERS=true"
-     # Debug configuration (Ensure port ignored below is exposed for debugging in ports section)
-     - SERVICE_8080_NAME=vista-scheduling-service
-     - SERVICE_64085_IGNORE=true
-
+      - SERVICE_64085_IGNORE=true
 
 networks:
   default:
