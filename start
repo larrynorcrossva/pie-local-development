@@ -41,9 +41,9 @@ function start_all_staff(){
 
 function start_fixtures(){
     echo -e "\nStarting Fixtures\n"
-    docker-compose stop mock-roa var-mongo-db-mock var-oracle-db-mock video-visits-mongo-mock mongo
+    docker-compose stop "${fixtures[@]}"
     if [ "$PULL" = true ] ; then
-        docker-compose pull mock-roa var-mongo-db-mock var-oracle-db-mock video-visits-mongo-mock mongo
+        docker-compose pull --ignore-pull-failures "${fixtures[@]}"
     fi
     docker-compose up -d --force-recreate --no-deps "${fixtures[@]}"
 }
@@ -57,13 +57,20 @@ function start_data_seed(){
     docker-compose up -d var-mongo-data-seed
 }
 
+function start_via(){
+    echo -e "\nStarting VIA\n"
+    docker-compose stop "${via[@]}"
+    if [ "$PULL" = true ] ; then
+        docker-compose pull --ignore-pull-failures "${via[@]}"
+    fi
+    docker-compose up -d --force-recreate --no-deps "${via[@]}"
+}
+
 function start_core(){
     ## Start Consul first
-    echo -e "\nStarting Consul and Vault\n"
+    echo -e "\nStarting Consul\n"
     # docker-compose up -d consul vault || (echo "*** FAILED: Could not start Consul or Vault using docker-compose." && exit -1)
-    if [ "$PULL" = true ] ; then
-        docker-compose pull consul
-    fi
+
     docker-compose up -d consul || (echo "*** FAILED: Could not start Consul or Vault using docker-compose." && exit -1)
 
     echo -e "\nWaiting 15s for Consul and Vault...\n"
@@ -73,52 +80,51 @@ function start_core(){
     ./consul-registration/register-core.sh
 
     if [ "$PULL" = true ] ; then
-        docker-compose pull registrator apigateway mock-mvi user-services swagger-ui wayf-web redis zipkin
+        docker-compose pull "${core[@]}"
     fi
-    docker-compose up -d registrator apigateway mock-mvi user-services swagger-ui wayf-web redis zipkin || (echo "*** FAILED: Could not start core containers using docker-compose." && exit -1)
+    docker-compose up -d --force-recreate --no-deps "${core[@]}" || (echo "*** FAILED: Could not start core containers using docker-compose." && exit -1)
 }
 
 function start_shared_services(){
     ./consul-registration/register-shared-services.sh
-    docker-compose stop var-messaging-microservice facility-service vmr-mock-service video-visits-service task-resources messaging-publisher vista-scheduling-service mobile-appointment-service
+    docker-compose stop "${ss[@]}"
     if [ "$PULL" = true ] ; then
-        docker-compose pull var-messaging-microservice facility-service vmr-mock-service video-visits-service task-resources messaging-publisher vista-scheduling-service mobile-appointment-service
+        docker-compose pull "${ss[@]}"
     fi
-    docker-compose up -d var-messaging-microservice facility-service vmr-mock-service video-visits-service task-resources messaging-publisher vista-scheduling-service mobile-appointment-service
+    docker-compose up -d --force-recreate --no-deps "${ss[@]}"
 }
 
 function start_vet(){
-    docker-compose stop roa-services roa-web veteran-video-connect-service iamssoe-proxy-mock iamssoe-db-mock
+    docker-compose stop "${vet[@]}"
     if [ "$PULL" = true ] ; then
-        docker-compose pull roa-services roa-web veteran-video-connect-service iamssoe-proxy-mock iamssoe-db-mock
+        docker-compose pull "${vet[@]}"
     fi
-    docker-compose up -d roa-services roa-web veteran-video-connect-service iamssoe-proxy-mock iamssoe-db-mock
+    docker-compose up -d --force-recreate --no-deps "${vet[@]}"
 }
 
 function start_staff(){
     ./consul-registration/register-staff.sh
-    docker-compose stop patient-context mock-wstrust ssoi-mock sud-service sud-web pcs-web personal-preference-service vista-data-services mdws-via-adapter staff-video-connect-service
+    docker-compose stop "${staff[@]}"
     if [ "$PULL" = true ] ; then
-        docker-compose pull patient-context mock-wstrust ssoi-mock sud-service sud-web pcs-web personal-preference-service vista-data-services mdws-via-adapter staff-video-connect-service
+        docker-compose pull "${staff[@]}"
     fi
-    docker-compose up -d patient-context mock-wstrust ssoi-mock sud-service sud-web pcs-web personal-preference-service vista-data-services mdws-via-adapter staff-video-connect-service
+    docker-compose up -d --force-recreate --no-deps "${staff[@]}"
 }
 
 function start_var(){
     ./consul-registration/register-var.sh
-    docker-compose stop var-resources var-web
+    docker-compose stop "${var[@]}"
     if [ "$PULL" = true ] ; then
-        docker-compose pull var-resources var-web
+        docker-compose pull "${var[@]}"
     fi
-    docker-compose up -d var-resources var-web
+    docker-compose up -d --force-recreate --no-deps "${var[@]}"
 }
 
 function start_sm(){
     ./consul-registration/register-sm.sh
-    docker-compose stop scheduling-manager-resources scheduling-manager-web
+    docker-compose stop "${sm[@]}"
     if [ "$PULL" = true ] ; then
-        docker-compose pull scheduling-manager-resources scheduling-manager-web
+        docker-compose pull "${sm[@]}"
     fi
-    docker-compose up -d scheduling-manager-resources scheduling-manager-web
+    docker-compose up -d --force-recreate --no-deps "${sm[@]}"
 }
-

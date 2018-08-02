@@ -10,6 +10,7 @@ function stop_fixtures(){
 
 function stop_core(){
     docker-compose rm -v -s -f "${core[@]}"
+    docker-compose rm -v -s -f "consul"
 }
 
 function stop_data_seed(){

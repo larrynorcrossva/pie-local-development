@@ -49,10 +49,11 @@ while [[ "$#" > 0 ]]; do
         a|all|-a|--all) start_all; shift;;
         av|all-vet|-av|--all-vet) start_all_vet; shift;;
         as|all-staff|-as|--all-staff) start_all_staff; shift;;
-        c|core|-c|--core) start_core; shift;;
         f|fixtures|-f|--fixtures) start_fixtures; shift;;
-        s|ss|-s|--shared-services) start_shared_services; shift;;
+        v|via|-v|--via) start_via; shift;;
         d|data|-d|--data-seed) start_data_seed; shift;;
+        c|core|-c|--core) start_core; shift;;
+        s|ss|-s|--shared-services) start_shared_services; shift;;
         v|vet|-v|--vet) start_vet; shift;;
         staff|--staff) start_staff; shift;;
         var|--var) start_var; shift;;
