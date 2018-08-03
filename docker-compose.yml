@@ -344,7 +344,7 @@ services:
       - "8082:8080"
       - "5005:5005"
     volumes:
-      - ./src/test/resources/via-mock-files/SchedulingService:/opt/via-mock-files
+      - ./via-mock-files/SchedulingService:/opt/via-mock-files
 
 #######################
 ### DB FIXTURES END ###
@@ -544,7 +544,7 @@ services:
 # IAM SSOe Mock - Injects HTTP headers to simulate SSOe token header injection. Allows log in/out.
   iamssoe-proxy-mock:
     image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ablevets/idp-proxy-mock-shared:latest
-    #image: local-idp
+    container_name: iamssoe-proxy-mock
     ports:
       - 9000:80
     environment:
@@ -558,6 +558,7 @@ services:
 #Mock database to store identity information
   iamssoe-db-mock:
     image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ablevets/idp-db-mock-shared:1.0.1-git-commit-c4e0d0925
+    container_name: iamssoe-db-mock
     environment:
       - MYSQL_ROOT_PASSWORD=MySqlAdmin$$
       - MYSQL_DATABASE=MockUser
