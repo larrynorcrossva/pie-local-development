@@ -8,7 +8,7 @@ core=(registrator apigateway user-services mock-mvi mock-mvi-ablevets wayf-web r
 
 utilities=(swagger-ui zipkin)
 
-ss=(var-messaging-microservice facility-service vmr-mock-service video-visits-service messaging-publisher scheduling-service mobile-appointment-service)
+ss=(var-messaging-microservice facility-service vmr-mock-service video-visits-service messaging-publisher scheduling-service appointment-service)
 # removed task-resources
 
 vet=(roa-services roa-web eula-service eula-web veteran-video-connect-service iamssoe-proxy-mock iamssoe-db-mock)
