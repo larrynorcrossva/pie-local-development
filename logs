@@ -27,7 +27,7 @@ function logs_vet(){
 
 function logs_staff(){
     echo "\nOpening docker logs for staff services... \n"
-    docker-compose logs -f patient-context mock-wstrust ssoi-mock sud-service sud-web pcs-web personal-preference-service vista-data-services mdws-via-adapter staff-video-connect-service
+    docker-compose logs -f patient-context mock-wstrust ssoi-mock sud-service sud-web pcs-web personal-preference-service vista-data-services vista-scheduling-service mdws-via-adapter staff-video-connect-service
 }
 
 function logs_var(){
