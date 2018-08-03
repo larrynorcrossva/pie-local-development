@@ -542,7 +542,6 @@ services:
       - "TRACE_URL=http://localhost:9411/api/v1/spans"
 
 # IAM SSOe Mock - Injects HTTP headers to simulate SSOe token header injection. Allows log in/out.
-#
   iamssoe-proxy-mock:
     image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ablevets/idp-proxy-mock-shared:latest
     #image: local-idp
@@ -555,9 +554,10 @@ services:
       - "CLIENT_LANDING=/users/v1/landing?redirect_uri="
     volumes:
       - /tmp/ssoenothing:/usr/local/openresty/nginx/conf/secured
+
 #Mock database to store identity information
   iamssoe-db-mock:
-    image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ablevets/idp-db-mock-shared:latest
+    image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ablevets/idp-db-mock-shared:1.0.1-git-commit-c4e0d0925
     environment:
       - MYSQL_ROOT_PASSWORD=MySqlAdmin$$
       - MYSQL_DATABASE=MockUser
