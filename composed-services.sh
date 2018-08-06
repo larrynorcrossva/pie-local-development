@@ -4,13 +4,11 @@ fixtures=(mock-roa var-mongo-db-mock var-oracle-db-mock video-visits-mongo-mock 
 
 via=(via-mock-engine via-oracle via-vista via-weblogic)
 
-#core=(registrator apigateway user-services mock-mvi mock-mvi-ablevets wayf-web redis )
 core=(registrator apigateway user-services mock-mvi-ablevets wayf-web redis )
 
 utilities=(swagger-ui zipkin)
 
 ss=(var-messaging-microservice facility-service vmr-mock-service video-visits-service messaging-publisher vista-scheduling-service appointment-service)
-# removed task-resources
 
 vet=(roa-services roa-web eula-service eula-web veteran-video-connect-service iamssoe-proxy-mock iamssoe-db-mock)
 
