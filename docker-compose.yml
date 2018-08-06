@@ -70,26 +70,26 @@ services:
   # to create JWT security tokens and augmenting user identities with other identifiers from the MVI (specifically ICN)
   #
   mock-mvi-ablevets:
-    image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ablevets/var-mock-mvi:1.0.0
+    image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ablevets/var-mock-mvi:1.0.1-git-commit-17009e329
     ports:
       - "35219:8080"
     environment:
       - SERVICE_TAGS=local
       - SERVICE_NAME=mock-mvi-ablevets
 
-  mock-mvi:
-    image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ckm/vamf/mvimock-soapui:v1.0.5
-    ports:
-      - "35220:8080"
+#  mock-mvi:
+#    image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ckm/vamf/mvimock-soapui:v1.0.5
+#    ports:
+#      - "35220:8080"
 
   user-services:
     image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ckm/docker-user-service:1.7.16
     depends_on:
       - eula-web
       - eula-service
-      - mock-mvi
+      - mock-mvi-ablevets
     links:
-      - mock-mvi
+      - mock-mvi-ablevets
       - roa-services
       - sud-service
       - zipkin
@@ -107,7 +107,7 @@ services:
       - USE_ENVCONSUL=false
       - SERVER_USE_FORWARD_HEADERS=true
       - TRACE_URL=http://zipkin:9411/api/v1/spans
-      - MVI_URL=http://mock-mvi:8080/mvi/mockVAIdMPort
+      - MVI_URL=http://mock-mvi-ablevets:8080/mvi/mockVAIdMPort
       - ROA_HOST=http://roa-services:8080
       - SUD_HOST=http://sud-service:8080
       - MVI_SENDER_ID=CIH200
@@ -848,11 +848,11 @@ services:
     links:
      - var-messaging-microservice
      - facility-service
-     - mock-mvi
+     - mock-mvi-ablevets
     depends_on:
      - var-messaging-microservice
      - facility-service
-     - mock-mvi
+     - mock-mvi-ablevets
     environment:
      - SERVICE_64058_IGNORE=true
      - SERVICE_TAGS=local
