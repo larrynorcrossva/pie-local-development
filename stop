@@ -58,7 +58,7 @@ while [[ "$#" > 0 ]]; do case $1 in
   f|fixtures|-f|--fixtures) stop_fixtures; shift;;
   s|ss|-s|--shared-services) stop_shared_services; shift;;
   v|vet|-v|--vet) stop_vet; shift;;
-  v|via|-v|--via) stop_via; shift;;
+  via|--via) stop_via; shift;;
   staff|--staff) stop_staff; shift;;
   var|--var) stop_var; shift;;
   sm|--sm) stop_sm; shift;;
