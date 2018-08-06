@@ -3,10 +3,10 @@
 <soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
   <soap:Body>
     <ns2:loginVIA xmlns:ns2="http://service.via.med.va.gov/">
-      <ns2:siteCode>553</ns2:siteCode>
+      <ns2:siteCode>523</ns2:siteCode>
       <ns2:queryBean>
         <requestingApp>TEST_APP</requestingApp>
-        <criteria>ssoiWstToken created for test</criteria>
+        <criteria><![CDATA[<soap:Envelope ><soap:Body><RequestSecurityTokenResponse  Context="renew"/></soap:Body></soap:Envelope>]]></criteria>
         <multiSiteQuery>false</multiSiteQuery>
         <consumingAppToken>TEST_TOKEN</consumingAppToken>
         <consumingAppPassword>TEST_PASSWORD</consumingAppPassword>
@@ -26,13 +26,13 @@
          <ns2:UserTO>
             <name>ALEXANDER,ROBERT</name>
             <DUZ>0y13ZjiB/gLEMyc9QxpdKs5YS6yS2Gi0aDN1rduOMD4=</DUZ>
-            <siteId>553</siteId>
+            <siteId>523</siteId>
             <greeting>Good evening ALEXANDER,ROBERT</greeting>
             <vistaDUZ>62</vistaDUZ>
             <divisions>
                <division>
                   <name>SOFTWARE SERVICE</name>
-                  <siteId>553</siteId>
+                  <siteId>523</siteId>
                </division>
                <division>
                   <name>VISTA HEALTH CARE</name>

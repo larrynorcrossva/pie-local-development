@@ -7,15 +7,15 @@
         <provider>
           <name>ALEXANDER,ROBERT</name>
           <userId>0y13ZjiB/gLEMyc9QxpdKs5YS6yS2Gi0aDN1rduOMD4=</userId>
-          <loginSiteCode>442</loginSiteCode>
+          <loginSiteCode>523</loginSiteCode>
         </provider>
         <patient>
-          <localPid>7209444</localPid>
-          <localSiteId>442</localSiteId>
-          <mpiPid>7209444</mpiPid>
+          <localPid>101076</localPid>
+          <localSiteId>523</localSiteId>
+          <mpiPid>101076</mpiPid>
         </patient>
         <requestingApp>TEST_APP</requestingApp>
-        <startDate>20110119.034000</startDate>
+        <startDate>20110101.000000</startDate>
         <multiSiteQuery>false</multiSiteQuery>
         <consumingAppToken>TEST_TOKEN</consumingAppToken>
         <consumingAppPassword>TEST_PASSWORD</consumingAppPassword>
@@ -37,10 +37,10 @@
             <arrays>
                <taggedAppointmentArray>
                   <count>7</count>
-                  <tag>516</tag>
+                  <tag>523</tag>
                   <appts>
                      <appointmentTO>
-                        <timestamp>20110119.034000</timestamp>
+                        <timestamp>20110304.100000</timestamp>
                         <facility/>
                         <clinic>
                            <name>CHY ORTHO CURTIS</name>
@@ -52,7 +52,7 @@
                         <bookNotes>r/s from 2-7 pt was ill</bookNotes>
                      </appointmentTO>
                      <appointmentTO>
-                        <timestamp>20110119.034000</timestamp>
+                        <timestamp>20110204.153000</timestamp>
                         <facility/>
                         <clinic>
                            <name>CHY MAGNETIC RESONANCE IMAGING</name>
@@ -63,7 +63,7 @@
                         <appointmentLength>60</appointmentLength>
                      </appointmentTO>
                      <appointmentTO>
-                        <timestamp>20110119.104000</timestamp>
+                        <timestamp>20110207.110000</timestamp>
                         <facility/>
                         <clinic>
                            <name>CHY ORTHO CURTIS</name>
@@ -73,7 +73,7 @@
                         <clinicId>1393</clinicId>
                      </appointmentTO>
                      <appointmentTO>
-                        <timestamp>20110119.014000</timestamp>
+                        <timestamp>20101124.102000</timestamp>
                         <facility/>
                         <clinic>
                            <name>CHY PC KILPATRICK</name>
@@ -93,7 +93,7 @@
                         <clinicId>308</clinicId>
                      </appointmentTO>
                      <appointmentTO>
-                        <timestamp>20110119.184000</timestamp>
+                        <timestamp>20110119.104000</timestamp>
                         <facility/>
                         <clinic>
                            <name>CHY PC KILPATRICK</name>

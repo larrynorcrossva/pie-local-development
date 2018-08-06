@@ -1,0 +1,124 @@
+---- BEGIN REQUEST ----
+
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+  <soap:Body>
+    <ns2:getAppointmentsBookingNotes xmlns:ns2="http://service.via.med.va.gov/">
+      <ns2:queryBean>
+        <provider>
+          <name>ALEXANDER,ROBERT</name>
+          <userId>0y13ZjiB/gLEMyc9QxpdKs5YS6yS2Gi0aDN1rduOMD4=</userId>
+          <loginSiteCode>523</loginSiteCode>
+        </provider>
+       <patient>
+            <localPid>1006088937</localPid>
+            <localSiteId>523</localSiteId>
+            <mpiPid>1006088937</mpiPid>
+        </patient>        
+        <requestingApp>TEST_APP</requestingApp>
+        <startDate>20110101.000000</startDate>
+        <multiSiteQuery>false</multiSiteQuery>
+        <consumingAppToken>TEST_TOKEN</consumingAppToken>
+        <consumingAppPassword>TEST_PASSWORD</consumingAppPassword>
+      </ns2:queryBean>
+    </ns2:getAppointmentsBookingNotes>
+  </soap:Body>
+</soap:Envelope>
+
+---- END REQUEST ----
+
+---- BEGIN RESPONSE ----
+
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+   <soap:Body>
+      <ns2:getAppointmentsBookingNotesResponse xmlns:ns2="http://service.via.med.va.gov/">
+         <ns2:TaggedAppointmentArrays>
+             <count>1</count>
+             <arrays>
+                <taggedAppointmentArray>
+                   <count>7</count>
+                   <tag>523</tag>
+                   <appts>
+                      <appointmentTO>
+                         <timestamp>20110304.100000</timestamp>
+                         <facility/>
+                         <clinic>
+                            <name>CHY ORTHO CURTIS</name>
+                         </clinic>
+                         <type>REGULAR</type>
+                         <currentStatus>INPATIENT/CHECKED OUT</currentStatus>
+                         <clinicId>1391</clinicId>
+                         <appointmentLength>30</appointmentLength>
+                         <bookNotes>r/s from 2-7 pt was ill</bookNotes>
+                      </appointmentTO>
+                      <appointmentTO>
+                         <timestamp>20110304.153000</timestamp>
+                         <facility/>
+                         <clinic>
+                            <name>CHY MAGNETIC RESONANCE IMAGING</name>
+                         </clinic>
+                         <type>REGULAR</type>
+                         <currentStatus>NON-COUNT</currentStatus>
+                         <clinicId>387</clinicId>
+                         <appointmentLength>60</appointmentLength>
+                      </appointmentTO>
+                      <appointmentTO>
+                         <timestamp>20110507.110000</timestamp>
+                         <facility/>
+                         <clinic>
+                            <name>CHY ORTHO CURTIS</name>
+                         </clinic>
+                         <type>SERVICE CONNECTED</type>
+                         <currentStatus>CANCELLED BY PATIENT</currentStatus>
+                         <clinicId>1393</clinicId>
+                      </appointmentTO>
+                      <appointmentTO>
+                         <timestamp>20101124.102000</timestamp>
+                         <facility/>
+                         <clinic>
+                            <name>CHY PC KILPATRICK</name>
+                         </clinic>
+                         <type>SERVICE CONNECTED</type>
+                         <currentStatus>CANCELLED BY PATIENT</currentStatus>
+                         <clinicId>308</clinicId>
+                      </appointmentTO>
+                      <appointmentTO>
+                         <timestamp>20110515.112000</timestamp>
+                         <facility/>
+                         <clinic>
+                            <name>CHY PC KILPATRICK</name>
+                         </clinic>
+                         <type>SERVICE CONNECTED</type>
+                         <currentStatus>CANCELLED BY CLINIC</currentStatus>
+                         <clinicId>308</clinicId>
+                      </appointmentTO>
+                      <appointmentTO>
+                         <timestamp>20110119.104000</timestamp>
+                         <facility/>
+                         <clinic>
+                            <name>CHY PC KILPATRICK</name>
+                         </clinic>
+                         <type>SERVICE CONNECTED</type>
+                         <currentStatus>CANCELLED BY CLINIC</currentStatus>
+                         <clinicId>308</clinicId>
+                         <appointmentLength>20</appointmentLength>
+                      </appointmentTO>
+                      <appointmentTO>
+                         <timestamp>20110511.140000</timestamp>
+                         <facility/>
+                         <clinic>
+                            <name>CHY ORTHO CURTIS RETURN</name>
+                         </clinic>
+                         <type>REGULAR</type>
+                         <currentStatus>INPATIENT/NO ACT TAKN</currentStatus>
+                         <clinicId>1392</clinicId>
+                         <appointmentLength>20</appointmentLength>
+                         <bookNotes>per Denise to f/u 8-10 weeks</bookNotes>
+                      </appointmentTO>
+                   </appts>
+                </taggedAppointmentArray>
+             </arrays>
+          </ns2:TaggedAppointmentArrays>
+      </ns2:getAppointmentsBookingNotesResponse>
+   </soap:Body>
+</soap:Envelope>
+---- END RESPONSE ----

@@ -7,15 +7,15 @@
         <provider>
           <name>ALEXANDER,ROBERT</name>
           <userId>0y13ZjiB/gLEMyc9QxpdKs5YS6yS2Gi0aDN1rduOMD4=</userId>
-          <loginSiteCode>101</loginSiteCode>
+          <loginSiteCode>523</loginSiteCode>
         </provider>
         <patient>
-          <localPid>20995175</localPid>
-          <localSiteId>101</localSiteId>
-          <mpiPid>20995175</mpiPid>
+          <localPid>101076</localPid>
+          <localSiteId>523</localSiteId>
+          <mpiPid>101076</mpiPid>
         </patient>
         <requestingApp>TEST_APP</requestingApp>
-        <startDate>20110304.050000</startDate>
+        <startDate>20180910.000000</startDate>
         <multiSiteQuery>false</multiSiteQuery>
         <consumingAppToken>TEST_TOKEN</consumingAppToken>
         <consumingAppPassword>TEST_PASSWORD</consumingAppPassword>
@@ -36,84 +36,74 @@
             <count>1</count>
             <arrays>
                <taggedAppointmentArray>
-                  <count>7</count>
-                  <tag>516</tag>
+                  <count>6</count>
+                  <tag>523</tag>
                   <appts>
                      <appointmentTO>
-                        <timestamp>20110304.100000</timestamp>
+                        <timestamp>20180910.153000</timestamp>
                         <facility/>
                         <clinic>
-                           <name>CHY ORTHO CURTIS</name>
+                           <name>AUDIOLOGY</name>
                         </clinic>
                         <type>REGULAR</type>
-                        <currentStatus>INPATIENT/CHECKED OUT</currentStatus>
-                        <clinicId>1391</clinicId>
+                        <currentStatus>FUTURE</currentStatus>
+                        <clinicId>64</clinicId>
                         <appointmentLength>30</appointmentLength>
-                        <bookNotes>r/s from 2-7 pt was ill</bookNotes>
                      </appointmentTO>
                      <appointmentTO>
-                        <timestamp>20110204.153000</timestamp>
+                        <timestamp>20180910.110000</timestamp>
                         <facility/>
                         <clinic>
-                           <name>CHY MAGNETIC RESONANCE IMAGING</name>
+                           <name>AUDIOLOGY</name>
                         </clinic>
                         <type>REGULAR</type>
-                        <currentStatus>NON-COUNT</currentStatus>
-                        <clinicId>387</clinicId>
-                        <appointmentLength>60</appointmentLength>
-                     </appointmentTO>
-                     <appointmentTO>
-                        <timestamp>20110207.110000</timestamp>
-                        <facility/>
-                        <clinic>
-                           <name>CHY ORTHO CURTIS</name>
-                        </clinic>
-                        <type>SERVICE CONNECTED</type>
                         <currentStatus>CANCELLED BY PATIENT</currentStatus>
-                        <clinicId>1393</clinicId>
+                        <clinicId>64</clinicId>
                      </appointmentTO>
                      <appointmentTO>
-                        <timestamp>20101124.102000</timestamp>
+                        <timestamp>20180910.112000</timestamp>
                         <facility/>
                         <clinic>
-                           <name>CHY PC KILPATRICK</name>
+                           <name>AUDIOLOGY</name>
                         </clinic>
-                        <type>SERVICE CONNECTED</type>
-                        <currentStatus>CANCELLED BY PATIENT</currentStatus>
-                        <clinicId>308</clinicId>
-                     </appointmentTO>
-                     <appointmentTO>
-                        <timestamp>20110215.112000</timestamp>
-                        <facility/>
-                        <clinic>
-                           <name>CHY PC KILPATRICK</name>
-                        </clinic>
-                        <type>SERVICE CONNECTED</type>
+                        <type>REGULAR</type>
                         <currentStatus>CANCELLED BY CLINIC</currentStatus>
-                        <clinicId>308</clinicId>
+                        <clinicId>64</clinicId>
                      </appointmentTO>
                      <appointmentTO>
-                        <timestamp>20110119.104000</timestamp>
+                        <timestamp>20180910.104000</timestamp>
                         <facility/>
                         <clinic>
-                           <name>CHY PC KILPATRICK</name>
+                           <name>PRIMARY CARE</name>
                         </clinic>
-                        <type>SERVICE CONNECTED</type>
+                        <type>REGULAR</type>
                         <currentStatus>CANCELLED BY CLINIC</currentStatus>
-                        <clinicId>308</clinicId>
+                        <clinicId>32</clinicId>
                         <appointmentLength>20</appointmentLength>
                      </appointmentTO>
                      <appointmentTO>
-                        <timestamp>20110511.140000</timestamp>
+                        <timestamp>20180910.140000</timestamp>
                         <facility/>
                         <clinic>
-                           <name>CHY ORTHO CURTIS RETURN</name>
+                           <name>PRIMARY CARE</name>
                         </clinic>
                         <type>REGULAR</type>
-                        <currentStatus>INPATIENT/NO ACT TAKN</currentStatus>
-                        <clinicId>1392</clinicId>
+                        <currentStatus>CANCELLED BY PATIENT</currentStatus>
+                        <clinicId>32</clinicId>
                         <appointmentLength>20</appointmentLength>
-                        <bookNotes>per Denise to f/u 8-10 weeks</bookNotes>
+                        <bookNotes>primary care cancelled by patient</bookNotes>
+                     </appointmentTO>
+                     <appointmentTO>
+                        <timestamp>20180910.141000</timestamp>
+                        <facility/>
+                        <clinic>
+                           <name>PRIMARY CARE</name>
+                        </clinic>
+                        <type>REGULAR</type>
+                        <currentStatus>FUTURE</currentStatus>
+                        <clinicId>32</clinicId>
+                        <appointmentLength>20</appointmentLength>
+                        <bookNotes>booked primary care</bookNotes>
                      </appointmentTO>
                   </appts>
                </taggedAppointmentArray>
