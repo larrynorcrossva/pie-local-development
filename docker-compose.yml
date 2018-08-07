@@ -69,13 +69,13 @@ services:
   # User service and Mobile Veteran (Patient) Index (MVI/MPI)- The user service is responsible for processing requests
   # to create JWT security tokens and augmenting user identities with other identifiers from the MVI (specifically ICN)
   #
-  mock-mvi-ablevets:
+  mock-mvi:
     image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ablevets/var-mock-mvi:1.0.1-git-commit-17009e329
     ports:
       - "35219:8080"
     environment:
       - SERVICE_TAGS=local
-      - SERVICE_NAME=mock-mvi-ablevets
+      - SERVICE_NAME=mock-mvi
 
 #  mock-mvi:
 #    image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ckm/vamf/mvimock-soapui:v1.0.5
@@ -87,9 +87,9 @@ services:
     depends_on:
       - eula-web
       - eula-service
-      - mock-mvi-ablevets
+      - mock-mvi
     links:
-      - mock-mvi-ablevets
+      - mock-mvi
       - roa-services
       - sud-service
       - zipkin
@@ -107,7 +107,7 @@ services:
       - USE_ENVCONSUL=false
       - SERVER_USE_FORWARD_HEADERS=true
       - TRACE_URL=http://zipkin:9411/api/v1/spans
-      - MVI_URL=http://mock-mvi-ablevets:8080/mvi/mockVAIdMPort
+      - MVI_URL=http://mock-mvi:8080/mvi/mockVAIdMPort
       - ROA_HOST=http://roa-services:8080
       - SUD_HOST=http://sud-service:8080
       - MVI_SENDER_ID=CIH200
@@ -246,7 +246,7 @@ services:
       - CONSUL_PATH=appconfig/${VAMF_ENVIRONMENT}/var-oracle-db-mock
 
   video-visits-mongo-mock:
-    image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ablevets/video-visits-mongo-mock:latest
+    image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ablevets/video-visits-mongo-mock:1.1.1
     ports:
       - "27015:27017"
     environment:
@@ -847,11 +847,11 @@ services:
     links:
      - var-messaging-microservice
      - facility-service
-     - mock-mvi-ablevets
+     - mock-mvi
     depends_on:
      - var-messaging-microservice
      - facility-service
-     - mock-mvi-ablevets
+     - mock-mvi
     environment:
      - SERVICE_64058_IGNORE=true
      - SERVICE_TAGS=local
