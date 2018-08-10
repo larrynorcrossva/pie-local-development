@@ -780,6 +780,7 @@ services:
       - CONSUL_HTTP_ADDR=consul:8500
       - CONSUL_TOKEN=7BE784A4-7498-4469-BE2F-9C3B9444DFEF
       - CONSUL_PATH=appconfig/local/var-web
+      - VAMF_ENVIRONMENT=local
 
   scheduling-manager-resources:
     image: ${ENV_IMAGE_ROOT}/scheduling-manager-resources:${SM_RESOURCES_VERSION}
