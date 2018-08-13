@@ -143,11 +143,13 @@ services:
 
 
   authorization-rules-service:
-    image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/vamis/authorization-rules-service:12
+    image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/vamis/authorization-rules-service:13
     container_name: authorization-rules-service
     ports:
       - "8481:8080"
+      - "18481:5005"
     environment:
+      - JAVA_OPTS=-Xms256m -Xmx512m -XX:-TieredCompilation -Xss256k -XX:+UseG1GC -XX:+UseStringDeduplication -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005
       - USE_ENVCONSUL=true
       - SERVER_USE_FORWARD_HEADERS=true
       - SERVICE_TAGS=local
@@ -161,10 +163,10 @@ services:
       - "ADMIN_TOKENS_ENABLED=true"
       - "ADMIN_TOKENS=admin|d4b75643-40a9-4694-897d-c099f741c8b2"
       - "ENABLE_ZIPKIN=false"
-      - "RULES_FOLDER=/opt/rules"
+#     - "RULES_FOLDER=/opt/rules"
 #      - "AUTH_RULES_SVC_URL="
-    volumes:
-       - "./core/authorization-rules-service/rules:/opt/rules"
+#   volumes:
+#     - "./authorization-rules-service/rules:/opt/rules"
 
 
 # Use EULA Services only for User Services 1.7
