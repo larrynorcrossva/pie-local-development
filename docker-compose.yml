@@ -172,7 +172,7 @@ services:
 # Use EULA Services only for User Services 1.7
   # End User License Agreement (EULA) Service v1
   eula-web:
-    image: mobileapps.vaftl.us:9250/ckm/eula-web:1.0.3
+    image: mobileapps.vaftl.us:9250/ckm/eula-web:1.0.4
     ports:
       - 8101:80
     environment:
@@ -279,7 +279,7 @@ services:
       - CONSUL_PATH=appconfig/${VAMF_ENVIRONMENT}/var-oracle-db-mock
 
   video-visits-mongo-mock:
-    image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ablevets/video-visits-mongo-mock:1.1.1
+    image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ablevets/video-visits-mongo-mock:1.1.1-VAR-12798
     ports:
       - "27015:27017"
     environment:
@@ -748,6 +748,7 @@ services:
   # VistA Scheduling Service (VSS) - exposes vista data by using the mdws to via adapter
   vista-scheduling-service:
     image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ckm/vista-scheduling-service:2.0.0
+#    image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ckm/vista-scheduling-service:2.0.0-null-sec
     ports:
      - 8185:8080
      - 18096:5005
@@ -928,7 +929,7 @@ services:
       - SERVICE_NAME=scheduling-manager-web
 
   appointment-service:
-    image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ckm/mobile-appointment-service:1.0.0
+    image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ablevets/mobile-appointment-service:1.0.0
     ports:
       - "9097:8080"
       - "19097:5005"
