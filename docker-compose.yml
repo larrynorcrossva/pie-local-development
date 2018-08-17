@@ -929,7 +929,7 @@ services:
       - SERVICE_NAME=scheduling-manager-web
 
   appointment-service:
-    image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ablevets/mobile-appointment-service:1.0.0
+    image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ckm/mobile-appointment-service:1.0.0
     ports:
       - "9097:8080"
       - "19097:5005"
