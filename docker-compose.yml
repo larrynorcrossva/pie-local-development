@@ -205,7 +205,7 @@ services:
     - "1521"
 
   var-mongo-db-mock:
-    image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ablevets/var-mongo-db-mock:1.0.0
+    image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ablevets/var-mongo-db-mock:1.0.1_096653d5a212
     #image: dev/var-mongo-db-mock
     ports:
       - "27017:27017"
