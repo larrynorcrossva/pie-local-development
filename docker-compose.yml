@@ -400,7 +400,7 @@ services:
 ### SHARED SERVICES START ###
 #############################
   var-messaging-microservice:
-    image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ablevets/var-messaging-microservice:0.47
+    image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ablevets/var-messaging-microservice:2.1.0
     #image: dev/var-messaging-microservice
     expose:
       - "8080"
