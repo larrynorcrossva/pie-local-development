@@ -745,7 +745,7 @@ services:
 ##########################
 
   var-resources:
-    image: dev/var-resources:latest
+    image: ${ENV_IMAGE_ROOT}/var-resources:${VAR_RESOURCES_VERSION}
     ports:
      - "9092:8080"
      - "64058:64058"
@@ -769,7 +769,7 @@ services:
      - JAVA_OPTS=-XX:+CMSClassUnloadingEnabled -Xrs -Dcom.sun.xml.ws.transport.http.client.HttpTransportPipe.dump=true -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=64058
 
   var-web:
-    image: dev/var-web:latest
+    image: ${ENV_IMAGE_ROOT}/var-web:${VAR_WEB_VERSION}
     ports:
       - "9090:80"
     environment:
@@ -777,7 +777,7 @@ services:
       - SERVICE_NAME=var-web
 
   scheduling-manager-resources:
-    image: dev/scheduling-manager-resources:latest
+    image: ${ENV_IMAGE_ROOT}/scheduling-manager-resources:${SM_RESOURCES_VERSION}
     ports:
      - "9070:8080"
      - "64059:64059"
@@ -792,7 +792,7 @@ services:
      - JAVA_OPTS=-XX:+CMSClassUnloadingEnabled -Xrs -Dcom.sun.xml.ws.transport.http.client.HttpTransportPipe.dump=true -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=64059
 
   scheduling-manager-web:
-    image: dev/scheduling-manager-web:latest
+    image: ${ENV_IMAGE_ROOT}/scheduling-manager-web:${SM_WEB_VERSION}
     ports:
       - "9071:80"
     environment:
@@ -813,6 +813,14 @@ services:
       - CONSUL_PATH=appconfig/local/var-utility-resources
       - JWT_SECRET=testtesttest
       - JAVA_OPTS=-XX:+CMSClassUnloadingEnabled -Xrs -Dcom.sun.xml.ws.transport.http.client.HttpTransportPipe.dump=true -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=64060
+
+  var-utility-web:
+    image: ${ENV_IMAGE_ROOT}/var-utility-web:${VARUT_WEB_VERSION}
+    ports:
+      - "9075:80"
+    environment:
+      - SERVICE_TAGS=local
+      - SERVICE_NAME=var-utility-web
 
 
 networks:
