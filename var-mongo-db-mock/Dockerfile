@@ -1,4 +1,4 @@
-FROM mongo:3.4.11
+FROM mongo:3.6.6
 
 ENV DEBIAN_FRONTEND noninteractive
 RUN apt-get update \
