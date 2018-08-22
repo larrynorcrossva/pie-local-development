@@ -323,7 +323,7 @@ services:
       - CONSUL_PATH=appconfig/local/var-messaging-microservice
 
   facility-service:
-    image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ablevets/facility-resources:0.29
+    image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ablevets/facility-resources:2.1.0
     #image: dev/facility-service
     expose:
       - "8080"
