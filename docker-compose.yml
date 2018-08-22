@@ -143,7 +143,7 @@ services:
 
 
   authorization-rules-service:
-    image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/vamis/authorization-rules-service:14
+    image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ckm/vamf-authorization-rules-service:1.0.3
     container_name: authorization-rules-service
     ports:
       - "8481:8080"
