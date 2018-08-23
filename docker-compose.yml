@@ -71,7 +71,7 @@ services:
   # to create JWT security tokens and augmenting user identities with other identifiers from the MVI (specifically ICN)
   #
   mock-mvi:
-    image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ablevets/var-mock-mvi:1.0.1-git-commit-17009e329
+    image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ablevets/var-mock-mvi:1.1-user-services-1.8.0-0822-mockuser01-hack
     ports:
       - "35219:8080"
     environment:
@@ -576,7 +576,7 @@ services:
 
 # IAM SSOe Mock - Injects HTTP headers to simulate SSOe token header injection. Allows log in/out.
   iamssoe-proxy-mock:
-    image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ablevets/idp-proxy-mock-shared:latest
+    image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ablevets/idp-proxy-mock-shared:1.1-user-services-1.8.0
     container_name: iamssoe-proxy-mock
     ports:
       - 9000:80
@@ -590,9 +590,10 @@ services:
 
 #Mock database to store identity information
   iamssoe-db-mock:
-#    image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ablevets/idp-db-mock-shared:1.0.1-git-commit-c4e0d0925
-    image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ablevets/idp-db-mock-shared:1.0.1-user-services-1.8.0-hack-for-mockuser01
+    image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ablevets/idp-db-mock-shared:1.1-user-services-1.8.0
     container_name: iamssoe-db-mock
+    ports:
+      - 3306:3306
     environment:
       - MYSQL_ROOT_PASSWORD=MySqlAdmin$$
       - MYSQL_DATABASE=MockUser
@@ -780,6 +781,7 @@ services:
   ### MDWS to VIA adapter
   mdws-via-adapter:
     image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ckm/mdws-via-adapter:1.3.0
+    # image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ckm/mdws-via-adapter:1.3.3 # TODO: test
     ports:
      - 8180:8180
      - 64087:64087
