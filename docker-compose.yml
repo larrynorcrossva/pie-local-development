@@ -168,8 +168,6 @@ services:
 #   volumes:
 #     - "./authorization-rules-service/rules:/opt/rules"
 
-
-# Use EULA Services only for User Services 1.7
   # End User License Agreement (EULA) Service v1
   eula-web:
     image: mobileapps.vaftl.us:9250/ckm/eula-web:1.0.4
