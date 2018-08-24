@@ -777,8 +777,7 @@ services:
 
   ### MDWS to VIA adapter
   mdws-via-adapter:
-    image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ckm/mdws-via-adapter:1.3.0
-    # image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ckm/mdws-via-adapter:1.3.3 # TODO: test
+    image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ckm/mdws-via-adapter:1.3.3
     ports:
      - 8180:8180
      - 64087:64087
