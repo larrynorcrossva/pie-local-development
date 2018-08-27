@@ -31,14 +31,14 @@
 	},
 	{
 		"_id": "CCNUTRN",
-		"confirmation" : "TBD",
-		"details" : "TBD",
+		"confirmation" : "'This includes office visit(s) which will provide education on a healthy lifestyle including food and drink choices, reading food labels, and limits on nutritional intake. If you have other needs, please contact your local VA Medical Center to discuss this issue. If you are distance eligible and do not have a Primary Care Provider, you can use this app to request help in getting one assigned.",
+		"details" : "This includes office visit(s) which will provide education on a healthy lifestyle including food and drink choices, reading food labels, and limits on nutritional intake.",
 		"name" : "Nutrition (routine exam)"
 	},
 	{
-		"_id": "CCPRMYCRE",
-		"confirmation" : "TBD",
-		"details" : "TBD",
+		"_id": "CCPRMYRTNE",
+		"confirmation" : "This includes office visit(s) with a Primary Care Provider, focused on routine/acute patient complaints, wellness and disease prevention resulting in improved veteran health. If you have other needs, please contact your local VA Medical Center to discuss this issue. If you are not distance eligible and do not have a Primary Care Provider, you can use this app to request a VA Appointment with a Primary Care Provider.",
+		"details" : "This includes office visit(s) with a Primary Care Provider, focused on routine/acute patient complaints, wellness and disease prevention resulting in improved veteran health.",
 		"name" : "Primary Care (routine exam)"
 	}
 ]
