@@ -746,7 +746,6 @@ services:
 
   var-resources:
     image: ${ENV_IMAGE_ROOT}/var-resources:${VAR_RESOURCES_VERSION}
-    #image: dev/var-resources:latest ##For local dev
     ports:
      - "9092:8080"
      - "64058:64058"
@@ -771,7 +770,6 @@ services:
 
   var-web:
     image: ${ENV_IMAGE_ROOT}/var-web:${VAR_WEB_VERSION}
-    #image: dev/var-web:latest ##For local dev
     ports:
       - "9090:80"
     environment:
