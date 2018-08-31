@@ -1,32 +1,44 @@
 [
 	{
-	"_id" : "CCAUDHEAR",
-	"confirmation" : "This request is for hearing aid support only. If you have other needs, please contact your Primary Care Provider to discuss the issue. If you are distance eligible and do not have a Primary Care Provider, you can use this app to request help in getting one assigned.",
-	"details" : "This is an office visit for Veterans who already have a hearing aid and who need assistance with the device. This visit is for trouble shooting or adjusting your hearing aid for best performance. This may include technical adjustments, cleaning, and/or reprogramming for new listening situations and environments. This is not a visit to initially be evaluated for or to obtain a hearing aid.",
-	"name" : "Audiology (hearing aid support)"
-},
-{
-	"_id" : "CCAUDRTNE",
-	"confirmation" : "This request is for routine hearing exam only. If you have other needs, please contact your Primary Care Provider to discuss the issue. If you are distance eligible and do not have a Primary Care Provider, you can use this app to request help in getting one assigned.",
-	"details" : "This includes an office visit for a hearing exam and evaluation using non-invasive tests to check your hearing and inner ear health. The exam may lead to prevention and treatment recommendations, a request for further consultation, and/or a recommendation for hearing aids. A routine exam is not for any new or sudden changes with your hearing or ears.",
-	"name" : "Audiology (routine hearing exam)"
-},
-{
-	"_id" : "CCOPT",
-	"confirmation" : "This app currently only supports routine eye exams. If you have other needs, please contact your Primary Care Provider to discuss the issue. If you are distance eligible and do not have a Primary Care Provider, you can use this app to request help in getting one assigned.",
-	"details" : "This includes an office visit for an eye exam and vision evaluation, which may include dilating your eyes. The exam may lead to prevention and treatment recommendations, a request for further consultation, and/or a prescription for eye glasses or contact lenses. A routine exam is not for any new or sudden changes with your vision or eyes.",
-	"name" : "Optometry (routine eye exam)"
-},
-{
-	"_id" : "CCPOD",
-	"confirmation" : "This request currently only supports routine podiatry exams. If you have other needs, please contact your Primary Care Provider to discuss this issue. If you are distance eligible and do not have a Primary Care Provider, you can use this app to request help in getting one assigned.",
-	"details" : "This includes an office visit for an exam of the foot, ankle and related structures of the leg. The exam may lead to diagnosis and treatment to include common conditions like callous, bunions, and other conditions requiring in office treatment, orthotics, and possibly the need for surgery. If you are experiencing any acute conditions or sudden onset of pain, break in the skin with possible infection, please contact your local VAMC.",
-	"name" : "Podiatry (routine exam)"
-},
-{
-	"_id" : "CCPCPRVDR",
-	"confirmation" : "This request currently only supports the finding of a Primary Care Provider. If you have other needs, please contact your local VA Medical Center to discuss this issue. If you are distance eligible and do not have a Primary Care Provider, you can use this app to request help in getting one assigned.",
-	"details" : "If approved, you'll be assigned to a primary care provider in the community to whom we will send the approved referral. Once assigned, you will be provided information and will need to contact the provider’s office directly for preventive and other health care needs for the duration of the approved referral.",
-	"name" : "Primary Care (find a provider)"
-}
+		"_id" : "CCAUDHEAR",
+		"confirmation" : "This request is for hearing aid support only. If you have other needs, please contact your Primary Care Provider to discuss the issue. If you are distance eligible and do not have a Primary Care Provider, you can use this app to request help in getting one assigned.",
+		"details" : "This is an office visit for Veterans who already have a hearing aid and who need assistance with the device. This visit is for trouble shooting or adjusting your hearing aid for best performance. This may include technical adjustments, cleaning, and/or reprogramming for new listening situations and environments. This is not a visit to initially be evaluated for or to obtain a hearing aid.",
+		"name" : "Audiology (hearing aid support)"
+	},
+	{
+		"_id" : "CCAUDRTNE",
+		"confirmation" : "This request is for routine hearing exam only. If you have other needs, please contact your Primary Care Provider to discuss the issue. If you are distance eligible and do not have a Primary Care Provider, you can use this app to request help in getting one assigned.",
+		"details" : "This includes an office visit for a hearing exam and evaluation using non-invasive tests to check your hearing and inner ear health. The exam may lead to prevention and treatment recommendations, a request for further consultation, and/or a recommendation for hearing aids. A routine exam is not for any new or sudden changes with your hearing or ears.",
+		"name" : "Audiology (routine hearing exam)"
+	},
+	{
+		"_id" : "CCOPT",
+		"confirmation" : "This app currently only supports routine eye exams. If you have other needs, please contact your Primary Care Provider to discuss the issue. If you are distance eligible and do not have a Primary Care Provider, you can use this app to request help in getting one assigned.",
+		"details" : "This includes an office visit for an eye exam and vision evaluation, which may include dilating your eyes. The exam may lead to prevention and treatment recommendations, a request for further consultation, and/or a prescription for eye glasses or contact lenses. A routine exam is not for any new or sudden changes with your vision or eyes.",
+		"name" : "Optometry (routine eye exam)"
+	},
+	{
+		"_id" : "CCPOD",
+		"confirmation" : "This request currently only supports routine podiatry exams. If you have other needs, please contact your Primary Care Provider to discuss this issue. If you are distance eligible and do not have a Primary Care Provider, you can use this app to request help in getting one assigned.",
+		"details" : "This includes an office visit for an exam of the foot, ankle and related structures of the leg. The exam may lead to diagnosis and treatment to include common conditions like callous, bunions, and other conditions requiring in office treatment, orthotics, and possibly the need for surgery. If you are experiencing any acute conditions or sudden onset of pain, break in the skin with possible infection, please contact your local VAMC.",
+		"name" : "Podiatry (routine exam)"
+	},
+	{
+		"_id" : "CCPCPRVDR",
+		"confirmation" : "This request currently only supports the finding of a Primary Care Provider. If you have other needs, please contact your local VA Medical Center to discuss this issue. If you are distance eligible and do not have a Primary Care Provider, you can use this app to request help in getting one assigned.",
+		"details" : "If approved, you'll be assigned to a primary care provider in the community to whom we will send the approved referral. Once assigned, you will be provided information and will need to contact the provider’s office directly for preventive and other health care needs for the duration of the approved referral.",
+		"name" : "Primary Care (find a provider)"
+	},
+	{
+		"_id": "CCNUTRN",
+		"confirmation" : "This includes office visit(s) which will provide education on a healthy lifestyle including food and drink choices, reading food labels, and limits on nutritional intake. If you have other needs, please contact your local VA Medical Center to discuss this issue. If you are distance eligible and do not have a Primary Care Provider, you can use this app to request help in getting one assigned.",
+		"details" : "This includes office visit(s) which will provide education on a healthy lifestyle including food and drink choices, reading food labels, and limits on nutritional intake.",
+		"name" : "Nutrition (routine exam)"
+	},
+	{
+		"_id": "CCPRMYRTNE",
+		"confirmation" : "This includes office visit(s) with a Primary Care Provider, focused on routine/acute patient complaints, wellness and disease prevention resulting in improved veteran health. If you have other needs, please contact your local VA Medical Center to discuss this issue. If you are not distance eligible and do not have a Primary Care Provider, you can use this app to request a VA Appointment with a Primary Care Provider.",
+		"details" : "This includes office visit(s) with a Primary Care Provider, focused on routine/acute patient complaints, wellness and disease prevention resulting in improved veteran health.",
+		"name" : "Primary Care (routine exam)"
+	}
 ]

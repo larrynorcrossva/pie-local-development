@@ -38,7 +38,11 @@ function stop_var(){
 }
 
 function stop_sm(){
-    docker-compose rm -v -s -f "${stop[@]}"
+    docker-compose rm -v -s -f "${sm[@]}"
+}
+
+function stop_vats(){
+    docker-compose rm -v -s -f "${vats[@]}"
 }
 
 function stop_all(){
@@ -50,6 +54,7 @@ function stop_all(){
     stop_staff;
     stop_var;
     stop_sm;
+    stop_vats;
 }
 
 while [[ "$#" > 0 ]]; do case $1 in
@@ -62,6 +67,7 @@ while [[ "$#" > 0 ]]; do case $1 in
   staff|--staff) stop_staff; shift;;
   var|--var) stop_var; shift;;
   sm|--sm) stop_sm; shift;;
+  vats|--vats) stop_vats; shift;;
   *) echo "Unknown parameter: $1"; exit 1;;
 esac; done
 
