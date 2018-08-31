@@ -1,13 +1,15 @@
 #!/usr/bin/env bash
 
+. composed-services.sh
+
 function logs_core(){
     echo "\nOpening docker logs for NextGen core services... \n"
-    docker-compose logs -f consul registrator apigateway mock-mvi user-services swagger-ui wayf-web redis zipkin eula-service eula-web
+    docker-compose logs -f consul "${core[@]}"
 }
 
 function logs_fixtures(){
     echo "\nOpening docker logs for fixtures... \n"
-    docker-compose logs -f mock-roa var-mongo-db-mock var-oracle-db-mock video-visits-mongo-mock mongo
+    docker-compose logs -f "${fixtures[@]}"
 }
 
 function logs_data_seed(){
@@ -17,27 +19,27 @@ function logs_data_seed(){
 
 function logs_shared_services(){
     echo "\nOpening docker logs for shared services... \n"
-    docker-compose logs -f var-messaging-microservice facility-service vmr-mock-service video-visits-service task-resources messaging-publisher
+    docker-compose logs -f consul "${ss[@]}"
 }
 
 function logs_vet(){
     echo "\nOpening docker logs for vet services... \n"
-    docker-compose logs -f roa-services roa-web veteran-video-connect-service iamssoe-proxy-mock iamssoe-db-mock
+    docker-compose logs -f "${vet[@]}"
 }
 
 function logs_staff(){
     echo "\nOpening docker logs for staff services... \n"
-    docker-compose logs -f patient-context mock-wstrust ssoi-mock sud-service sud-web pcs-web personal-preference-service vista-data-services mdws-via-adapter staff-video-connect-service
+    docker-compose logs -f "${staff[@]}"
 }
 
 function logs_var(){
     echo "\nOpening docker logs for VAR... \n"
-    docker-compose logs -f var-resources var-web
+    docker-compose logs -f "${var[@]}"
 }
 
 function logs_sm(){
     echo "\nOpening docker logs for SM... \n"
-    docker-compose logs -f scheduling-manager-resources scheduling-manager-web
+    docker-compose logs -f "${sm[@]}"
 }
 
 while [[ "$#" > 0 ]]; do case $1 in
@@ -47,6 +49,7 @@ while [[ "$#" > 0 ]]; do case $1 in
   d|data|-d|--data-seed) logs_data_seed; shift;;
   v|vet|-v|--vet) logs_vet; shift;;
   staff|--staff) logs_staff; shift;;
+  via|--via) logs_via; shift;;
   var|--var) logs_var; shift;;
   sm|--sm) logs_sm; shift;;
   *) docker-compose logs -f $1;
