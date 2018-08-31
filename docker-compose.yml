@@ -188,7 +188,6 @@ services:
       - CONSUL_TOKEN=7BE784A4-7498-4469-BE2F-9C3B9444DFEF
       - CONSUL_PATH=appconfig/local/eula
       - ORACLE_URL=jdbc:oracle:thin:@//mock-roa:1521/xe
-      # - ORACLE_URL=jdbc:oracle:thin:@//eula-mock-db:1521/xe
       - ORACLE_USERNAME=HADB
       - ORACLE_PASSWORD=m0ckpass01
       - EULA_LATEST_VERSION=1
@@ -234,11 +233,6 @@ services:
     image: mobileapps.vaftl.us:9250/ckm/docker-roa-mock:1.0.3
     ports:
     - "1521"
-
-  # eula-mock-db:
-  #   image: mobileapps.vaftl.us:9250/ckm/docker-roa-mock:1.0.3
-  #   ports:
-  #   - "1521"
 
   var-mongo-db-mock:
     image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ablevets/var-mongo-db-mock:1.0.1_096653d5a212
@@ -331,43 +325,6 @@ services:
     - SSL_ENABLED=false
     - AUTH_ENABLED=true
     - JOURNALING=true
-
-  via-weblogic:
-    image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ckm/vamf/via-weblogic:4.0.25
-    tty: true
-    ports:
-      - "7011:7011"
-      - "8000:8000"
-    environment:
-      - USE_MOCK_RESULTS=true
-      - MOCK_RESULTS_URL=http://via-mock-engine:8080/mock/results/
-      - SIMULATE_SSOI=true
-      - SIMULATED_SSOI_ACCESS_CODE=FakeDoc1
-      - SIMULATED_SSOI_VERIFY_CODE=FD3456!!
-    depends_on:
-      - via-oracle
-      - via-vista
-      - via-mock-engine
-
-  via-oracle:
-    image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ckm/vamf/via-oracle:4.0.25
-    ports:
-      - "1522:1521"
-
-  via-vista:
-    image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ckm/vamf/via-vista:4.0.25
-    ports:
-      - "8001:8001"
-      - "2222:22"
-      - "9430:9430"
-
-  via-mock-engine:
-    image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ckm/vamf/via-mock-engine:4.0.25
-    ports:
-      - "8082:8080"
-      - "5005:5005"
-    volumes:
-      - ./via-mock-files/SchedulingService:/opt/via-mock-files
 
 #######################
 ### DB FIXTURES END ###

@@ -21,10 +21,6 @@ function stop_shared_services(){
     docker-compose rm -v -s -f "${ss[@]}"
 }
 
-function stop_via(){
-    docker-compose rm -v -s -f "${via[@]}"
-}
-
 function stop_vet(){
     docker-compose rm -v -s -f "${vet[@]}"
 }
@@ -63,7 +59,6 @@ while [[ "$#" > 0 ]]; do case $1 in
   f|fixtures|-f|--fixtures) stop_fixtures; shift;;
   s|ss|-s|--shared-services) stop_shared_services; shift;;
   v|vet|-v|--vet) stop_vet; shift;;
-  via|--via) stop_via; shift;;
   staff|--staff) stop_staff; shift;;
   var|--var) stop_var; shift;;
   sm|--sm) stop_sm; shift;;

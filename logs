@@ -42,11 +42,6 @@ function logs_sm(){
     docker-compose logs -f "${sm[@]}"
 }
 
-function logs_via(){
-    echo "\nOpening docker logs for VIA... \n"
-    docker-compose logs -f "${via[@]}"
-}
-
 while [[ "$#" > 0 ]]; do case $1 in
   c|core|-c|--core) logs_core; shift;;
   f|-f|--fixtures) logs_fixtures; shift;;
