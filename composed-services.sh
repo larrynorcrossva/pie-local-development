@@ -18,3 +18,5 @@ var=(var-resources var-web)
 
 sm=(scheduling-manager-resources scheduling-manager-web)
 
+vats=(var-utility-resources var-utility-web)
+
