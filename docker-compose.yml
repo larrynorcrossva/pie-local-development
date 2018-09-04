@@ -10,9 +10,9 @@ services:
   consul:
     image: mobileapps.vaftl.us:9250/ckm/consul-server:latest
     command: "consul agent -server -bootstrap-expect=1 -ui -client 0.0.0.0 -data-dir /consul/data -config-dir /consul/config"
-    volumes:
-     - "/consul/data"
-     - "/consul/config"
+    #    volumes:
+    # - "/consul/data"
+    # - "/consul/config"
     ports:
      - "8500:8500"
      - "8600:8600/udp"
@@ -61,6 +61,7 @@ services:
       - JWT_SECRET=testtesttest
       - SERVICE_80_NAME=apigateway
       - CONSUL_TOKEN=7BE784A4-7498-4469-BE2F-9C3B9444DFEF
+      - "AUTH_RULES_SVC_URL=http://authorization-rules-service:8080/rules/v1"
       - "REGEX_AUTH_PROXY=.*"
       - "REGEX_RESTRICTED_HEADER=((^va_)|(^eauth_))/i"
       - "REGEX_EXCLUDE_JWT_URL=((js$$)|(css$$)|(gif$$)|(jpg$$)|(^/users)|(^/saml)|(^/eula))"
@@ -70,7 +71,7 @@ services:
   # to create JWT security tokens and augmenting user identities with other identifiers from the MVI (specifically ICN)
   #
   mock-mvi:
-    image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ablevets/var-mock-mvi:1.0.1-git-commit-17009e329
+    image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ablevets/var-mock-mvi:1.1-user-services-1.8.0-0822-dfn-100862-mockuser15-hack
     ports:
       - "35219:8080"
     environment:
@@ -78,8 +79,7 @@ services:
       - SERVICE_NAME=mock-mvi
 
   user-services:
-#    image: mobileapps.vaftl.us:9250/ckm/docker-user-service:1.7.0
-    image: mobileapps.vaftl.us:9250/ckm/docker-user-service:1.7.3
+    image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ckm/docker-user-service:1.8.3
     depends_on:
       - eula-web
       - eula-service
@@ -92,13 +92,16 @@ services:
       - redis
       - mock-wstrust
       - eula-service
+    expose:
+      - "8080"
     ports:
       - "8081:8080"
+      - "18081:5005"
     environment:
       # 1.7.0 configuration
       #- VAULT_ADDR=http://vault:8200
       #- SECRET_PATH=secret/local/user-services
-      - USE_ENVCONSUL=true
+      - USE_ENVCONSUL=false
       - SERVER_USE_FORWARD_HEADERS=true
       - TRACE_URL=http://zipkin:9411/api/v1/spans
       - MVI_URL=http://mock-mvi:8080/mvi/mockVAIdMPort
@@ -106,31 +109,59 @@ services:
       - SUD_HOST=http://sud-service:8080
       - MVI_SENDER_ID=CIH200
       - MVI_PROCESSING_CODE=T
+#      - MVI_PROCESSING_CODE=MVI_PROCESSING_CODE
       - JWT_SECRET=testtesttest
       - SERVICE_TAGS=local
-      - SERVICE_NAME=docker-user-service
+      - VAMF_ENVIRONMENT=local
+      - SERVICE_8080_NAME=docker-user-service
       - CONSUL_SERVER=consul:8500
+      - CONSUL_HTTP_ADDR=consul:8500
       - CONSUL_TOKEN=7BE784A4-7498-4469-BE2F-9C3B9444DFEF
-      - CONSUL_PATH=appconfig/local/user-services
+      - CONSUL_PATH=vamf/local/user-services/v1
       - APIGW_BASE_URL=http://localhost:8089
+      - EULA_HOST=http://eula-service:8080
       - WAYF_APP_URL=http://localhost:8089/wayf/v1/index.html
+      - "AUTH_RULES_SVC_URL=http://authorization-rules-service:8080/rules/v1"
+      - "AUTH_RULES_HOST=http://authorization-rules-service:8080/"
       - "MVI_VISTA_FACILITIES=101,111,222,313,372,376,442,500,516,553,631,688,777,523,636"
-      - JAVA_OPTS=-Xms256m -Xmx512m -XX:-TieredCompilation -Xss256k -XX:+UseG1GC -XX:+UseStringDeduplication
-      - "JAVA_OPTS=-agentlib:jdwp=transport=dt_socket,address=8000,server=y,suspend=n"
+      - "JAVA_OPTS=-Xms256m -Xmx512m -XX:-TieredCompilation -Xss256k -XX:+UseG1GC -XX:+UseStringDeduplication -agentlib:jdwp=transport=dt_socket,address=5005,server=y,suspend=n"
       - "REDIS_HOST=redis"
+      - ENABLE_ZIPKIN=false
       - "IAM_WST_URL=http://mock-wstrust:8080/services/sts"
+      - "DEV_CACHE_ENC_DISABLED=true"
+      - "CACHE_ENC_PWD=password1!"
       # Include JWT_SECRET or JWT_PRIVATE_KEY + JWT_PUBLIC_KEY
       #- JWT_PRIVATE_KEY=MIIEvwIBADANBgkqhkiG9w0BAQEFAASCBKkwggSlAgEAAoIBAQDBGzt361EC4riygMie4qnnWVNNNdY3yiRdHf+BIeIgH6ru9l4AZYDxQuMJi4QIt17y1Lo7HNnBKP+gzSRkFe4cpira6RYqNMSY7CWlBbi8GlfrRtzHmtfCgSNtxaCEr2hVbBjg7BsAnhNiSWRQdkLlu5D7xFTn27oUhZK/Y3cP1UGR9iwe+nc7hpdVoTx1nR3GV1R2/9Z4+guQJ5RiAuwbIOD/Oxm8OtfX7K82yM02YH+SwlKim0y/0J/JSlJex+i/7waEEK2DMO+CffaTDv3A+ytOSCcLQNG26/7LeoJdf5knpxsnfW1W6z0Bp1SfYKtYm6vr8pFiyeJBoSd8DjeHAgMBAAECggEATcnKiuQgHil2fXGjX12vU6KIC/JD+PVU8K3E3x/nF0mqcdiMxVweNRHco1uwNFKpzOgknOtiTI1XbE82+Zpb8O5/FPAQHbBkAbYe8/r6D8wM3poNFdsqTw/2VaHmp4yBWufQncp+liEXbeBiqIb7K9AC92h/S2cX7mxgUPigXZ+2V5Bvdjo2jAtdrq6nXFtzsqCxNKFpFifdV2TkFbq6vGB/mJdrFHspUiMZc2KAR7/pQCO/oR/WIyHRTBvWcM/zrd/7A6TZRKYMabYDn1dbyP/ATqyJ/rtx+7Josj+LogBVrdeD7USpdHj6FLbT/Z0N5o1tintUlj8eo1XqNupjAQKBgQD2VLTgiVphbju0YA65I1yWYuPYdDXJVkJjqv7lFndPdOGZsfysdc2fdkdAEkPVZhI5Tve8CvOW98WnVLkj/WRyfBVeVbekIGdsH/PWRTrLv5mXbpDGYP0z1c7FTMx6qiaE6ZLZATy4jWBLRPQcJj5rm70nO4Sajfo5TQW4BB+abQKBgQDIr7Dvq5AixiMSzbvhPIDqjIYQv+TCbzKoNm/JuRgE/1mxfgxuthNA8OLDBEmCa3SWUo9Slrq5KnynVMnxIMiTw9CSbLhUYxqlrP0ei6C7d1bv5N3tH4GD5ljCmobz04Dg56/bs/pbfJBjfE2qxtrEgzK51FazUzlFUwzf++vhQwKBgQCCUuRzWxfvLjP2RU/k0XmdsuoazbjbMYDkXEaJC27KIetttkYZNCY6tIgTtNYgo+UGXuogmaawe5wd4GwnR1uKWm2vwCftdJtjEDCgb3Yg79ihzoRYAF5Vu0uvBOe2Cilg7nabytTGSz3j9LI15mHl6rqTdCC+6Fi3UjGxXrUdrQKBgQCjPF0EJZ2A239N3TA0Hd2Saqjl2OA+0un2bwjwoPCLqBQRzkBYkRsKGKWqEMOmJLdZSmAvwlCxKoDoLoxv6MWdg4oUgABTC6VyG0pr3RDpS0HYsWVeaeEUI3oRGFYq39+VkH63iyZZ4fEkKsiV31e0vi61fqTjCg+sdsgjLCuKNwKBgQDhp8wfpcqYnvDvn7OKL52SiXfktTWe8xq6pVKLDrHScEUhj/vgcXkvOiELP+jnNivMU2AWObLq0Nf+JWpH4HrIH8R+Ag7sgy+mL53Ku+4I2et1JsHCc94AS59qY/C4AqZDgpFAFYKTNPRn+bQMAIRCh2dIayehKTgZpvhmxxSSvw==
       #- JWT_PUBLIC_KEY=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAwRs7d+tRAuK4soDInuKp51lTTTXWN8okXR3/gSHiIB+q7vZeAGWA8ULjCYuECLde8tS6OxzZwSj/oM0kZBXuHKYq2ukWKjTEmOwlpQW4vBpX60bcx5rXwoEjbcWghK9oVWwY4OwbAJ4TYklkUHZC5buQ+8RU59u6FIWSv2N3D9VBkfYsHvp3O4aXVaE8dZ0dxldUdv/WePoLkCeUYgLsGyDg/zsZvDrX1+yvNsjNNmB/ksJSoptMv9CfyUpSXsfov+8GhBCtgzDvgn32kw79wPsrTkgnC0DRtuv+y3qCXX+ZJ6cbJ31tVus9AadUn2CrWJur6/KRYsniQaEnfA43hwIDAQAB
-      - EULA_HOST=http://eula-service:8080
       - "JWTISSUER_CONFIG_JSON=[{\"rsaPublicKeyB64\":\"MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAtxwSTqAC49xXxWIX/kpb4EWXjnpN8ii5FbjAOmubKA32ZVHC+OSj14uRkKJp5EgU0aOO6cbm7jTnGjOFq+KC540qtBMP6/bd/rcXNCb7t8ajb2eWC1PdvYCrpXM/IAZvdrOGhc9sU+8DeZj2dJg+WIlWkrnXsHMbAd5ePt1mCx6NPADFBRVSJg9MAN04yzBAcgmAeOgcZGYqHcihov3hIi0UnAwi0wtBHIquGcRKhUAG5clOY3YxyNJZ2HWglrCHtz1sHe7OGFBfGGR18C+S6CK7GDB2zm3IkJ16uqf/F3s+tF7u88mE3t6gr/Y/1U6OH99xm1Ta0Yqzie351qEXSwIDAQAB\",\"iss\":\"gov.va.mhv.idp.v1\",\"userType\":\"VETERAN\"},{\"rsaPublicKeyB64\":\"MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAtxwSTqAC49xXxWIX/kpb4EWXjnpN8ii5FbjAOmubKA32ZVHC+OSj14uRkKJp5EgU0aOO6cbm7jTnGjOFq+KC540qtBMP6/bd/rcXNCb7t8ajb2eWC1PdvYCrpXM/IAZvdrOGhc9sU+8DeZj2dJg+WIlWkrnXsHMbAd5ePt1mCx6NPADFBRVSJg9MAN04yzBAcgmAeOgcZGYqHcihov3hIi0UnAwi0wtBHIquGcRKhUAG5clOY3YxyNJZ2HWglrCHtz1sHe7OGFBfGGR18C+S6CK7GDB2zm3IkJ16uqf/F3s+tF7u88mE3t6gr/Y/1U6OH99xm1Ta0Yqzie351qEXSwIDAQAB\",\"iss\":\"external.idp.test1\",\"userType\":\"VETERAN\"},{\"rsaPublicKeyB64\":\"MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA17igsXGfpg3BRv1dr9jAyhyjGUpDSQ1CCIjQI/NZD+OoxoTlvPMmY8yQ3OfisnpE7zR+dNAdj7CHCiCbKgQKjPmOzdobKJD7N8538lxZ2wlHNko0rG3iyCKJVRJFMXirZfrPERlFj0AQrwhobIpuwyFQfsNTZPaxeaN35Bexo7fowu0LBkzvCioZfKq6QPxx8qQ0/wJYxeh3D4b5NWR1eIbWpJE5NbWYx0ZSs/TD5HQTAGsIvJN5+EKzVB1RZAp0UwdxDQE7BjpXBXx0PjZidCY2kH2jVm1OHd/xzkZiIt2EYe5Cpd/CuLfWjzxHv6pCkC8I0a6qljQNS9iOQc6blwIDAQAB\",\"iss\":\"gov.va.vamf.service.saml-sts\",\"userType\":\"VETERAN\"}]"
-#      - "IDP_CONFIG_JSON=[{\"idpId\": \"gov.va.iam.ssoe.v1\",\"friendlyName\": \"VAAFI SSOe\",\"description\": \"Veteran login supporting DSLogon, Symantec, and other CSPs.\",\"versionId\": \"v1\",\"scope\": \"VETERAN\",\"logoUrl\": \"img/dslogon-logo.png\",\"loginUrl\": \"http://${HOST_DOMAIN}:9000/users/v1/landing\",\"logoutUrl\": \"http://${HOST_DOMAIN}:9000/ssoeproxy/logout\",\"vamfLandingPage\": \"http://${HOST_DOMAIN}/users/v1/landing\"},{\"idpId\": \"gov.va.iam.ssoi.v1\",\"friendlyName\": \"VAAFI SSOi\",\"description\": \"Staff login supporting PIV authentication.\",\"versionId\": \"v1\",\"scope\": \"STAFF\",\"logoUrl\": \"img/logo_navbar_ipad.png\",\"loginUrl\": \"http://localhost:9001/users/v1/landing\",\"logoutUrl\": \"http://${HOST_DOMAIN}:9001/ssoiproxy/logout\",\"vamfLandingPage\": \"http://${HOST_DOMAIN}/users/v1/landing\"},{\"idpId\": \"gov.va.mhv.v1\",\"friendlyName\": \"My HealtheVet\",\"description\": \"Staff login supporting PIV authentication.\",\"versionId\": \"v1\",\"scope\": \"VETERAN\",\"logoUrl\": \"img/mhv-logo.png\",\"loginUrl\": \"http://${HOST_DOMAIN}:8080/ssoiproxy/login\",\"logoutUrl\": \"http://${HOST_DOMAIN}:8080/ssoiproxy/logout\",\"vamfLandingPage\": \"http://${HOST_DOMAIN}:8080/users/v1/landing\"}]"
-
-      # v1.7.3 IDP configuration
       - "IDP_CONFIG_JSON=[{\"idpId\": \"gov.va.iam.ssoe.v1\",\"friendlyName\": \"VAAFI SSOe\",\"description\": \"Veteran login supporting DSLogon, Symantec, and other CSPs.\",\"versionId\": \"v1\",\"scope\": \"VETERAN\",\"logoUrl\": \"img/dslogon-logo.png\",\"loginUrl\": \"http://${HOST_DOMAIN}:9000/users/v1/landing\",\"logoutUrl\": \"http://${HOST_DOMAIN}:9000/ssoeproxy/logout\",\"landingPage\": \"http://${HOST_DOMAIN}/users/v1/landing\"},{\"idpId\": \"gov.va.iam.ssoi.v1\",\"friendlyName\": \"VAAFI SSOi\",\"description\": \"Staff login supporting PIV authentication.\",\"versionId\": \"v1\",\"scope\": \"STAFF\",\"logoUrl\": \"img/logo_navbar_ipad.png\",\"loginUrl\": \"http://localhost:9001/users/v1/landing\",\"logoutUrl\": \"http://${HOST_DOMAIN}:9001/ssoiproxy/logout\",\"landingPage\": \"http://${HOST_DOMAIN}/users/v1/landing\"},{\"idpId\": \"gov.va.mhv.v1\",\"friendlyName\": \"My HealtheVet\",\"description\": \"Staff login supporting PIV authentication.\",\"versionId\": \"v1\",\"scope\": \"VETERAN\",\"logoUrl\": \"img/mhv-logo.png\",\"loginUrl\": \"http://${HOST_DOMAIN}:8080/ssoiproxy/login\",\"logoutUrl\": \"http://${HOST_DOMAIN}:8080/ssoiproxy/logout\",\"landingPage\": \"http://${HOST_DOMAIN}:8080/users/v1/landing\"}]"
 
 
-# Use EULA Services only for User Services 1.7
+  authorization-rules-service:
+    image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ckm/vamf-authorization-rules-service:1.0.3
+    container_name: authorization-rules-service
+    ports:
+      - "8481:8080"
+      - "18481:5005"
+    environment:
+      - JAVA_OPTS=-Xms256m -Xmx512m -XX:-TieredCompilation -Xss256k -XX:+UseG1GC -XX:+UseStringDeduplication -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005
+      - USE_ENVCONSUL=true
+      - SERVER_USE_FORWARD_HEADERS=true
+      - SERVICE_TAGS=local
+      - SERVICE_NAME=authorization-rules-service
+      - CONSUL_SERVER=consul:8500
+      - CONSUL_TOKEN=7BE784A4-7498-4469-BE2F-9C3B9444DFEF
+      - "VAMF_ENVIRONMENT=local"
+      - "CONSUL_PATH=appconfig/${VAMF_ENVIRONMENT}/authorization-rules-service/v1"
+      - JWT_SECRET=testtesttest
+      - "CONSUL_HTTP_ADDR=${CONSUL_SERVER}"
+      - "ADMIN_TOKENS_ENABLED=true"
+      - "ADMIN_TOKENS=admin|d4b75643-40a9-4694-897d-c099f741c8b2"
+      - "ENABLE_ZIPKIN=false"
+#     - "RULES_FOLDER=/opt/rules"
+#   volumes:
+#     - "./authorization-rules-service/rules:/opt/rules"
+
   # End User License Agreement (EULA) Service v1
   eula-web:
     image: mobileapps.vaftl.us:9250/ckm/eula-web:1.0.4
@@ -141,7 +172,7 @@ services:
       - SERVICE_TAGS=local
 
   eula-service:
-    image: mobileapps.vaftl.us:9250/ckm/eula-service:1.0.1
+    image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ckm/eula-service:1.1.4
     expose:
       - "8080"
     ports:
@@ -152,14 +183,13 @@ services:
       #- VAULT_ADDR=http://vault:8200
       #- SECRET_PATH=secret/local/eula
       # Use consul
-      - USE_ENVCONSUL=true
+      - USE_ENVCONSUL=false
       - CONSUL_SERVER=consul:8500
       - CONSUL_TOKEN=7BE784A4-7498-4469-BE2F-9C3B9444DFEF
       - CONSUL_PATH=appconfig/local/eula
+      - ORACLE_URL=jdbc:oracle:thin:@//mock-roa:1521/xe
       - ORACLE_USERNAME=HADB
       - ORACLE_PASSWORD=m0ckpass01
-      - ORACLE_URL=jdbc:oracle:thin:@//mock-roa:1521/xe
-#      - JWT_PUBLIC_KEY=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAwRs7d+tRAuK4soDInuKp51lTTTXWN8okXR3/gSHiIB+q7vZeAGWA8ULjCYuECLde8tS6OxzZwSj/oM0kZBXuHKYq2ukWKjTEmOwlpQW4vBpX60bcx5rXwoEjbcWghK9oVWwY4OwbAJ4TYklkUHZC5buQ+8RU59u6FIWSv2N3D9VBkfYsHvp3O4aXVaE8dZ0dxldUdv/WePoLkCeUYgLsGyDg/zsZvDrX1+yvNsjNNmB/ksJSoptMv9CfyUpSXsfov+8GhBCtgzDvgn32kw79wPsrTkgnC0DRtuv+y3qCXX+ZJ6cbJ31tVus9AadUn2CrWJur6/KRYsniQaEnfA43hwIDAQAB
       - EULA_LATEST_VERSION=1
       - JWT_SECRET=testtesttest
       - ENABLE_ZIPKIN=false
@@ -206,7 +236,6 @@ services:
 
   var-mongo-db-mock:
     image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ablevets/var-mongo-db-mock:1.0.1_096653d5a212
-    #image: dev/var-mongo-db-mock
     ports:
       - "27017:27017"
     environment:
@@ -234,7 +263,7 @@ services:
       - CONSUL_PATH=appconfig/${VAMF_ENVIRONMENT}/var-oracle-db-mock
 
   video-visits-mongo-mock:
-    image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ablevets/video-visits-mongo-mock:latest
+    image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ablevets/video-visits-mongo-mock:1.1.1-VAR-12798-dedf49402b3f
     ports:
       - "27015:27017"
     environment:
@@ -245,6 +274,15 @@ services:
       - CONSUL_SERVER=consul:8500
       - CONSUL_TOKEN=${CONSUL_MASTER_TOKEN}
       - CONSUL_PATH=appconfig/${VAMF_ENVIRONMENT}/video-visits-mongo-mock
+
+  vvs-mongo-mock:
+    image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ckm/vamf/appointment-service-vvs-mongo-mock:1.0.0
+    ports:
+      - "27014:27017"
+    environment:
+      - SERVICE_NAME=vvs-mongo-mock
+      - SERVICE_TAGS=local
+
 
 #  video-visits-oracle-mock:
 #    image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ablevets/video-visits-oracle-mock:latest
@@ -348,7 +386,7 @@ services:
      - CONSUL_PATH=appconfig/${VAMF_ENVIRONMENT}/vmr-mock-service
 
   video-visits-service:
-    image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ablevets/video-visits-service:2.2.0
+    image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ablevets/video-visits-service:2.4.3
     ports:
       - "8079:8080"
     links:
@@ -484,10 +522,9 @@ services:
       - "TRACE_URL=http://localhost:9411/api/v1/spans"
 
 # IAM SSOe Mock - Injects HTTP headers to simulate SSOe token header injection. Allows log in/out.
-#
   iamssoe-proxy-mock:
-    image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ablevets/idp-proxy-mock-shared:latest
-    #image: local-idp
+    image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ablevets/idp-proxy-mock-shared:1.1-user-services-1.8.0
+    container_name: iamssoe-proxy-mock
     ports:
       - 9000:80
     environment:
@@ -498,9 +535,12 @@ services:
     volumes:
       - /tmp/ssoenothing:/usr/local/openresty/nginx/conf/secured
 
-# Mock database to store identity information
+#Mock database to store identity information
   iamssoe-db-mock:
-    image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ablevets/idp-db-mock-shared:1.0.1-git-commit-c4e0d0925
+    image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ablevets/idp-db-mock-shared:1.1-user-services-1.8.0
+    container_name: iamssoe-db-mock
+    ports:
+      - 3306:3306
     environment:
       - MYSQL_ROOT_PASSWORD=MySqlAdmin$$
       - MYSQL_DATABASE=MockUser
@@ -539,7 +579,7 @@ services:
 
 # Mock SSOi
   ssoi-mock:
-    image: mobileapps.vaftl.us:9250/ckm/ssoi-mock:latest
+    image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ckm/ssoi-mock:latest
     ports:
       - 9001:80
     environment:
@@ -549,8 +589,8 @@ services:
           {\"userId\": \"vhastaff01\", \"headers\": {
             \"ADDOMAIN\": \"vha\", \"ADEMAIL\": \"test01.Staff01@va.gov\", \"LASTNAME\": \"Staff01\", \"FIRSTNAME\": \"Test01\",
             \"SESSIONSCOPE\": \"B\", \"VAUID\": \"1984\", \"ADSAMACCOUNTNAME\": \"staff01t\", \"ACCESSROLES\": \"CBSS_Access\",
-            \"DODEDIPNID\": \"1020002350\", \"VISTAID\": \"523|22228439^PN^508^USVHA|A,590|11128439^PN^590^USVHA|A\", \"SECID\": \"0000028347\",
-            \"MVIICN\": \"1008693670V746966\", \"VISTAIDRAW\": \"523|22228439^PN^508^USVHA|A^590|11128439^PN^590^USVHA|A\",
+            \"DODEDIPNID\": \"1020002350\", \"VISTAID\": \"523|22228439^PN^523^USVHA|A,590|11128439^PN^590^USVHA|A\", \"SECID\": \"0000028347\",
+            \"MVIICN\": \"1008693670V746966\", \"VISTAIDRAW\": \"523|22228439^PN^523^USVHA|A^590|11128439^PN^590^USVHA|A\",
             \"ORGANIZATIONID\": \"urn:oid:2.16.840.1.113883.4.349\", \"ASSURLEVEL\": \"2\", \"ORGANIZATION\": \"Department of Veterans Affairs\",
             \"PROOFINGAUTH\": \"VA\", \"ROLE\": \"role1\", \"ISSUEINSTANT\": \"2017-06-19T13:37:16Z\", \"AUTHNTYPE\": \"Direct\",
             \"ADUPN\": \"tstaff01@iam.va.local\", \"TRANSACTIONID\": \"00000000000000000000000036d0e30a-0ad4-5947d38c-3688-00fa4fca\",
@@ -628,7 +668,7 @@ services:
 
   # VistA Data Services (VDS) - exposes vista data by using the mdws to via adapter
   vista-data-services:
-    image: mobileapps.vaftl.us:9250/ckm/docker-vista-data-services:1.6.3
+    image: mobileapps.vaftl.us:9250/ckm/docker-vista-data-services:1.9.0
     #image: vista-data-services
     ports:
      - 8085:8080
@@ -639,20 +679,55 @@ services:
      #- "SECRET_PATH=secret/local/vista-data-services"
      # Use Consul
      - "USE_ENVCONSUL=true"
+     - REDIS_HOST=redis
      - "CONSUL_SERVER=consul:8500"
+     - "CONSUL_HTTP_ADDR=consul:8500"
      - "CONSUL_TOKEN=7BE784A4-7498-4469-BE2F-9C3B9444DFEF"
      - "CONSUL_PATH=appconfig/local/vista-data-services"
+     - "VAMF_ENVIRONMENT=local"
      - MDWS_ADAPTER_BASE_URL=http://mdws-via-adapter:8080/MdwsViaAdapter/v1/services
      - JAVA_OPTS=-Xms256m -Xmx512m -XX:-TieredCompilation -Xss256k -XX:+UseG1GC -XX:+UseStringDeduplication -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=64085
      - USER_SVC_URL=http://user-services:8080/users/v1
      - JWT_SECRET=testtesttest
+     - "SERVER_USE_FORWARD_HEADERS=true"
      # Debug configuration (Ensure port ignored below is exposed for debugging in ports section)
      - SERVICE_8080_NAME=vista-data-services_v1
      - SERVICE_64085_IGNORE=true
 
+  # VistA Scheduling Service (VSS) - exposes vista data by using the mdws to via adapter
+  vista-scheduling-service:
+    image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ckm/vista-scheduling-service:2.0.1-b1
+    ports:
+     - 8185:8080
+     - 18096:5005
+    environment:
+     # Don't use Vault
+     #- "VAULT_ADDR=http://vault:8200"
+     #- "SECRET_PATH=secret/local/vista-data-services"
+     # Use Consul
+     - "USE_ENVCONSUL=true"
+     - REDIS_HOST=redis
+     - "CONSUL_SERVER=consul:8500"
+     - "SERVICE_8080_NAME=vista-scheduling-service"
+     - "CONSUL_HTTP_ADDR=consul:8500"
+     - "CONSUL_TOKEN=7BE784A4-7498-4469-BE2F-9C3B9444DFEF"
+     - "CONSUL_PATH=appconfig/local/VistaSchedulingService"
+     - "VAMF_ENVIRONMENT=local"
+     - VIA_BASE_URL=http://10.1.0.8:8089/via-webservices/services
+     - MDWS_ADAPTER_BASE_URL=http://mdws-via-adapter:8080/MdwsViaAdapter/v1/services
+     - JAVA_OPTS=-Xms256m -Xmx512m -XX:-TieredCompilation -Xss256k -XX:+UseG1GC -XX:+UseStringDeduplication -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005
+     - USER_SVC_URL=http://user-services:8080/users/v1
+     - JWT_SECRET=testtesttest
+     - "SERVER_USE_FORWARD_HEADERS=true"
+     # Debug configuration (Ensure port ignored below is exposed for debugging in ports section)
+     - SERVICE_64085_IGNORE=true
+     - REQUESTING_APP=VAR_App
+     - CONSUMING_APP_TOKEN=APP_TOKEN
+     - CONSUMING_APP_PASSWORD=passw0rd123
+
   ### MDWS to VIA adapter
   mdws-via-adapter:
-    image: mobileapps.vaftl.us:9250/ckm/mdws-via-adapter:1.2.15
+    image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ckm/mdws-via-adapter:1.3.3
     ports:
      - 8180:8180
      - 64087:64087
@@ -665,6 +740,8 @@ services:
     - "CONSUL_SERVER=consul:8500"
     - "CONSUL_TOKEN=7BE784A4-7498-4469-BE2F-9C3B9444DFEF"
     - "CONSUL_PATH=appconfig/local/mdws-via-adapter"
+    - "CONSUL_HTTP_ADDR=consul:8500"
+    - "VAMF_ENVIRONMENT=local"
     # Mock Via
     #- VIA_BASE_URL=http://mock-via:8080/via-webservices/via-webservices/services
     # Live Via (AV)
@@ -759,6 +836,7 @@ services:
      - mock-mvi
     environment:
      - SERVICE_64058_IGNORE=true
+     - SERVICE_8080_NAME=var-resources
      - SERVICE_TAGS=local
      - SERVICE_NAME=var-resources
      - CONSUL_SERVER=consul:8500
@@ -803,6 +881,35 @@ services:
       - SERVICE_TAGS=local
       - SERVICE_NAME=scheduling-manager-web
 
+  appointment-service:
+    image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ckm/mobile-appointment-service:1.1.0
+    ports:
+      - "9097:8080"
+      - "19097:5005"
+    depends_on:
+      - video-visits-mongo-mock
+      - vista-scheduling-service
+      - video-visits-service
+    environment:
+      - JAVA_OPTS=-Xms256m -Xmx512m -XX:-TieredCompilation -Xss256k -XX:+UseG1GC -XX:+UseStringDeduplication -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005
+      - "USE_ENVCONSUL=false"
+      - "CONSUL_SERVER=consul:8500"
+      - "CONSUL_HTTP_ADDR=consul:8500"
+      - "CONSUL_TOKEN=7BE784A4-7498-4469-BE2F-9C3B9444DFEF"
+      - "CONSUL_PATH=appconfig/local/mobile-appointment-service"
+      - "VAMF_ENVIRONMENT=local"
+      - SERVICE_8080_NAME=appointment-service
+      - SERVICE_64085_IGNORE=true
+      - MAX_RESULTSET_SIZE=40
+      - MAX_PAGE_SIZE=20
+      - VVS_BASE_URL=http://video-visits-service:8080/video-visit-resources/v2
+      - VDS_SCH_SERVICE_URL=http://vista-scheduling-service:8080/VistaSchedulingService/v2
+      - VIA_BASE_URL=http://via-weblogic:7011/via-webservices/services
+      - REQUESTING_APP=
+      - CONSUMING_APP_PASSWORD=TEST_PASSWORD
+      - CONSUMING_APP_TOKEN=TEST_TOKEN
+      # - VIA_BASE_URL=http://10.1.0.8:8089/via-webservices/services # ablevets VIA instance 
+      
   var-utility-resources:
     image: ${ENV_IMAGE_ROOT}/var-utility-resources:${VARUT_RESOURCES_VERSION}
     ports:
@@ -831,3 +938,4 @@ networks:
   default:
     external:
       name: varnextgenlocalenvironment_default
+
