@@ -262,7 +262,7 @@ services:
       - CONSUL_PATH=appconfig/${VAMF_ENVIRONMENT}/var-oracle-db-mock
 
   video-visits-mongo-mock:
-    image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ablevets/video-visits-mongo-mock:1.1.1-VAR-12798-dedf49402b3f
+    image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ablevets/video-visits-mongo-mock:1.1.1-VAR-12798-cd9126401fe9
     ports:
       - "27015:27017"
     environment:
