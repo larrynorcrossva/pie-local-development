@@ -436,6 +436,40 @@ services:
       - "JAVA_OPTS=-Xms256m -Xmx512m -XX:-TieredCompilation -Xss256k -XX:+UseG1GC -XX:+UseStringDeduplication"
       - "USE_ENVCONSUL=true"
       - JWT_SECRET=testtesttest
+      - "MONGODB_TASK_RESOURCES_URI=mongodb://testuser:testpass@mongo:27017/taskresourcesdb?ssl=false&connectTimeoutMS=20000&maxPoolSize=100"
+
+  mock-cdw:
+    image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ckm/docker-cdw-mock:2.0
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=IS4skwnfuglx928361V
+    container_name: mock-cdw
+    ports:
+      - 1433:1433
+    mem_limit: 3GB
+
+  cdw-service:
+    image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ckm/docker-cdw-service:1.11.0
+    container_name: cdw-service
+    ports:
+      - 8072:8080
+    environment:
+      - "DB_MOBILEHEALTH_URL=jdbc:jtds:sqlserver://${CDW_HOST}:1433;databaseName=OIA_MOBILEHEALTH" ## new name
+      - DB_MOBILEHEALTH_USERNAME=ciadmin
+      - DB_MOBILEHEALTH_PASSWORD=tk1ZXVsKmafZFt8p
+#       Settings for using utilize ckm mock for testing:
+#     - DB_MOBILEHEALTH_URL=jdbc:jtds:sqlserver://mock-cdw:1433;databaseName=OIA_MOBILEHEALTH ##
+#     - DB_MOBILEHEALTH_USERNAME=sa
+#     - DB_MOBILEHEALTH_PASSWORD=IS4skwnfuglx928361V
+      - CORS_ALLOWED_ORIGIN=*
+      - JAVA_OPTS=-Xms64m -Xmx256m -XX:-TieredCompilation -Xss256k -XX:+UseG1GC -XX:+UseStringDeduplication
+      - SERVICE_TAGS=${VAMF_ENVIRONMENT}
+      - SERVICE_NAME=cdw-service
+      - CONSUL_SERVER=${CONSUL_HTTP_ADDR}
+      - CONSUL_TOKEN=${CONSUL_MASTER_TOKEN}
+      - CONSUL_PATH=appconfig/${VAMF_ENVIRONMENT}/cdw-service
+      - TRACE_URL=http://zipkin:9411/api/v1/spans
+    restart: on-failure:5
 
 ###########################
 ### SHARED SERVICES END ###
