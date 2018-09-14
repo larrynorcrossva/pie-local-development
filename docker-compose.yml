@@ -1,21 +1,29 @@
-version: '2'
+version: '2.1'
 services:
 
 ###########################
 ### CORE SERVICES START ###
 ###########################
-
   # Consul is our service registry. (https://github.com/hashicorp/consul)
   # Consul is configured to be exposed locally (http://${HOST_DOMAIN}:8500) to make it easier to change and manage configurations.
   consul:
     image: mobileapps.vaftl.us:9250/ckm/consul-server:latest
-    command: "consul agent -server -bootstrap-expect=1 -ui -client 0.0.0.0 -data-dir /consul/data -config-dir /consul/config"
-    #    volumes:
+    container_name: consul
+
+    command: "consul agent -server -rejoin -bootstrap-expect=1 -ui -client 0.0.0.0 -data-dir /consul/data -config-dir /consul/config"
+    volumes:
+    - ./healthchecks:/opt/healthchecks
     # - "/consul/data"
     # - "/consul/config"
     ports:
      - "8500:8500"
      - "8600:8600/udp"
+    restart: always
+    healthcheck:
+      test: ["CMD", "bash", "/opt/healthchecks/healthcheck-consul.sh"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
 
   # Registrator is a special container that monitors and registers other containers in Consul.
   # https://github.com/gliderlabs/registrator
@@ -30,7 +38,9 @@ services:
   # (see https://github.com/gliderlabs/registrator/blob/master/registrator.go#L27)
   registrator:
     image: mobileapps.vaftl.us:9250/ckm/registrator:1.1.1
+    container_name: registrator
     command: "-tags local -internal consul://consul:8500"
+    restart: always
     volumes:
       - /var/run/docker.sock:/tmp/docker.sock
     environment:
@@ -45,6 +55,7 @@ services:
   #
   apigateway:
     image: mobileapps.vaftl.us:9250/ckm/apigateway:1.3.3
+    container_name: apigateway
     ports:
       - "8089:80"
     links:
@@ -72,18 +83,23 @@ services:
   #
   mock-mvi:
     image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ablevets/var-mock-mvi:1.1-user-services-1.8.0-0822-dfn-100862-mockuser15-hack
+    container_name: mock-mvi
+    volumes:
+      - ./healthchecks:/opt/healthchecks
     ports:
       - "35219:8080"
     environment:
       - SERVICE_TAGS=local
       - SERVICE_NAME=mock-mvi
+    healthcheck:
+      test: ["CMD", "bash", "/opt/healthchecks/healthcheck-mvi.sh"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
 
   user-services:
     image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ckm/docker-user-service:1.8.3
-    depends_on:
-      - eula-web
-      - eula-service
-      - mock-mvi
+    container_name: user-services
     links:
       - mock-mvi
       - roa-services
@@ -118,9 +134,9 @@ services:
       - CONSUL_HTTP_ADDR=consul:8500
       - CONSUL_TOKEN=7BE784A4-7498-4469-BE2F-9C3B9444DFEF
       - CONSUL_PATH=vamf/local/user-services/v1
-      - APIGW_BASE_URL=http://localhost:8089
+      - "APIGW_BASE_URL=http://${HOST_DOMAIN-localhost}:8089"
       - EULA_HOST=http://eula-service:8080
-      - WAYF_APP_URL=http://localhost:8089/wayf/v1/index.html
+      - "WAYF_APP_URL=http://${HOST_DOMAIN-localhost}:8089/wayf/v1/index.html"
       - "AUTH_RULES_SVC_URL=http://authorization-rules-service:8080/rules/v1"
       - "AUTH_RULES_HOST=http://authorization-rules-service:8080/"
       - "MVI_VISTA_FACILITIES=101,111,222,313,372,376,442,500,516,553,631,688,777,523,636"
@@ -230,11 +246,25 @@ services:
 
   mock-roa:
     image: mobileapps.vaftl.us:9250/ckm/docker-roa-mock:1.0.3
+    container_name: mock-roa
+    volumes:
+      - ./healthchecks:/opt/healthchecks
     ports:
-    - "1521"
+      - "1521"
+    environment:
+      - ORACLE_USERNAME=HADB
+      - ORACLE_PASSWORD=m0ckpass01
+    healthcheck:
+      test: ["CMD", "bash", "/opt/healthchecks/healthcheck-mock-roa.sh"]
+      interval: 1m
+      timeout: 5s
+      retries: 3
 
   var-mongo-db-mock:
     image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ablevets/var-mongo-db-mock:1.0.1_096653d5a212
+    container_name: var-mongo-db-mock
+    volumes:
+      - ./healthchecks:/opt/healthchecks
     ports:
       - "27017:27017"
     environment:
@@ -245,13 +275,20 @@ services:
       - CONSUL_SERVER=consul:8500
       - CONSUL_TOKEN=${CONSUL_MASTER_TOKEN}
       - CONSUL_PATH=appconfig/${VAMF_ENVIRONMENT}/var-mongo-db-mock
+    healthcheck:
+      test: ["CMD", "bash", "/opt/healthchecks/healthcheck-mongo.sh"]
+      interval: 1m
+      timeout: 5s
+      retries: 3
 
   var-oracle-db-mock:
     image: sath89/oracle-xe-11g:latest
+    container_name: var-oracle-db-mock
     ports:
       - "1521:1521"
     volumes:
       - ./var-oracle-db-mock:/docker-entrypoint-initdb.d
+      - ./healthchecks:/opt/healthchecks
     environment:
       - constraint:nodetype==*service*
       - SERVICE_NAME=var-oracle-db-mock
@@ -260,8 +297,15 @@ services:
       - CONSUL_SERVER=consul:8500
       - CONSUL_TOKEN=${CONSUL_MASTER_TOKEN}
       - CONSUL_PATH=appconfig/${VAMF_ENVIRONMENT}/var-oracle-db-mock
+      - CLEAR_CACHE=true
+    healthcheck:
+      test: ["CMD", "bash", "/opt/healthchecks/healthcheck-var-oracle-db-mock.sh"]
+      interval: 1m
+      timeout: 5s
+      retries: 3
 
   video-visits-mongo-mock:
+    container_name: video-visits-mongo-mock
     image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ablevets/video-visits-mongo-mock:1.1.1-VAR-12798-cd9126401fe9
     ports:
       - "27015:27017"
@@ -311,6 +355,9 @@ services:
 # SSL turned off by default
   mongo:
     image: mobileapps.vaftl.us:9250/ckm/mock-mongo:1.0.0
+    container_name: mongo
+    volumes:
+      - ./healthchecks:/opt/healthchecks
     expose:
      - "27017"
     ports:
@@ -324,6 +371,11 @@ services:
     - SSL_ENABLED=false
     - AUTH_ENABLED=true
     - JOURNALING=true
+    healthcheck:
+      test: ["CMD", "bash", "/opt/healthchecks/healthcheck-mongo.sh"]
+      interval: 1m
+      timeout: 5s
+      retries: 3
 
 #######################
 ### DB FIXTURES END ###
@@ -436,6 +488,40 @@ services:
       - "JAVA_OPTS=-Xms256m -Xmx512m -XX:-TieredCompilation -Xss256k -XX:+UseG1GC -XX:+UseStringDeduplication"
       - "USE_ENVCONSUL=true"
       - JWT_SECRET=testtesttest
+      - "MONGODB_TASK_RESOURCES_URI=mongodb://testuser:testpass@mongo:27017/taskresourcesdb?ssl=false&connectTimeoutMS=20000&maxPoolSize=100"
+
+  mock-cdw:
+    image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ckm/docker-cdw-mock:2.0
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=IS4skwnfuglx928361V
+    container_name: mock-cdw
+    ports:
+      - 1433:1433
+    mem_limit: 3GB
+
+  cdw-service:
+    image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ckm/docker-cdw-service:1.11.0
+    container_name: cdw-service
+    ports:
+      - 8072:8080
+    environment:
+      - "DB_MOBILEHEALTH_URL=jdbc:jtds:sqlserver://${CDW_HOST}:1433;databaseName=OIA_MOBILEHEALTH" ## new name
+      - DB_MOBILEHEALTH_USERNAME=ciadmin
+      - DB_MOBILEHEALTH_PASSWORD=tk1ZXVsKmafZFt8p
+#       Settings for using utilize ckm mock for testing:
+#     - DB_MOBILEHEALTH_URL=jdbc:jtds:sqlserver://mock-cdw:1433;databaseName=OIA_MOBILEHEALTH ##
+#     - DB_MOBILEHEALTH_USERNAME=sa
+#     - DB_MOBILEHEALTH_PASSWORD=IS4skwnfuglx928361V
+      - CORS_ALLOWED_ORIGIN=*
+      - JAVA_OPTS=-Xms64m -Xmx256m -XX:-TieredCompilation -Xss256k -XX:+UseG1GC -XX:+UseStringDeduplication
+      - SERVICE_TAGS=${VAMF_ENVIRONMENT}
+      - SERVICE_NAME=cdw-service
+      - CONSUL_SERVER=${CONSUL_HTTP_ADDR}
+      - CONSUL_TOKEN=${CONSUL_MASTER_TOKEN}
+      - CONSUL_PATH=appconfig/${VAMF_ENVIRONMENT}/cdw-service
+      - TRACE_URL=http://zipkin:9411/api/v1/spans
+    restart: on-failure:5
 
 ###########################
 ### SHARED SERVICES END ###
@@ -452,8 +538,6 @@ services:
     image: mobileapps.vaftl.us:9250/ckm/docker-roa-service:1.0.11
     restart: on-failure
     links:
-      - mock-roa
-    depends_on:
       - mock-roa
     ports:
      - "8086:8080"
@@ -473,7 +557,6 @@ services:
       - JWT_SECRET=testtesttest
       - DB_ROA_URL=jdbc:oracle:thin:@mock-roa:1521:xe
       - VAMF_ENVIRONMENT=local
-      #- JWT_PUBLIC_KEY=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAwRs7d+tRAuK4soDInuKp51lTTTXWN8okXR3/gSHiIB+q7vZeAGWA8ULjCYuECLde8tS6OxzZwSj/oM0kZBXuHKYq2ukWKjTEmOwlpQW4vBpX60bcx5rXwoEjbcWghK9oVWwY4OwbAJ4TYklkUHZC5buQ+8RU59u6FIWSv2N3D9VBkfYsHvp3O4aXVaE8dZ0dxldUdv/WePoLkCeUYgLsGyDg/zsZvDrX1+yvNsjNNmB/ksJSoptMv9CfyUpSXsfov+8GhBCtgzDvgn32kw79wPsrTkgnC0DRtuv+y3qCXX+ZJ6cbJ31tVus9AadUn2CrWJur6/KRYsniQaEnfA43hwIDAQAB
 
 ## ROA WEB
   roa-web:
@@ -559,8 +642,6 @@ services:
       - '3001:3001'
     links:
       - var-mongo-db-mock
-    depends_on:
-      - var-mongo-db-mock
     environment:
       - "constraint:nodetype==*service*"
       - "CONSUL_SERVER=consul:8500"
@@ -588,8 +669,8 @@ services:
           {\"userId\": \"vhastaff01\", \"headers\": {
             \"ADDOMAIN\": \"vha\", \"ADEMAIL\": \"test01.Staff01@va.gov\", \"LASTNAME\": \"Staff01\", \"FIRSTNAME\": \"Test01\",
             \"SESSIONSCOPE\": \"B\", \"VAUID\": \"1984\", \"ADSAMACCOUNTNAME\": \"staff01t\", \"ACCESSROLES\": \"CBSS_Access\",
-            \"DODEDIPNID\": \"1020002350\", \"VISTAID\": \"523|22228439^PN^523^USVHA|A,590|11128439^PN^590^USVHA|A\", \"SECID\": \"0000028347\",
-            \"MVIICN\": \"1008693670V746966\", \"VISTAIDRAW\": \"523|22228439^PN^523^USVHA|A^590|11128439^PN^590^USVHA|A\",
+            \"DODEDIPNID\": \"1020002350\", \"VISTAID\": \"523|990^PN^523^USVHA|A,636|990^PN^636^USVHA|A,501|990^PN^501^USVHA|A,663|990^PN^663^USVHA|A\", \"SECID\": \"0000028347\",
+            \"MVIICN\": \"1008693670V746966\", \"VISTAIDRAW\": \"523|990^PN^523^USVHA|A^636|990^PN^636^USVHA|A^501|990^PN^501^USVHA|A^663|990^PN^663^USVHA|A\",
             \"ORGANIZATIONID\": \"urn:oid:2.16.840.1.113883.4.349\", \"ASSURLEVEL\": \"2\", \"ORGANIZATION\": \"Department of Veterans Affairs\",
             \"PROOFINGAUTH\": \"VA\", \"ROLE\": \"role1\", \"ISSUEINSTANT\": \"2017-06-19T13:37:16Z\", \"AUTHNTYPE\": \"Direct\",
             \"ADUPN\": \"tstaff01@iam.va.local\", \"TRANSACTIONID\": \"00000000000000000000000036d0e30a-0ad4-5947d38c-3688-00fa4fca\",
@@ -609,8 +690,6 @@ services:
     image: mobileapps.vaftl.us:9250/ckm/docker-sud-service:1.1.2
     restart: on-failure
     links:
-      - mock-roa
-    depends_on:
       - mock-roa
     environment:
       # Use Vault
@@ -726,9 +805,9 @@ services:
 
   ### MDWS to VIA adapter
   mdws-via-adapter:
-    image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ckm/mdws-via-adapter:1.3.3
+    image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ckm/mdws-via-adapter:1.4.0
     ports:
-     - 8180:8180
+     - 8180:8080
      - 64087:64087
     environment:
     # Vault
@@ -829,10 +908,6 @@ services:
      - var-messaging-microservice
      - facility-service
      - mock-mvi
-    depends_on:
-     - var-messaging-microservice
-     - facility-service
-     - mock-mvi
     environment:
      - SERVICE_64058_IGNORE=true
      - SERVICE_8080_NAME=var-resources
@@ -881,7 +956,7 @@ services:
       - SERVICE_NAME=scheduling-manager-web
 
   appointment-service:
-    image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ckm/mobile-appointment-service:1.1.0
+    image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ckm/mobile-appointment-service:1.2.0
     ports:
       - "9097:8080"
       - "19097:5005"
@@ -901,13 +976,15 @@ services:
       - SERVICE_64085_IGNORE=true
       - MAX_RESULTSET_SIZE=40
       - MAX_PAGE_SIZE=20
+      - VIA_BASE_URL=http://10.1.0.8:8089/via-webservices/services # ablevets VIA instance
       - VVS_BASE_URL=http://video-visits-service:8080/video-visit-resources/v2
       - VDS_SCH_SERVICE_URL=http://vista-scheduling-service:8080/VistaSchedulingService/v2
-      - VIA_BASE_URL=http://via-weblogic:7011/via-webservices/services
+      - CDW_SERVICE_BASE_URL=http://cdw-service:8080/cdw/v1
+      # - CCS_BASE_URL= # not used if unspecified
+      - DISPLAY_APPOINTMENTS_CLINIC_DISPLAY_NULL=false # default: false, required for TH
       - REQUESTING_APP=
       - CONSUMING_APP_PASSWORD=TEST_PASSWORD
       - CONSUMING_APP_TOKEN=TEST_TOKEN
-      # - VIA_BASE_URL=http://10.1.0.8:8089/via-webservices/services # ablevets VIA instance 
       
   var-utility-resources:
     image: ${ENV_IMAGE_ROOT}/var-utility-resources:${VARUT_RESOURCES_VERSION}
