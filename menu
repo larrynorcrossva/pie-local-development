@@ -1,0 +1,666 @@
+#!/usr/bin/env bash
+
+. app.env
+
+
+if [ -f composed-services.sh ]; then
+    . composed-services.sh
+fi
+
+green=$'\033[32m'
+yellow=$'\033[33m'
+red=$'\033[31m'
+normal=$'\033[0m'
+
+validate_fixture_database() {
+    local db=$1
+
+    rm -f /tmp/validatedb.log
+    docker exec -i var-oracle-db-mock sqlplus -L -S system/oracle > /tmp/validatedb.log <<-EOF
+    desc ${db};
+EOF
+    grep -s "does not exist" /tmp/validatedb.log
+    if [[ $? -eq 0 ]]; then
+        echo "Database does not contain table ${db}.  The database will need to be seeded."
+        return 1
+    fi
+    return 0
+}
+
+stack_status() {
+    local arg_docker_ps=()
+
+	if [[ -z "$1" ]]; then
+		echo "Missing arugment.  Usage: validate_stack_group core"
+		return 2
+	fi
+
+	local stack_groups=(fixtures core ss vet staff var sm)
+	found=false
+
+	for stack_group in ${stack_groups[*]}; do
+		if [[ ${stack_group} == "$1" ]]; then
+			found=true
+			break
+		fi
+	done
+ 
+	if [[ $found == "false" ]]; then
+		echo "Invalid argument.  Must be one of ${stack_groups[*]}"
+		return 3
+	fi
+
+	local GROUP=$1'[*]'
+    for container in ${!GROUP}; do
+        arg_docker_ps+=('--filter')
+        arg_docker_ps+=("name=${container}")
+    done
+    docker ps -a "${arg_docker_ps[@]}" --format "table {{.Names}}\t{{.Status}}\t{{.Image}}"
+}
+
+validate_fixtures() {
+	stack_status fixtures 
+    echo "Checking oracle database for VARDB, HADB, MOCKDB"
+    validate_fixture_database "VARDB.FACILITY"
+    validate_fixture_database "MOCKDB.MOCK_USERS"
+    validate_fixture_database "HADB.FACILITY"
+}
+
+validate_url() {
+    local SERVICE=$1
+    local URL=$2
+    local STATUS=$3
+
+    local OP=$4
+
+    if [ -z "$OP" ]; then
+        OP="="
+    fi
+
+
+    local RESULT
+    RESULT="UNKNOWN"
+    test "$(curl -sL -w '%{http_code}' -o /dev/null $URL)" $OP $STATUS && { RESULT="${green}SUCCESS" ; } || { RESULT="${red}FAILURE$normal" ; }
+
+    printf "Checking %-25s\t%-60s\t%-40s\033[0m\n" "$SERVICE" "${URL}" "$RESULT"
+}
+
+validate_core() {
+	stack_status core
+
+    validate_url "consul"        "http://localhost:8500/v1/status/leader" '000' '!='
+    validate_url "user-services" "http://localhost:8089/jwt" 200
+    validate_url "WAYF"          "http://localhost:8089/wayf/" 403
+    validate_url "MVI"           "http://localhost:35219/mvi/mockVAIdMPort" 200
+    validate_url "authorization-rules-service" "http://localhost:8481/rules/v1/getLoadedRules" 200
+    # http://localhost:${vds.port}/VistaSchedulingService/v2/swagger.json
+}
+
+validate_ss() {
+	stack_status ss
+
+    validate_url "var-messaging-microservice"    "http://localhost:8079/video-visit-resources/v2/"   200
+    validate_url "vmr-mock-service"              "http://localhost:8284/vmr-mock-services/v2/ws"     405
+    validate_url "task-resources"                "http://localhost:32788/trs/v1/"                    200
+    validate_url "messaging-publisher"           "http://localhost:7090/messaging-publisher/v1/"     200
+    validate_url "video-visits-service"          "http://localhost:8079/video-visit-resources/v2/"   200
+    validate_url "vista-scheduling-service"      "http://localhost:8185/VistaSchedulingService/v2/"  200
+    validate_url "appointment-service"           "http://localhost:9097/appointments/v1/"            200
+    validate_url "cdw-service"                   "http://localhost:8072/cdw/v1/"                     200
+
+    # The following are not routable through apigateway, and do not have exposed ports:
+    ## facility-resources
+    ## var-messaging-microservice
+}
+
+validate_vet() {
+	stack_status vet
+
+    validate_url "eula-service"                  "http://localhost:8098/eula/v1/"                           200
+    validate_url "eula-web"                      "http://localhost:8101/eula-web/v1/js/app.js"              200
+    validate_url "veteran-video-connect-service" "http://localhost:8280/veteran-videoconnect-resources/v2/" 200
+    validate_url "iamssoe-proxy-mock"            "http://localhost:9000/loginPage/status.html"              200
+    ## iamssoe-db-mock
+}
+
+validate_staff() {
+	stack_status staff
+
+    validate_url "patient-context"               "http://localhost:3001/patient-context/v2/"                200
+    validate_url "ssoi-mock"                     "http://localhost:9001/loginPage/status.html"              200
+    validate_url "pcs-web"                       "http://localhost:8093/pcs/v1/index.html"                  200
+    validate_url "personal-preference-service"   "http://localhost:8287/personal-preferences/v1/"           200
+    validate_url "vista-data-services"           "http://localhost:8085/VistaDataServices/v1/"              200
+    validate_url "mdws-via-adapter"              "http://localhost:8180/MdwsViaAdapter/v1/services/MdwsEmrService?WSDL"    200
+    validate_url "staff-video-connect-service"   "http://localhost:8293/staff-videoconnect-resources/v2/"   200
+
+    # mock-wstrust -- no exposed port
+    # sud-service 
+    # sud-web 
+
+    rm -f /tmp/cookie.jar
+    curl -sL -o /dev/null http://localhost:8089/users/v1/landing --cookie "IAMSESSION=123" -H "secid:01234" --cookie-jar /tmp/cookie.jar
+
+    local JWT
+    local URL
+    local RESULT
+    RESULT="UNKNOWN"
+
+    JWT=$(cat /tmp/cookie.jar | grep vamfjwt | awk '{print $7}')
+    curl -sL -o /dev/null --cookie-jar /tmp/cookie.jar -H "X-VAMF-JWT: $JWT" "http://localhost:8089/users/v1/session/vars/ssoiWstToken"
+
+    URL="http://localhost:8089/VistaDataServices/v1/patient/523/100865"
+    test "$(curl -sL -w '%{http_code}' -o /dev/null --cookie-jar /tmp/cookie.jar -H "X-VAMF-JWT: $JWT" "${URL}")" = 200 && { RESULT="${green}SUCCESS" ; } || { RESULT="${red}FAILURE$normal" ; }
+
+
+    printf "Checking %-25s\t%-60s\t%-40s\033[0m\n" "VIA" "${URL}" "$RESULT"
+}
+
+validate_var() {
+    stack_status var
+    validate_url "var-web"       "http://localhost:8089/var/v4/version.json"    200
+
+    rm -f /tmp/cookie.jar
+    curl -sL -o /dev/null --cookie-jar /tmp/cookie.jar -H "va_eauth_icn: 1006088937V099668" "http://localhost:8089/jwt"
+    local JWT
+    local URL
+    local RESULT
+    RESULT="UNKNOWN"
+    JWT=$(cat /tmp/cookie.jar | grep vamfjwt | awk '{print $7}')
+    URL="http://localhost:9092/var/VeteranAppointmentRequestService/v4/rest/community-care-services/type-of-cares"
+    test "$(curl -sL -w '%{http_code}' -o /dev/null --cookie-jar /tmp/cookie.jar -H "X-VAMF-JWT: $JWT" $URL)" = 200 && { RESULT="${green}SUCCESS" ; } || { RESULT="${red}FAILURE$normal" ; }
+    printf "Checking %-25s\t%-60s\t%-40s\033[0m\n" "VAR" "${URL}" "$RESULT"
+}
+
+validate_sm() {
+    stack_status sm
+    validate_url "scheduling-manager-web"       "http://localhost:9071/scheduling-manager/v3/version.json"    200
+    validate_url "scheduling-manager-resources" "http://localhost:9070/SchedulingManagerService/"             200
+
+    rm -f /tmp/cookie.jar
+    curl -sL -o /dev/null http://localhost:8089/users/v1/landing --cookie "IAMSESSION=123" -H "secid:01234" --cookie-jar /tmp/cookie.jar
+    local JWT
+    local URL
+    local RESULT
+    RESULT="UNKNOWN"
+    JWT=$(cat /tmp/cookie.jar | grep vamfjwt | awk '{print $7}')
+    curl -sL -o /dev/null --cookie-jar /tmp/cookie.jar -H "X-VAMF-JWT: $JWT" "http://localhost:8089/users/v1/session/vars/ssoiWstToken"
+
+    URL="http://localhost:9070/SchedulingManagerService/v3/rest/disabled-features/"
+    test "$(curl -sL -w '%{http_code}' -o /dev/null --cookie-jar /tmp/cookie.jar -H "X-VAMF-JWT: $JWT" "${URL}")" = 200 && { RESULT="${green}SUCCESS" ; } || { RESULT="${red}FAILURE$normal" ; }
+    printf "Checking %-25s\t%-60s\t%-40s\033[0m\n" "SM" "${URL}" "$RESULT"
+}
+
+validate_apigateway() {
+    validate_url "INVALID URL"                  "http://localhost:8089/INVALID_URL"                  404
+
+    printf "Checking shared services. . . \n"
+    validate_url "var-messaging-microservice"    "http://localhost:8089/video-visit-resources/v2/"   200
+    validate_url "task-resources"                "http://localhost:8089/trs/v1/"                     200
+    validate_url "messaging-publisher"           "http://localhost:8089/messaging-publisher/v1/"     200
+    validate_url "video-visits-service"          "http://localhost:8089/video-visit-resources/v2/"   200
+    validate_url "vista-scheduling-service"      "http://localhost:8089/VistaSchedulingService/v2/"  200
+    validate_url "appointment-service"           "http://localhost:8089/appointments/v1/"            200
+    validate_url "cdw-service"                   "http://localhost:8089/cdw/v1/"                     200
+
+    printf "Checking vet. . . \n"
+    validate_url "eula-service"                  "http://localhost:9000/eula/v1/"                           200
+    validate_url "eula-web"                      "http://localhost:9000/eula-web/v1/js/app.js"              200
+    validate_url "veteran-video-connect-service" "http://localhost:9000/veteran-videoconnect-resources/v2/" 200
+
+    printf "Checking staff. . . \n"
+    validate_url "patient-context"               "http://localhost:9001/patient-context/v2/"                200
+    validate_url "pcs-web"                       "http://localhost:9001/pcs/v1/index.html"                  200
+    validate_url "vista-data-services"           "http://localhost:9001/VistaDataServices/v1/"              200
+    validate_url "staff-video-connect-service"   "http://localhost:9001/staff-videoconnect-resources/v2/"   200
+
+    printf "Checking scheduling-manager. . . \n"
+    validate_url "scheduling-manager-web"       "http://localhost:9001/scheduling-manager/v3/version.json"    200
+    validate_url "scheduling-manager-resources" "http://localhost:9001/SchedulingManagerService/"             200
+
+    printf "Checking var. . . \n"
+
+
+}
+
+validate_compose_config() {
+    . app.env
+	docker-compose config --resolve-image-digests || {
+		echo "Could not resolve images used in docker-compose config"
+        return
+	}
+
+	echo "docker-compose.yml successfully resolved"
+}
+
+# OPTARG The value of the last option argument processed by the getopts builtin command (see SHELL BUILTIN COMMANDS below).
+# OPTIND The index of the next argument to be processed by the getopts builtin command (see SHELL BUILTIN COMMANDS below).
+# OPTERR If set to the value 1, bash displays error messages generated by the getopts builtin command (see SHELL BUILTIN COMMANDS below).  OPTERR is initialized to 1 each time the shell is invoked or a shell script is executed.
+
+menu_validate() {
+PS3='Please enter your choice: '
+options=("Validate compose config"  "Validate fixtures" "Validate core" "Validate ss" "Validate vet" "Validate staff" 
+"Validate var" "Validate sm" "Validate apigateway" "Validate all"
+"Restart registrator"
+"Quit")
+select opt in "${options[@]}"
+do
+    case $opt in
+		"Validate compose config")
+			validate_compose_config
+			;;
+        "Validate fixtures")
+			validate_fixtures
+            ;;
+        "Validate core")
+            validate_core
+            ;;
+        "Validate ss")
+            validate_ss
+            ;;
+        "Validate vet")
+            validate_vet
+            ;;
+        "Validate staff")
+            validate_staff
+            ;;
+        "Validate var")
+            validate_var
+            ;;
+        "Validate sm")
+            validate_sm
+            ;;
+        "Validate apigateway")
+            validate_apigateway
+            ;;
+        "Validate all")
+			validate_fixtures
+            validate_core
+            validate_ss
+            validate_vet
+            validate_staff
+            validate_var
+            validate_sm
+            validate_apigateway
+            ;;
+
+        "Restart registrator")
+            docker-compose up -d --force-recreate --no-deps registrator
+            ;;
+
+        "Quit")
+            break
+            ;;
+        *) echo "invalid option $REPLY";;
+    esac
+done
+}
+
+manually_seed() {
+    local CONTAINER_ID
+    CONTAINER_ID=$(docker ps -a -q --filter name=oracle)
+
+    if [ -z "$CONTAINER_ID" ] ; then
+        echo "oracle container not found."
+        return
+    fi
+
+	docker exec -it ${CONTAINER_ID} bash -c 'for F in $(ls /docker-entrypoint-initdb.d/*.sql); do sqlplus system/oracle < $F; done'
+}
+
+build_base_images() {
+    aws ecr get-login --region us-east-1 --no-include-email | bash
+    local DTR_PREFIX_AWS="181140462490.dkr.ecr.us-east-1.amazonaws.com"
+    docker pull ${DTR_PREFIX_AWS}/ablevets/openjdk8-tomcat-appdynamics:1.0.1
+    docker tag ${DTR_PREFIX_AWS}/ablevets/openjdk8-tomcat-appdynamics:1.0.1 dev/openjdk8-tomcat-appdynamics:1.0.0
+     
+    docker pull ${DTR_PREFIX_AWS}/ablevets/centos7-nginx
+    docker tag ${DTR_PREFIX_AWS}/ablevets/centos7-nginx dev/centos7-nginx
+
+    docker pull ${DTR_PREFIX_AWS}/ablevets/centos7-openjdk8-tomcat:latest
+    docker tag ${DTR_PREFIX_AWS}/ablevets/centos7-openjdk8-tomcat:latest dev/openjdk8-tomcat:latest
+}
+
+build_var_web() {
+    if [ ! -d ../var-web/ ] ; then
+        echo "Could not find directory ../var-web/"
+        echo "Clone the repository to a folder next to var-nextgen-local-environment"
+        return
+    fi
+
+    pushd ../var-web/ || return
+    npm install
+    . app.env && ./build.sh && docker build -t dev/var-web dist/
+    popd || return
+}
+
+build_var_resources() {
+    if [ ! -d ../var-resources/ ] ; then
+        echo "Could not find directory ../var-resources/"
+        echo "Clone the repository to a folder next to var-nextgen-local-environment"
+        return
+    fi
+
+    pushd ../var-resources/ || return
+    . app.env && ./build.sh && docker build -t dev/var-resources dist/
+    popd || return
+}
+
+build_sm_web() {
+    if [ ! -d ../scheduling-manager-web/ ] ; then
+        echo "Could not find directory ../scheduling-manager-web/"
+        echo "Clone the repository to a folder next to var-nextgen-local-environment"
+        return
+    fi
+
+    pushd ../scheduling-manager-web/ || return
+    npm install
+    . app.env && ./build.sh && docker build -t dev/scheduling-manager-web dist/
+    popd || return
+}
+
+build_sm_resources() {
+    if [ ! -d ../scheduling-manager-resources/ ] ; then
+        echo "Could not find directory ../scheduling-manager-resources/"
+        echo "Clone the repository to a folder next to var-nextgen-local-environment"
+        return
+    fi
+
+    pushd ../scheduling-manager-resources/ || return
+    . app.env && ./build.sh && docker build -t dev/scheduling-manager-resources dist/
+    popd || return
+}
+
+menu_build() {
+PS3='Please enter your choice: '
+options=("Setup Base Images" "Build Var Web" "Build Var Resources" "Build SM Web" "Build SM Resources" "Quit")
+select opt in "${options[@]}"
+do
+    case $opt in
+        "Setup Base Images")
+            echo "Pulling image dependencies"
+            build_base_images
+            ;;
+        "Build Var Web")
+            echo "Manually building var-web"
+            build_var_web
+            ;;
+        "Build Var Resources")
+            echo "Manually building var-resources"
+            build_var_resources
+            ;;
+        "Build SM Web")
+            echo "Manually building scheduling-manager-web"
+            build_sm_web
+            ;;
+        "Build SM Resources")
+            echo "Manually building scheduling-manager-resources"
+            build_sm_resources
+            ;;
+        "Quit")
+            break
+            ;;
+        *) echo "invalid option $REPLY";;
+    esac
+done
+}
+
+main_status() {
+
+pushd ../ || return
+
+printf "%25s\t%-45s%-40s\n" "REPO" "BRANCH" "TIMESTAMP"
+
+for REPO in var-nextgen-local-environment var-web var-resources scheduling-manager-web scheduling-manager-resources ; do
+
+	if [ ! -d $REPO ]; then
+		echo "Could not find project $REPO"
+		return
+	fi
+
+    BRANCH=$(git -C $REPO status | head -n 1 | awk '{print $3}')
+    TIMESTAMP=$(git -C $REPO show --format="%ci %cr" $BRANCH| head -n 1)
+    printf "%25s\t%-45s%-40s\n" "$REPO" "$BRANCH" "$TIMESTAMP"
+done
+
+popd || return
+
+}
+
+menu_logs() {
+PS3='Please enter your choice: '
+options=("fixtures" "core" "ss" "vet" "staff" "var" "sm" "vats" "Quit")
+select opt in "${options[@]}"
+do
+    case $opt in
+        "fixtures")
+            docker-compose logs -f "${fixtures[@]}"
+            ;;
+        "core")
+            docker-compose logs -f "${core[@]}"
+            ;;
+        "ss")
+            docker-compose logs -f "${ss[@]}"
+            ;;
+        "vet")
+            docker-compose logs -f "${vet[@]}"
+            ;;
+        "staff")
+            docker-compose logs -f "${staff[@]}"
+            ;;
+        "var")
+            docker-compose logs -f "${var[@]}"
+            ;;
+        "sm")
+            docker-compose logs -f "${sm[@]}"
+            ;;
+        "vats")
+            docker-compose logs -f "${vats[@]}"
+            ;;
+        "Quit")
+            break
+            ;;
+        *) echo "invalid option $REPLY";;
+    esac
+done
+
+}
+
+menu_quickstart() {
+PS3='Please enter your choice: '
+options=(
+"All vet" "All staff" "Build Menu"
+"Start var (DEV)" "Start sm (DEV)" "Start vats (DEV)"
+"Validate Menu"
+"Quit")
+select opt in "${options[@]}"
+do
+    case $opt in
+        "All staff")
+            ./run --vpn --dev all-staff
+            ;;
+        "All vet")
+            ./run --vpn --dev all-vet
+            ;;
+        "Build Menu")
+             menu_build
+             ;;
+        "Start var (DEV)")
+            ./run --vpn --dev var
+            ;;
+        "Start sm (DEV)")
+            ./run --vpn --dev sm
+            ;;
+        "Start vats (DEV)")
+            ./run --vpn --dev vats
+            ;;
+        "Validate Menu")
+            menu_validate
+            ;;
+        "Quit")
+            break
+            ;;
+        *) echo "invalid option $REPLY";;
+    esac
+done
+}
+
+menu_gitsetup() {
+PS3='Please enter your choice: '
+options=("Force checkout latest dev branch" "Quit")
+select opt in "${options[@]}"
+do
+    case $opt in
+        "Force checkout latest dev branch")
+            echo "----------------------------------"
+            echo " Warning;                         "
+            echo " This project updates your working directory."
+            echo " Local changes will be stashed.   "
+            echo "----------------------------------"
+            sleep 2
+            ./updategitrepos.sh
+            ;;
+        "Quit")
+            break
+            ;;
+        *) echo "invalid option $REPLY";;
+    esac
+done
+}
+
+menu_setup() {
+PS3='Please enter your choice: '
+options=("Reset Stack" "Reset Docker" "Docker Pull" "Build Menu" 
+"Start fixtures" "Check Database"  "Start data core ss" "Start vet" "Start staff"
+"Start var (DEV)" "Start sm (DEV)" "Start vats (DEV)"
+"Quit")
+select opt in "${options[@]}"
+do
+    case $opt in
+        "Reset Stack")
+            echo "Removing all docker containers. . . "
+            docker stop $(docker ps -a -q) && docker rm $(docker ps -a -q) || echo "Could not remove containers"
+            sleep 15s
+            ;;
+        "Reset Docker")
+            echo "Restarting Docker Engine. . ."
+            killall Docker && open /Applications/Docker.app
+            sleep 90s
+            ./cleanup.sh
+            ;;
+        "Docker Pull")
+            echo "Pulling latest images of the stack"
+            docker-compose pull --ignore-pull-failures
+            ;;
+        "Build Menu")
+             menu_build
+             ;;
+        "Start fixtures")
+            rm -f var-oracle-db-mock/.cache
+            ./run fixtures
+            ;;
+        "Check Database")
+            validate_fixtures
+            ;;
+        "Start data core ss")
+            ./run --vpn data core ss
+            ;;
+        "Start vet")
+            ./run --vpn vet
+            ;;
+        "Start staff")
+            ./run --vpn staff
+            ;;
+        "Start var (DEV)")
+            ./run --vpn --dev var
+            ;;
+        "Start sm (DEV)")
+            ./run --vpn --dev sm
+            ;;
+        "Start vats (DEV)")
+            ./run --vpn --dev vats
+            ;;
+        "Quit")
+            break
+            ;;
+        *) echo "invalid option $REPLY";;
+    esac
+done
+}
+
+menu_main() {
+PS3='Please enter your choice: '
+options=("Login ECR" "Setup Menu" "Status Menu" "Quickstart Menu" "Build Menu" "Logs Menu" "Validate Menu" "Seed" "Git Menu" "Quit")
+select opt in "${options[@]}"
+do
+    case $opt in
+        "Login ECR")
+            aws ecr get-login --region us-east-1 --no-include-email | bash
+            ;;
+        "Status Menu")
+            main_status
+            ;;
+        "Quickstart Menu")
+            menu_quickstart
+            ;;
+        "Setup Menu")
+            menu_setup
+            ;;
+        "Build Menu")
+            menu_build
+            ;;
+        "Logs Menu")
+            menu_logs
+            ;;
+        "Validate Menu")
+            menu_validate
+            ;;
+        "Seed")
+            echo "Manually seeding database.  Ensure that the fixures are up and running prior to running this command."
+			manually_seed
+            ;;
+        "Git Menu")
+            cat <<EOF
+
+            THE PROGRAM IS DISTRIBUTED IN THE HOPE THAT IT WILL BE USEFUL, BUT WITHOUT ANY WARRANTY. IT IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE. THE ENTIRE RISK AS TO THE QUALITY AND PERFORMANCE OF THE PROGRAM IS WITH YOU. SHOULD THE PROGRAM PROVE DEFECTIVE, YOU ASSUME THE COST OF ALL NECESSARY SERVICING, REPAIR OR CORRECTION.
+
+            IN NO EVENT UNLESS REQUIRED BY APPLICABLE LAW THE AUTHOR WILL BE LIABLE TO YOU FOR DAMAGES, INCLUDING ANY GENERAL, SPECIAL, INCIDENTAL OR CONSEQUENTIAL DAMAGES ARISING OUT OF THE USE OR INABILITY TO USE THE PROGRAM (INCLUDING BUT NOT LIMITED TO LOSS OF DATA OR DATA BEING RENDERED INACCURATE OR LOSSES SUSTAINED BY YOU OR THIRD PARTIES OR A FAILURE OF THE PROGRAM TO OPERATE WITH ANY OTHER PROGRAMS), EVEN IF THE AUTHOR HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGES.
+
+            Update the source repositories to the latest dev branches.
+
+            Local changes in your working directory maybe lost.
+
+            After the repositories have been updated, the images will need to be rebuilt, followed by redeploying the containers.
+
+EOF
+            menu_gitsetup
+            ;;
+
+        "Quit")
+            break
+            ;;
+        *) echo "invalid option $REPLY";;
+    esac
+done
+}
+
+# The following is only executed if the script is being executed:
+[[ "${BASH_SOURCE[0]}" == "${0}" ]] && {
+
+	if [[ $# -le 0 ]]; then
+		menu_main
+        exit
+	fi
+
+    echo "${*}"
+}
+
+export fixtures
+export core
+export ss
+export vet
+export staff
+export var
+export sm
+export vats
+
