@@ -21,7 +21,7 @@ validate_fixture_database() {
 EOF
     grep -s "does not exist" /tmp/validatedb.log
     if [[ $? -eq 0 ]]; then
-        echo "Database does not contain table ${db}.  The database will need to be seeded."
+        echo -e "${red}FAILURE$normal Database does not contain table ${db}.  The SQL database will need to be seeded."
         return 1
     fi
     return 0
@@ -61,9 +61,17 @@ stack_status() {
 validate_fixtures() {
 	stack_status fixtures 
     echo "Checking oracle database for VARDB, HADB, MOCKDB"
-    validate_fixture_database "VARDB.FACILITY"
-    validate_fixture_database "MOCKDB.MOCK_USERS"
-    validate_fixture_database "HADB.FACILITY"
+
+    local ERROR
+    ERROR=false
+    
+    validate_fixture_database "VARDB.FACILITY" || ERROR=true
+    validate_fixture_database "MOCKDB.MOCK_USERS" || ERROR=true
+    validate_fixture_database "HADB.FACILITY" || ERROR=true
+    
+    if [[ $ERROR = "false" ]]; then 
+        echo -e "\n${green}SUCCESS${normal} SQL databases have been seeded\n\n"
+    fi
 }
 
 validate_url() {
@@ -192,9 +200,10 @@ validate_sm() {
 }
 
 validate_apigateway() {
+    printf "\n\nChecking apigateway. . . \n\n"
     validate_url "INVALID URL"                  "http://localhost:8089/INVALID_URL"                  404
 
-    printf "Checking shared services. . . \n"
+    printf "\n\nChecking shared services. . . \n\n"
     validate_url "var-messaging-microservice"    "http://localhost:8089/video-visit-resources/v2/"   200
     validate_url "task-resources"                "http://localhost:8089/trs/v1/"                     200
     validate_url "messaging-publisher"           "http://localhost:8089/messaging-publisher/v1/"     200
@@ -203,24 +212,24 @@ validate_apigateway() {
     validate_url "appointment-service"           "http://localhost:8089/appointments/v1/"            200
     validate_url "cdw-service"                   "http://localhost:8089/cdw/v1/"                     200
 
-    printf "Checking vet. . . \n"
+    printf "\n\nChecking vet. . . \n\n"
     validate_url "eula-service"                  "http://localhost:9000/eula/v1/"                           200
     validate_url "eula-web"                      "http://localhost:9000/eula-web/v1/js/app.js"              200
     validate_url "veteran-video-connect-service" "http://localhost:9000/veteran-videoconnect-resources/v2/" 200
 
-    printf "Checking staff. . . \n"
+    printf "\n\nChecking staff. . . \n\n"
     validate_url "patient-context"               "http://localhost:9001/patient-context/v2/"                200
     validate_url "pcs-web"                       "http://localhost:9001/pcs/v1/index.html"                  200
     validate_url "vista-data-services"           "http://localhost:9001/VistaDataServices/v1/"              200
     validate_url "staff-video-connect-service"   "http://localhost:9001/staff-videoconnect-resources/v2/"   200
 
-    printf "Checking scheduling-manager. . . \n"
+    printf "\n\nChecking scheduling-manager. . . \n\n"
     validate_url "scheduling-manager-web"       "http://localhost:9001/scheduling-manager/v3/version.json"    200
     validate_url "scheduling-manager-resources" "http://localhost:9001/SchedulingManagerService/"             200
 
-    printf "Checking var. . . \n"
-
-
+    printf "\n\nChecking var. . . \n\n"
+    validate_url "var-web"                      "http://localhost:9000/var/v4/version.json"    200
+    validate_url "var-resources"                "http://localhost:9000/var/VeteranAppointmentRequestService/v4/rest/" 200
 }
 
 validate_compose_config() {
@@ -330,6 +339,10 @@ build_var_web() {
 
     pushd ../var-web/ || return
     npm install
+
+    echo "\n\nBuilding branch: $(git -C . status | head -n 1 | awk '{print $3}')\n\n\n" 
+    sleep 2
+    
     . app.env && ./build.sh && docker build -t dev/var-web dist/
     popd || return
 }
@@ -342,6 +355,10 @@ build_var_resources() {
     fi
 
     pushd ../var-resources/ || return
+
+    echo "\n\nBuilding branch: $(git -C . status | head -n 1 | awk '{print $3}')\n\n\n" 
+    sleep 2
+
     . app.env && ./build.sh && docker build -t dev/var-resources dist/
     popd || return
 }
@@ -354,6 +371,10 @@ build_sm_web() {
     fi
 
     pushd ../scheduling-manager-web/ || return
+
+    echo "\n\nBuilding branch: $(git -C . status | head -n 1 | awk '{print $3}')\n\n\n" 
+    sleep 2
+
     npm install
     . app.env && ./build.sh && docker build -t dev/scheduling-manager-web dist/
     popd || return
@@ -367,7 +388,44 @@ build_sm_resources() {
     fi
 
     pushd ../scheduling-manager-resources/ || return
+
+    echo "\n\nBuilding branch: $(git -C . status | head -n 1 | awk '{print $3}')\n\n\n" 
+    sleep 2
+
     . app.env && ./build.sh && docker build -t dev/scheduling-manager-resources dist/
+    popd || return
+}
+
+build_vats_web() {
+    if [ ! -d ../var-utility-web/ ] ; then
+        echo "Could not find directory ../var-utility-web/"
+        echo "Clone the repository to a folder next to var-nextgen-local-environment"
+        return
+    fi
+
+    pushd ../var-utility-web/ || return
+    npm install
+
+    echo "\n\nBuilding branch: $(git -C . status | head -n 1 | awk '{print $3}')\n\n\n" 
+    sleep 2
+    
+    . app.env && ./build.sh && docker build -t dev/var-utility-web dist/
+    popd || return
+}
+
+build_vats_resources() {
+    if [ ! -d ../var-utility-resources/ ] ; then
+        echo "Could not find directory ../var-utility-resources/"
+        echo "Clone the repository to a folder next to var-nextgen-local-environment"
+        return
+    fi
+
+    pushd ../var-utility-resources/ || return
+
+    echo "\n\nBuilding branch: $(git -C . status | head -n 1 | awk '{print $3}')\n\n\n" 
+    sleep 2
+
+    . app.env && ./build.sh && docker build -t dev/var-utility-resources dist/
     popd || return
 }
 
@@ -507,7 +565,10 @@ done
 
 menu_gitsetup() {
 PS3='Please enter your choice: '
-options=("Force checkout latest dev branch" "Quit")
+options=("Force checkout latest dev branch"
+"Checkout feature var-web"
+"Checkout feature var-resources"
+"Quit")
 select opt in "${options[@]}"
 do
     case $opt in
@@ -520,6 +581,10 @@ do
             sleep 2
             ./updategitrepos.sh
             ;;
+        "Checkout feature var-web")
+        ;;
+        "Checkout feature var-resources")
+        ;;
         "Quit")
             break
             ;;
@@ -528,19 +593,85 @@ do
 done
 }
 
+featuresflag_consul_set() {
+
+    local FEATURE_FLAG=$1
+
+    curl -s -o /dev/null -H "Content-Type: application/json" -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -X PUT -d "${FEATURE_FLAG}" http://${HOST_DOMAIN}:8500/v1/kv/appconfig/${VAMF_ENVIRONMENT}/var-resources/disabledFeatures.disabledFeatures || { echo "Failed to set consul value" ; exit ; }
+
+}
+
+featuresflag_consul_get() {
+    printf "Current FEATURE FLAG: "
+    curl -H "Content-Type: application/json" -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" http://${HOST_DOMAIN}:8500/v1/kv/appconfig/${VAMF_ENVIRONMENT}/var-resources/disabledFeatures.disabledFeatures?raw=true 
+    printf "\n"
+}
+
+featuresflag_wait_for_update() {
+    printf "restarting var-resources..\n"
+    sleep 30
+
+    printf "\n\nDisabled features currently set to: \n"
+    curl http://localhost:8089/var/VeteranAppointmentRequestService/v4/rest/disabled-features
+    printf "\n\n"
+}
+
+menu_features() {
+PS3='Please enter your choice: '
+options=(
+"Check current FEATURE FLAG"
+"Clear FEATURE FLAG"
+"Set FEATURE FLAG to TH_FEATURE_SET"
+"Set FEATURE FLAG to CC_FEATURE_SET"
+"Set FEATURE FLAG to TH_FEATURE_SET,CC_FEATURE_SET"
+"Quit")
+select opt in "${options[@]}"
+do
+    case $opt in
+        "Check current FEATURE FLAG")
+            featuresflag_consul_get
+        ;;
+        "Clear FEATURE FLAG")
+            featuresflag_consul_set ""
+            featuresflag_wait_for_update
+        ;;
+        "Set FEATURE FLAG to TH_FEATURE_SET")
+            featuresflag_consul_set "TH_FEATURE_SET"
+            featuresflag_wait_for_update
+        ;;
+        "Set FEATURE FLAG to CC_FEATURE_SET")
+            featuresflag_consul_set "CC_FEATURE_SET"
+            featuresflag_wait_for_update
+        ;;
+        "Set FEATURE FLAG to TH_FEATURE_SET,CC_FEATURE_SET")
+            featuresflag_consul_set "TH_FEATURE_SET,CC_FEATURE_SET"
+            featuresflag_wait_for_update
+        ;;
+        "Quit")
+            break
+            ;;
+        *) echo "invalid option $REPLY";;
+    esac
+done
+
+}
+
 menu_setup() {
 PS3='Please enter your choice: '
-options=("Reset Stack" "Reset Docker" "Docker Pull" "Build Menu" 
+options=("Stop Stack" "Reset Docker" "Docker Pull Images" "Build Menu" 
 "Start fixtures" "Check Database"  "Start data core ss" "Start vet" "Start staff"
+"Features Flags"
 "Start var (DEV)" "Start sm (DEV)" "Start vats (DEV)"
 "Quit")
 select opt in "${options[@]}"
 do
     case $opt in
-        "Reset Stack")
+        "Stop Stack")
             echo "Removing all docker containers. . . "
             docker stop $(docker ps -a -q) && docker rm $(docker ps -a -q) || echo "Could not remove containers"
             sleep 15s
+            rm -f var-oracle-db-mock/.cache
+            ./cleanup.sh
             ;;
         "Reset Docker")
             echo "Restarting Docker Engine. . ."
@@ -548,7 +679,7 @@ do
             sleep 90s
             ./cleanup.sh
             ;;
-        "Docker Pull")
+        "Docker Pull Images")
             echo "Pulling latest images of the stack"
             docker-compose pull --ignore-pull-failures
             ;;
@@ -571,6 +702,11 @@ do
         "Start staff")
             ./run --vpn staff
             ;;
+        "Features Flags")
+            #printf "Default VAR_DISABLED_FEATURES_SET = %s\n\n" "${VAR_DISABLED_FEATURES_SET}"
+            featuresflag_consul_get
+            menu_features
+            ;;
         "Start var (DEV)")
             ./run --vpn --dev var
             ;;
@@ -590,7 +726,7 @@ done
 
 menu_main() {
 PS3='Please enter your choice: '
-options=("Login ECR" "Setup Menu" "Status Menu" "Quickstart Menu" "Build Menu" "Logs Menu" "Validate Menu" "Seed" "Git Menu" "Quit")
+options=("Login ECR" "Setup Menu" "Status Menu" "Quickstart Menu" "Build Menu" "Logs Menu" "Validate Menu" "Seed SQL Database" "Git Menu" "Quit")
 select opt in "${options[@]}"
 do
     case $opt in
@@ -615,7 +751,7 @@ do
         "Validate Menu")
             menu_validate
             ;;
-        "Seed")
+        "Seed SQL Database")
             echo "Manually seeding database.  Ensure that the fixures are up and running prior to running this command."
 			manually_seed
             ;;

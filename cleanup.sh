@@ -7,3 +7,4 @@ echo -e "\nCleaning up exited containers..."
 docker rm $(docker ps -a -f status=exited -q)
 echo -e "\nCleaning up dangling volumes..."
 docker volume rm $(docker volume ls -f dangling=true -q)
+
