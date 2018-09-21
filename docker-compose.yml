@@ -437,7 +437,42 @@ services:
       - "USE_ENVCONSUL=true"
       - JWT_SECRET=testtesttest
 
-###########################
+  # Administrative Data Repository (ADR) Service and Mock (SOAP) data source. ADR serves as a enterprise data service
+  # that allows VA apps to retrieve patient demographic and next-of-kin information
+  mock-adr:
+    #image: mobileapps.vaftl.us:9250/ckm/docker-adr-mock
+    image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ablevets/docker-adr-mock:1.0
+
+  adr-services:
+    #image: mobileapps.vaftl.us:9250/ckm/docker-adr-service:1.0.8
+    image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ablevets/docker-adr-service
+    ports:
+    - "8083:8080"
+    links:
+    - mock-adr
+    - zipkin
+    depends_on:
+    - mock-adr
+    environment:
+    - VAMF_ENVIRONMENT=local
+    # Don't use Vault, ADR doesn't have any secrets in local-dev
+    #- VAULT_ADDR=http://vault:8200
+    #- SECRET_PATH=secret/local/adr-service
+    # Use Consul
+    - USE_ENVCONSUL=true
+    - CONSUL_SERVER=consul:8500
+    - CONSUL_TOKEN=7BE784A4-7498-4469-BE2F-9C3B9444DFEF
+    - CONSUL_PATH=appconfig/local/adr-service
+    - ENDPOINT_URL=http://mock-adr:8080/adr/mockeeSummaryPortSoap11
+    - CORS_ALLOWED_ORIGIN=*
+    - JWT_SECRET=testtesttest
+    - JAVA_OPTS=-Xms256m -Xmx512m -XX:-TieredCompilation -Xss256k -XX:+UseG1GC -XX:+UseStringDeduplication
+    - SERVICE_TAGS=local
+    - TRACE_URL=http://zipkin:9411/api/v1/spans
+    - SERVICE_NAME=docker-adr-service
+    - DEV_JWT_IGNORE = true
+
+  ###########################
 ### SHARED SERVICES END ###
 ###########################
 
@@ -821,7 +856,8 @@ services:
 ##########################
 
   var-resources:
-    image: ${ENV_IMAGE_ROOT}/var-resources:${VAR_RESOURCES_VERSION}
+     image: ${ENV_IMAGE_ROOT}/var-resources:${VAR_RESOURCES_VERSION}
+   # image: dev/var-resources:latest
     ports:
      - "9092:8080"
      - "64058:64058"
@@ -847,6 +883,7 @@ services:
 
   var-web:
     image: ${ENV_IMAGE_ROOT}/var-web:${VAR_WEB_VERSION}
+    # image: dev/var-web:latest
     ports:
       - "9090:80"
     environment:
@@ -907,8 +944,8 @@ services:
       - REQUESTING_APP=
       - CONSUMING_APP_PASSWORD=TEST_PASSWORD
       - CONSUMING_APP_TOKEN=TEST_TOKEN
-      # - VIA_BASE_URL=http://10.1.0.8:8089/via-webservices/services # ablevets VIA instance 
-      
+      # - VIA_BASE_URL=http://10.1.0.8:8089/via-webservices/services # ablevets VIA instance
+
   var-utility-resources:
     image: ${ENV_IMAGE_ROOT}/var-utility-resources:${VARUT_RESOURCES_VERSION}
     ports:
