@@ -27,7 +27,7 @@
 		"_id" : "CCPCPRVDR",
 		"confirmation" : "This request currently only supports the finding of a Primary Care Provider. If you have other needs, please contact your local VA Medical Center to discuss this issue. If you are distance eligible and do not have a Primary Care Provider, you can use this app to request help in getting one assigned.",
 		"details" : "If approved, you'll be assigned to a primary care provider in the community to whom we will send the approved referral. Once assigned, you will be provided information and will need to contact the provider’s office directly for preventive and other health care needs for the duration of the approved referral.",
-		"name" : "Primary Care (find a provider)"
+		"name" : "Find a Provider (primary care)"
 	},
 	{
 		"_id": "CCNUTRN",
@@ -39,6 +39,6 @@
 		"_id": "CCPRMYRTNE",
 		"confirmation" : "This includes office visit(s) with a Primary Care Provider, focused on routine/acute patient complaints, wellness and disease prevention resulting in improved veteran health. If you have other needs, please contact your local VA Medical Center to discuss this issue. If you are not distance eligible and do not have a Primary Care Provider, you can use this app to request a VA Appointment with a Primary Care Provider.",
 		"details" : "This includes office visit(s) with a Primary Care Provider, focused on routine/acute patient complaints, wellness and disease prevention resulting in improved veteran health.",
-		"name" : "Primary Care (routine exam)"
+		"name" : "Primary Care (routine appointment)"
 	}
 ]
