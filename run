@@ -60,7 +60,6 @@ while [[ "$#" > 0 ]]; do
         var|--var) start_var; shift;;
         sm|--sm) start_sm; shift;;
         vats|--vats) start_vats; shift;;
-        adr|--adr) start_adr; shift;;
         *) echo "Unknown parameter: $1"; shift;;
     esac;
 done

@@ -318,9 +318,9 @@ services:
     environment:
     - MONGODB_ADMIN_USER=admin
     - MONGODB_ADMIN_PASS=adminpass
-    - MONGODB_APPLICATION_DATABASE=notificationsdb, remindersdb, taskresourcesdb
     - MONGODB_APPLICATION_USER=testuser
     - MONGODB_APPLICATION_PASS=testpass
+    - MONGODB_APPLICATION_DATABASE=notificationsdb, remindersdb, taskresourcesdb
     - SSL_ENABLED=false
     - AUTH_ENABLED=true
     - JOURNALING=true
@@ -443,7 +443,7 @@ services:
     #image: mobileapps.vaftl.us:9250/ckm/docker-adr-mock
     image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ablevets/docker-adr-mock:1.0
 
-  adr-services:
+  adr-service:
     #image: mobileapps.vaftl.us:9250/ckm/docker-adr-service:1.0.8
     image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ablevets/docker-adr-service
     ports:
@@ -856,8 +856,8 @@ services:
 ##########################
 
   var-resources:
-     image: ${ENV_IMAGE_ROOT}/var-resources:${VAR_RESOURCES_VERSION}
-   # image: dev/var-resources:latest
+    # image: ${ENV_IMAGE_ROOT}/var-resources:${VAR_RESOURCES_VERSION}
+    image: dev/var-resources:latest
     ports:
      - "9092:8080"
      - "64058:64058"
@@ -882,8 +882,8 @@ services:
      - JAVA_OPTS=-XX:+CMSClassUnloadingEnabled -Xrs -Dcom.sun.xml.ws.transport.http.client.HttpTransportPipe.dump=true -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=64058
 
   var-web:
-    image: ${ENV_IMAGE_ROOT}/var-web:${VAR_WEB_VERSION}
-    # image: dev/var-web:latest
+    # image: ${ENV_IMAGE_ROOT}/var-web:${VAR_WEB_VERSION}
+    image: dev/var-web:latest
     ports:
       - "9090:80"
     environment:

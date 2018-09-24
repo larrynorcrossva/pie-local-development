@@ -12,7 +12,7 @@ vet=(roa-services roa-web eula-service eula-web veteran-video-connect-service ia
 
 staff=(patient-context mock-wstrust ssoi-mock sud-service sud-web pcs-web personal-preference-service vista-data-services mdws-via-adapter staff-video-connect-service)
 
-var=(var-resources var-web)
+var=(var-resources var-web mock-adr adr-service)
 
 sm=(scheduling-manager-resources scheduling-manager-web)
 

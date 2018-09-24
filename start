@@ -130,10 +130,3 @@ function start_vats(){
     docker-compose up -d --force-recreate --no-deps "${vats[@]}"
 }
 
-function start_adr(){
-    ./consul-registration/register-adr.sh
-    echo -e "\nStarting mock-adr... \n"
-    docker-compose up -d --force-recreate mock-adr
-    echo -e "\nStart adr-services... \n"
-    docker-compose up -d --force-recreate adr-services
-}
