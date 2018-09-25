@@ -14,7 +14,7 @@ curl -H "Content-Type: application/json" -H "X-Consul-Token: ${CONSUL_MASTER_TOK
 curl -H "Content-Type: application/json" -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -X PUT -d "http://${MDWS_HOST}/mdws3.2.8/" http://${HOST_DOMAIN}:8500/v1/kv/appconfig/${VAMF_ENVIRONMENT}/var-resources/scheduling.endBasePointUrl > /dev/null
 
 
-echo "\n\n\nSetting var-resources FEATURE FLAG to ${VAR_DISABLED_FEATURES_SET}\n\n\n"
+printf "\n\n\nSetting var-resources FEATURE FLAG to ${VAR_DISABLED_FEATURES_SET}\n\n\n"
 
 curl -H "Content-Type: application/json" -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -X PUT -d "${VAR_DISABLED_FEATURES_SET}" http://${HOST_DOMAIN}:8500/v1/kv/appconfig/${VAMF_ENVIRONMENT}/var-resources/disabledFeatures.disabledFeatures > /dev/null
 
