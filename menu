@@ -224,11 +224,11 @@ validate_apigateway() {
     validate_url "staff-video-connect-service"   "http://localhost:9001/staff-videoconnect-resources/v2/"   200
 
     printf "\n\nChecking scheduling-manager. . . \n\n"
-    validate_url "scheduling-manager-web"       "http://localhost:9001/scheduling-manager/v3/version.json"    200
-    validate_url "scheduling-manager-resources" "http://localhost:9001/SchedulingManagerService/"             200
+    validate_url "scheduling-manager-web"       "http://localhost:9001/scheduling-manager/v3/version.json"  200
+    validate_url "scheduling-manager-resources" "http://localhost:9001/SchedulingManagerService/"           200
 
     printf "\n\nChecking var. . . \n\n"
-    validate_url "var-web"                      "http://localhost:9000/var/v4/version.json"    200
+    validate_url "var-web"                      "http://localhost:9000/var/v4/version.json"                 200
     validate_url "var-resources"                "http://localhost:9000/var/VeteranAppointmentRequestService/v4/rest/" 200
 }
 
@@ -340,7 +340,7 @@ build_var_web() {
     pushd ../var-web/ || return
     npm install
 
-    echo "\n\nBuilding branch: $(git -C . status | head -n 1 | awk '{print $3}')\n\n\n" 
+    printf "\n\nBuilding branch: $(git -C . status | head -n 1 | awk '{print $3}')\n\n\n" 
     sleep 2
     
     . app.env && ./build.sh && docker build -t dev/var-web dist/
@@ -356,7 +356,7 @@ build_var_resources() {
 
     pushd ../var-resources/ || return
 
-    echo "\n\nBuilding branch: $(git -C . status | head -n 1 | awk '{print $3}')\n\n\n" 
+    printf "\n\nBuilding branch: $(git -C . status | head -n 1 | awk '{print $3}')\n\n\n" 
     sleep 2
 
     . app.env && ./build.sh && docker build -t dev/var-resources dist/
@@ -372,7 +372,7 @@ build_sm_web() {
 
     pushd ../scheduling-manager-web/ || return
 
-    echo "\n\nBuilding branch: $(git -C . status | head -n 1 | awk '{print $3}')\n\n\n" 
+    printf "\n\nBuilding branch: $(git -C . status | head -n 1 | awk '{print $3}')\n\n\n" 
     sleep 2
 
     npm install
@@ -389,7 +389,7 @@ build_sm_resources() {
 
     pushd ../scheduling-manager-resources/ || return
 
-    echo "\n\nBuilding branch: $(git -C . status | head -n 1 | awk '{print $3}')\n\n\n" 
+    printf "\n\nBuilding branch: $(git -C . status | head -n 1 | awk '{print $3}')\n\n\n" 
     sleep 2
 
     . app.env && ./build.sh && docker build -t dev/scheduling-manager-resources dist/
@@ -406,7 +406,7 @@ build_vats_web() {
     pushd ../var-utility-web/ || return
     npm install
 
-    echo "\n\nBuilding branch: $(git -C . status | head -n 1 | awk '{print $3}')\n\n\n" 
+    printf "\n\nBuilding branch: $(git -C . status | head -n 1 | awk '{print $3}')\n\n\n" 
     sleep 2
     
     . app.env && ./build.sh && docker build -t dev/var-utility-web dist/
@@ -422,7 +422,7 @@ build_vats_resources() {
 
     pushd ../var-utility-resources/ || return
 
-    echo "\n\nBuilding branch: $(git -C . status | head -n 1 | awk '{print $3}')\n\n\n" 
+    printf "\n\nBuilding branch: $(git -C . status | head -n 1 | awk '{print $3}')\n\n\n" 
     sleep 2
 
     . app.env && ./build.sh && docker build -t dev/var-utility-resources dist/
