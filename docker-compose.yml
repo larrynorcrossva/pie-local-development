@@ -441,7 +441,10 @@ services:
   # that allows VA apps to retrieve patient demographic and next-of-kin information
   mock-adr:
     #image: mobileapps.vaftl.us:9250/ckm/docker-adr-mock
-    image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ablevets/docker-adr-mock:1.0
+    #image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ablevets/docker-adr-mock:1.0
+    image: vamf/adrmock-soapui:v1
+    ports:
+    - "8090:8080"
 
   adr-service:
     #image: mobileapps.vaftl.us:9250/ckm/docker-adr-service:1.0.8
