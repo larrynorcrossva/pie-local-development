@@ -6,7 +6,7 @@ core=(registrator apigateway user-services mock-mvi wayf-web authorization-rules
 
 utilities=(swagger-ui zipkin)
 
-ss=(var-messaging-microservice facility-service vmr-mock-service video-visits-service messaging-publisher vista-scheduling-service appointment-service)
+ss=(var-messaging-microservice facility-service vmr-mock-service video-visits-service messaging-publisher vista-scheduling-service appointment-service cdw-service task-resources)
 
 vet=(roa-services roa-web eula-service eula-web veteran-video-connect-service iamssoe-proxy-mock iamssoe-db-mock)
 
