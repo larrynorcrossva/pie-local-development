@@ -71,7 +71,8 @@ services:
   # to create JWT security tokens and augmenting user identities with other identifiers from the MVI (specifically ICN)
   #
   mock-mvi:
-    image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ablevets/var-mock-mvi:1.1-user-services-1.8.0-0822-dfn-100862-mockuser15-hack
+    #image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ablevets/var-mock-mvi:1.1-user-services-1.8.0-0822-dfn-100862-mockuser15-hack
+    image: dev/var-mock-mvi:latest
     ports:
       - "35219:8080"
     environment:
@@ -447,8 +448,7 @@ services:
     - "8090:8080"
 
   adr-service:
-    #image: mobileapps.vaftl.us:9250/ckm/docker-adr-service:1.0.8
-    image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ablevets/docker-adr-service
+    image: mobileapps.vaftl.us:9250/ckm/adr-services:1.2.0
     ports:
     - "8083:8080"
     links:
@@ -473,7 +473,7 @@ services:
     - SERVICE_TAGS=local
     - TRACE_URL=http://zipkin:9411/api/v1/spans
     - SERVICE_NAME=docker-adr-service
-    - DEV_JWT_IGNORE = true
+    - DEV_JWT_IGNORE=true
 
   ###########################
 ### SHARED SERVICES END ###
@@ -574,7 +574,8 @@ services:
 
 #Mock database to store identity information
   iamssoe-db-mock:
-    image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ablevets/idp-db-mock-shared:1.1-user-services-1.8.0
+    #image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ablevets/idp-db-mock-shared:1.1-user-services-1.8.0
+    image: dev/iamssoe-db-mock:latest
     container_name: iamssoe-db-mock
     ports:
       - 3306:3306
@@ -859,8 +860,7 @@ services:
 ##########################
 
   var-resources:
-    # image: ${ENV_IMAGE_ROOT}/var-resources:${VAR_RESOURCES_VERSION}
-    image: dev/var-resources:latest
+    image: ${ENV_IMAGE_ROOT}/var-resources:${VAR_RESOURCES_VERSION}
     ports:
      - "9092:8080"
      - "64058:64058"
@@ -885,8 +885,7 @@ services:
      - JAVA_OPTS=-XX:+CMSClassUnloadingEnabled -Xrs -Dcom.sun.xml.ws.transport.http.client.HttpTransportPipe.dump=true -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=64058
 
   var-web:
-    # image: ${ENV_IMAGE_ROOT}/var-web:${VAR_WEB_VERSION}
-    image: dev/var-web:latest
+    image: ${ENV_IMAGE_ROOT}/var-web:${VAR_WEB_VERSION}
     ports:
       - "9090:80"
     environment:
