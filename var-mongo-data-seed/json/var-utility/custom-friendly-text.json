@@ -1,0 +1,160 @@
+[
+    {
+        "_class": "gov.va.vamf.scheduling.varutility.domain.CustomFriendlyText",
+        "siteCode": "631",
+        "friendlyText": "VA Central Westerner"
+    },
+    {
+        "_class": "gov.va.vamf.scheduling.varutility.domain.CustomFriendlyText",
+        "siteCode": "523BZ",
+        "friendlyText": "BOSTON SOC"
+    },
+    {
+        "_class": "gov.va.vamf.scheduling.varutility.domain.CustomFriendlyText",
+        "siteCode": "523",
+        "friendlyText": "BOSTON HCS VAMC"
+    },
+    {
+        "_class": "gov.va.vamf.scheduling.varutility.domain.CustomFriendlyText",
+        "siteCode": "523PA",
+        "friendlyText": "BOSTON PRRTP"
+    },
+    {
+        "_class": "gov.va.vamf.scheduling.varutility.domain.CustomFriendlyText",
+        "siteCode": "523SCI",
+        "friendlyText": "BOSTON SPINAL CORD OUTCOMES"
+    },
+    {
+        "_class": "gov.va.vamf.scheduling.varutility.domain.CustomFriendlyText",
+        "siteCode": "523BV",
+        "friendlyText": "BOSTON VA FACILITY DOM"
+    },
+    {
+        "_class": "gov.va.vamf.scheduling.varutility.domain.CustomFriendlyText",
+        "siteCode": "523QA",
+        "friendlyText": "BOSTON VA MOBILE CLINIC"
+    },
+    {
+        "_class": "gov.va.vamf.scheduling.varutility.domain.CustomFriendlyText",
+        "siteCode": "523BU",
+        "friendlyText": "BROCKTON DOM"
+    },
+    {
+        "_class": "gov.va.vamf.scheduling.varutility.domain.CustomFriendlyText",
+        "siteCode": "523A5",
+        "friendlyText": "BROCKTON VAMC"
+    },
+    {
+        "_class": "gov.va.vamf.scheduling.varutility.domain.CustomFriendlyText",
+        "siteCode": "523DT",
+        "friendlyText": "CHELSEA"
+    },
+    {
+        "_class": "gov.va.vamf.scheduling.varutility.domain.CustomFriendlyText",
+        "siteCode": "523GA",
+        "friendlyText": "FRAMINGHAM"
+    },
+    {
+        "_class": "gov.va.vamf.scheduling.varutility.domain.CustomFriendlyText",
+        "siteCode": "523MA",
+        "friendlyText": "IDES HANSCOM AFB"
+    },
+    {
+        "_class": "gov.va.vamf.scheduling.varutility.domain.CustomFriendlyText",
+        "siteCode": "523BY",
+        "friendlyText": "LOWELL OPC"
+    },
+    {
+        "_class": "gov.va.vamf.scheduling.varutility.domain.CustomFriendlyText",
+        "siteCode": "523GD",
+        "friendlyText": "PLYMOUTH CBOC"
+    },
+    {
+        "_class": "gov.va.vamf.scheduling.varutility.domain.CustomFriendlyText",
+        "siteCode": "523GC",
+        "friendlyText": "QUINCY"
+    },
+    {
+        "_class": "gov.va.vamf.scheduling.varutility.domain.CustomFriendlyText",
+        "siteCode": "523A4",
+        "friendlyText": "WEST ROXBURY"
+    },
+    {
+        "_class": "gov.va.vamf.scheduling.varutility.domain.CustomFriendlyText",
+        "siteCode": "523GB",
+        "friendlyText": "WORCESTER"
+    },
+    {
+        "_class": "gov.va.vamf.scheduling.varutility.domain.CustomFriendlyText",
+        "siteCode": "523GE",
+        "friendlyText": "ZZ-DORCHESTER"
+    },
+    {
+        "_class": "gov.va.vamf.scheduling.varutility.domain.CustomFriendlyText",
+        "siteCode": "5239AA",
+        "friendlyText": "ZZBOSTON NURSING HOME"
+    },
+    {
+        "_class": "gov.va.vamf.scheduling.varutility.domain.CustomFriendlyText",
+        "siteCode": "636GF",
+        "friendlyText": "BETTENDORF CBOC"
+    },
+    {
+        "_id": {
+            "$oid": "5bb222dacb48162e0b0e0d38"
+        },
+        "_class": "gov.va.vamf.scheduling.varutility.domain.CustomFriendlyText",
+        "siteCode": "636GJ",
+        "friendlyText": "DUBUQUE CBOC"
+    },
+    {
+        "_class": "gov.va.vamf.scheduling.varutility.domain.CustomFriendlyText",
+        "siteCode": "636A8",
+        "friendlyText": "IOWA CITY HCS"
+    },
+    {
+        "_class": "gov.va.vamf.scheduling.varutility.domain.CustomFriendlyText",
+        "siteCode": "636GA",
+        "friendlyText": "NORFOLK CBOC"
+    },
+    {
+        "_class": "gov.va.vamf.scheduling.varutility.domain.CustomFriendlyText",
+        "siteCode": "636BX",
+        "friendlyText": "OMAHA VA FACILITY DOM"
+    },
+    {
+        "_class": "gov.va.vamf.scheduling.varutility.domain.CustomFriendlyText",
+        "siteCode": "636GG",
+        "friendlyText": "QUINCY CBOC"
+    },
+    {
+        "_class": "gov.va.vamf.scheduling.varutility.domain.CustomFriendlyText",
+        "siteCode": "636GT",
+        "friendlyText": "STERLING CBOC"
+    },
+    {
+        "_class": "gov.va.vamf.scheduling.varutility.domain.CustomFriendlyText",
+        "siteCode": "636A6",
+        "friendlyText": "VA CIHS, DES MOINES DIVISION"
+    },
+    {
+        "_class": "gov.va.vamf.scheduling.varutility.domain.CustomFriendlyText",
+        "siteCode": "636A4",
+        "friendlyText": "VA NWIHS, GRAND ISLAND DIV"
+    },
+    {
+        "_class": "gov.va.vamf.scheduling.varutility.domain.CustomFriendlyText",
+        "siteCode": "636A5",
+        "friendlyText": "VA NWIHS, LINCOLN DIVISION"
+    },
+    {
+        "_class": "gov.va.vamf.scheduling.varutility.domain.CustomFriendlyText",
+        "siteCode": "636",
+        "friendlyText": "VA NWIHS, OMAHA DIVISION"
+    },
+    {
+        "_class": "gov.va.vamf.scheduling.varutility.domain.CustomFriendlyText",
+        "siteCode": "636GH",
+        "friendlyText": "WATERLOO CBOC"
+    }
+]
