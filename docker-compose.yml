@@ -501,7 +501,7 @@ services:
     mem_limit: 3GB
 
   cdw-service:
-    image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ckm/docker-cdw-service:1.11.0
+    image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ckm/cdw-services:2.0.1
     container_name: cdw-service
     ports:
       - 8072:8080
@@ -513,6 +513,7 @@ services:
 #     - DB_MOBILEHEALTH_URL=jdbc:jtds:sqlserver://mock-cdw:1433;databaseName=OIA_MOBILEHEALTH ##
 #     - DB_MOBILEHEALTH_USERNAME=sa
 #     - DB_MOBILEHEALTH_PASSWORD=IS4skwnfuglx928361V
+      - REDIS_HOST=redis
       - CORS_ALLOWED_ORIGIN=*
       - JAVA_OPTS=-Xms64m -Xmx256m -XX:-TieredCompilation -Xss256k -XX:+UseG1GC -XX:+UseStringDeduplication
       - SERVICE_TAGS=${VAMF_ENVIRONMENT}
@@ -774,7 +775,7 @@ services:
 
   # VistA Scheduling Service (VSS) - exposes vista data by using the mdws to via adapter
   vista-scheduling-service:
-    image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ckm/vista-scheduling-service:2.0.2
+    image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ckm/vista-scheduling-service:2.1.0
     ports:
      - 8185:8080
      - 18096:5005
@@ -956,7 +957,7 @@ services:
       - SERVICE_NAME=scheduling-manager-web
 
   appointment-service:
-    image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ckm/mobile-appointment-service:1.2.0
+    image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ckm/mobile-appointment-service:1.2.1
     ports:
       - "9097:8080"
       - "19097:5005"
