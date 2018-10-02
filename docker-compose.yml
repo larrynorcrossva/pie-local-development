@@ -455,7 +455,7 @@ services:
       - CONSUL_SERVER=consul:8500
       - CONSUL_TOKEN=7BE784A4-7498-4469-BE2F-9C3B9444DFEF
       - CONSUL_PATH=appconfig/local/video-visits-service
-      - "TRACE_URL=http://localhost:9411/api/v1/spans"
+      - "TRACE_URL=http://zipkin:9411/api/v1/spans"
 
   messaging-publisher:
     image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ablevets/messaging-publisher:1.0.1
@@ -986,6 +986,7 @@ services:
       - REQUESTING_APP=
       - CONSUMING_APP_PASSWORD=TEST_PASSWORD
       - CONSUMING_APP_TOKEN=TEST_TOKEN
+      - TRACE_URL=http://zipkin:9411/api/v1/spans
       
   var-utility-resources:
     image: ${ENV_IMAGE_ROOT}/var-utility-resources:${VARUT_RESOURCES_VERSION}
