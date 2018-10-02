@@ -365,9 +365,9 @@ services:
     environment:
     - MONGODB_ADMIN_USER=admin
     - MONGODB_ADMIN_PASS=adminpass
+    - MONGODB_APPLICATION_DATABASE=notificationsdb, remindersdb, taskresourcesdb
     - MONGODB_APPLICATION_USER=testuser
     - MONGODB_APPLICATION_PASS=testpass
-    - MONGODB_APPLICATION_DATABASE=notificationsdb, remindersdb, taskresourcesdb
     - SSL_ENABLED=false
     - AUTH_ENABLED=true
     - JOURNALING=true
@@ -1022,7 +1022,6 @@ services:
       - REQUESTING_APP=
       - CONSUMING_APP_PASSWORD=TEST_PASSWORD
       - CONSUMING_APP_TOKEN=TEST_TOKEN
-      # - VIA_BASE_URL=http://10.1.0.8:8089/via-webservices/services # ablevets VIA instance
 
 
   var-utility-resources:
