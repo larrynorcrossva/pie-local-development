@@ -980,7 +980,7 @@ services:
       - VIA_BASE_URL=http://10.1.0.8:8089/via-webservices/services # ablevets VIA instance
       - VVS_BASE_URL=http://video-visits-service:8080/video-visit-resources/v2
       - VDS_SCH_SERVICE_URL=http://vista-scheduling-service:8080/VistaSchedulingService/v2
-      - CDW_SERVICE_BASE_URL=http://cdw-service:8080/cdw/v1
+      - CDW_SERVICE_BASE_URL=http://cdw-service:8080/cdw/v2
       # - CCS_BASE_URL= # not used if unspecified
       - DISPLAY_APPOINTMENTS_CLINIC_DISPLAY_NULL=false # default: false, required for TH
       - REQUESTING_APP=
