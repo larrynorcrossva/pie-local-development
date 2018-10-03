@@ -531,7 +531,7 @@ services:
     - "8090:8080"
 
   adr-service:
-    image: mobileapps.vaftl.us:9250/ckm/adr-services:1.2.0
+    image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ckm/adr-services:1.2.0
     ports:
     - "8083:8080"
     links:
