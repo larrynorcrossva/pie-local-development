@@ -107,9 +107,9 @@ validate_ss() {
     validate_url "vista-scheduling-service"      "http://localhost:8185/VistaSchedulingService/v2/"  200
     validate_url "appointment-service"           "http://localhost:9097/appointments/v1/"            200
     validate_url "cdw-service"                   "http://localhost:8072/cdw/v1/"                     200
+    validate_url "facility-service"              "http://localhost:7501/FacilityService/v2/rest/public/facility/timezone"   200
 
     # The following are not routable through apigateway, and do not have exposed ports:
-    ## facility-resources
     ## var-messaging-microservice
 }
 
@@ -202,6 +202,7 @@ validate_apigateway() {
     validate_url "vista-scheduling-service"      "http://localhost:8089/VistaSchedulingService/v2/"  200
     validate_url "appointment-service"           "http://localhost:8089/appointments/v1/"            200
     validate_url "cdw-service"                   "http://localhost:8089/cdw/v1/"                     200
+    validate_url "facility-service"              "http://localhost:8089/FacilityService/v2/rest/public/facility/timezone"   200
 
     printf "Checking vet. . . \n"
     validate_url "eula-service"                  "http://localhost:9000/eula/v1/"                           200
@@ -219,8 +220,8 @@ validate_apigateway() {
     validate_url "scheduling-manager-resources" "http://localhost:9001/SchedulingManagerService/"             200
 
     printf "Checking var. . . \n"
-
-
+    validate_url "var-web"                      "http://localhost:9000/var/v4/version.json"                     200
+    validate_url "var-resources"                "http://localhost:9000/var/VeteranAppointmentRequestService//"  200
 }
 
 validate_compose_config() {
