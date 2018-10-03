@@ -957,7 +957,7 @@ services:
       - SERVICE_NAME=scheduling-manager-web
 
   appointment-service:
-    image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ckm/mobile-appointment-service:1.2.1
+    image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ckm/mobile-appointment-service:1.2.2
     ports:
       - "9097:8080"
       - "19097:5005"
