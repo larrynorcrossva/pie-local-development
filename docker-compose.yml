@@ -547,8 +547,8 @@ services:
     # Use Consul
     - USE_ENVCONSUL=true
     - CONSUL_SERVER=consul:8500
-    - CONSUL_TOKEN=7BE784A4-7498-4469-BE2F-9C3B9444DFEF
-    - CONSUL_PATH=appconfig/local/adr-service
+    - CONSUL_TOKEN=$CONSUL_MASTER_TOKEN
+    - CONSUL_PATH=appconfig/${VAMF_ENVIRONMENT}/adr-service
     - CORS_ALLOWED_ORIGIN=*
     - JAVA_OPTS=-Xms256m -Xmx512m -XX:-TieredCompilation -Xss256k -XX:+UseG1GC -XX:+UseStringDeduplication
     - SERVICE_TAGS=local
