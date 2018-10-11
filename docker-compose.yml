@@ -552,6 +552,7 @@ services:
     - CORS_ALLOWED_ORIGIN=*
     - JAVA_OPTS=-Xms256m -Xmx512m -XX:-TieredCompilation -Xss256k -XX:+UseG1GC -XX:+UseStringDeduplication
     - SERVICE_TAGS=local
+    - SERVICE_NAME=adr-service
 
 ###########################
 ### SHARED SERVICES END ###
