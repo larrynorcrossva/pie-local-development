@@ -82,7 +82,7 @@ services:
   # to create JWT security tokens and augmenting user identities with other identifiers from the MVI (specifically ICN)
   #
   mock-mvi:
-    image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ablevets/var-mock-mvi:1.1-user-services-1.8.0-0822-dfn-100862-mockuser15-hack
+    image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ablevets/var-mock-mvi:1.1-user-services-1.8.0-mockuser25-VAR-13144
     container_name: mock-mvi
     volumes:
       - ./healthchecks:/opt/healthchecks
@@ -524,6 +524,37 @@ services:
       - TRACE_URL=http://zipkin:9411/api/v1/spans
     restart: on-failure:5
 
+  # Administrative Data Repository (ADR) Service and Mock (SOAP) data source. ADR serves as a enterprise data service
+  # that allows VA apps to retrieve patient demographic and next-of-kin information
+  mock-adr:
+    image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ckm/docker-adr-mock:1.1-new
+    ports:
+    - "8090:8080"
+
+  adr-service:
+    image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ckm/adr-services:1.2.0
+    ports:
+    - "8083:8080"
+    links:
+    - mock-adr
+    - zipkin
+    depends_on:
+    - mock-adr
+    environment:
+    - VAMF_ENVIRONMENT=local
+    # Don't use Vault, ADR doesn't have any secrets in local-dev
+    #- VAULT_ADDR=http://vault:8200
+    #- SECRET_PATH=secret/local/adr-service
+    # Use Consul
+    - USE_ENVCONSUL=true
+    - CONSUL_SERVER=consul:8500
+    - CONSUL_TOKEN=$CONSUL_MASTER_TOKEN
+    - CONSUL_PATH=appconfig/${VAMF_ENVIRONMENT}/adr-service
+    - CORS_ALLOWED_ORIGIN=*
+    - JAVA_OPTS=-Xms256m -Xmx512m -XX:-TieredCompilation -Xss256k -XX:+UseG1GC -XX:+UseStringDeduplication
+    - SERVICE_TAGS=local
+    - SERVICE_NAME=adr-service
+
 ###########################
 ### SHARED SERVICES END ###
 ###########################
@@ -620,7 +651,7 @@ services:
 
 #Mock database to store identity information
   iamssoe-db-mock:
-    image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ablevets/idp-db-mock-shared:1.1-user-services-1.8.0
+    image:  181140462490.dkr.ecr.us-east-1.amazonaws.com/ablevets/idp-db-mock-shared:1.1.3-VAR-13144
     container_name: iamssoe-db-mock
     ports:
       - 3306:3306
@@ -987,7 +1018,7 @@ services:
       - CONSUMING_APP_PASSWORD=TEST_PASSWORD
       - CONSUMING_APP_TOKEN=TEST_TOKEN
       - TRACE_URL=http://zipkin:9411/api/v1/spans
-      
+
   var-utility-resources:
     image: ${ENV_IMAGE_ROOT}/var-utility-resources:${VARUT_RESOURCES_VERSION}
     ports:
