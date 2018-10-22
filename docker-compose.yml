@@ -496,7 +496,7 @@ services:
     expose:
       - "8080"
     ports:
-      - "8080"
+      - "8288:8080"
     environment:
       - "constraint:nodetype==*service*"
       - "SERVICE_NAME=task-resources"

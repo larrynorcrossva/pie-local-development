@@ -1,6 +1,6 @@
 # Services are organized into buckets.  When maintained in a single location, the other service scripts can source this file to incorporate changes.
 
-fixtures=(mock-roa var-mongo-db-mock var-oracle-db-mock video-visits-mongo-mock vvs-mongo-mock mock-adr)
+fixtures=(mock-roa var-mongo-db-mock var-oracle-db-mock video-visits-mongo-mock vvs-mongo-mock mock-adr mongo)
 
 core=(registrator apigateway user-services mock-mvi wayf-web authorization-rules-service redis)
 

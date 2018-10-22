@@ -109,7 +109,7 @@ validate_ss() {
 
     validate_url "var-messaging-microservice"    "http://localhost:8079/video-visit-resources/v2/"   200
     validate_url "vmr-mock-service"              "http://localhost:8284/vmr-mock-services/v2/ws"     405
-    validate_url "task-resources"                "http://localhost:32788/trs/v1/"                    200
+    validate_url "task-resources"                "http://localhost:8288/trs/v1/"                     200
     validate_url "messaging-publisher"           "http://localhost:7090/messaging-publisher/v1/"     200
     validate_url "video-visits-service"          "http://localhost:8079/video-visit-resources/v2/"   200
     validate_url "vista-scheduling-service"      "http://localhost:8185/VistaSchedulingService/v2/"  200
