@@ -91,6 +91,7 @@ services:
     environment:
       - SERVICE_TAGS=local
       - SERVICE_NAME=mock-mvi
+      - "CATALINA_OPTS=-Xms128m -Xmx256m -XX:-TieredCompilation -Xss256k -XX:+UseG1GC -XX:+UseStringDeduplication"
     healthcheck:
       test: ["CMD", "bash", "/opt/healthchecks/healthcheck-mvi.sh"]
       interval: 15s
@@ -212,6 +213,7 @@ services:
       - ENABLE_ZIPKIN=false
       - SERVICE_TAGS=local
       - SERVICE_NAME=eula-service
+      - "JAVA_OPTS=-Xms256m -Xmx512m -XX:-TieredCompilation -Xss256k -XX:+UseG1GC -XX:+UseStringDeduplication"
 
   ## Swagger UI for working with contracts
   swagger-ui:
@@ -415,6 +417,7 @@ services:
       - CONSUL_SERVER=consul:8500
       - CONSUL_TOKEN=7BE784A4-7498-4469-BE2F-9C3B9444DFEF
       - CONSUL_PATH=appconfig/local/var-messaging-microservice
+      - "JAVA_OPTS=-Xms256m -Xmx512m -XX:-TieredCompilation -Xss256k -XX:+UseG1GC -XX:+UseStringDeduplication"
 
   facility-service:
     image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ablevets/facility-resources:2.1.0
@@ -430,6 +433,7 @@ services:
       - CONSUL_SERVER=consul:8500
       - CONSUL_TOKEN=7BE784A4-7498-4469-BE2F-9C3B9444DFEF
       - CONSUL_PATH=appconfig/local/facility-resources
+      - "JAVA_OPTS=-Xms256m -Xmx512m -XX:-TieredCompilation -Xss256k -XX:+UseG1GC -XX:+UseStringDeduplication"
 
   vmr-mock-service:
     image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ablevets/vmr-mock-service:latest
@@ -444,6 +448,7 @@ services:
      - CONSUL_SERVER=consul:8500
      - CONSUL_TOKEN=${CONSUL_MASTER_TOKEN}
      - CONSUL_PATH=appconfig/${VAMF_ENVIRONMENT}/vmr-mock-service
+     - "JAVA_OPTS=-Xms256m -Xmx512m -XX:-TieredCompilation -Xss256k -XX:+UseG1GC -XX:+UseStringDeduplication"
 
   video-visits-service:
     image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ablevets/video-visits-service:2.4.3
@@ -466,6 +471,7 @@ services:
       - CONSUL_TOKEN=7BE784A4-7498-4469-BE2F-9C3B9444DFEF
       - CONSUL_PATH=appconfig/local/video-visits-service
       - "TRACE_URL=http://zipkin:9411/api/v1/spans"
+      - "JAVA_OPTS=-Xms256m -Xmx512m -XX:-TieredCompilation -Xss256k -XX:+UseG1GC -XX:+UseStringDeduplication"
 
   messaging-publisher:
     image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ablevets/messaging-publisher:1.0.1
@@ -481,6 +487,7 @@ services:
      - CONSUL_TOKEN=${CONSUL_MASTER_TOKEN}
      - CONSUL_PATH=appconfig/${VAMF_ENVIRONMENT}/messaging-publisher
      - "TRACE_URL=http://zipkin:9411/api/v1/spans"
+     - "JAVA_OPTS=-Xms256m -Xmx512m -XX:-TieredCompilation -Xss256k -XX:+UseG1GC -XX:+UseStringDeduplication"
 
   task-resources:
     image: mobileapps.vaftl.us:9250/ckm/task-resources:1.0.5
@@ -575,7 +582,7 @@ services:
     - CONSUL_TOKEN=$CONSUL_MASTER_TOKEN
     - CONSUL_PATH=appconfig/${VAMF_ENVIRONMENT}/adr-service
     - CORS_ALLOWED_ORIGIN=*
-    - JAVA_OPTS=-Xms256m -Xmx512m -XX:-TieredCompilation -Xss256k -XX:+UseG1GC -XX:+UseStringDeduplication
+    - JAVA_OPTS=-Xms128m -Xmx256m -XX:-TieredCompilation -Xss256k -XX:+UseG1GC -XX:+UseStringDeduplication
     - SERVICE_TAGS=local
     - SERVICE_NAME=adr-service
 
@@ -659,6 +666,7 @@ services:
       - CONSUL_TOKEN=7BE784A4-7498-4469-BE2F-9C3B9444DFEF
       - CONSUL_PATH=appconfig/${VAMF_ENVIRONMENT}/veteran-video-connect-service
       - "TRACE_URL=http://localhost:9411/api/v1/spans"
+      - "JAVA_OPTS=-Xms256m -Xmx512m -XX:-TieredCompilation -Xss256k -XX:+UseG1GC -XX:+UseStringDeduplication"
 
 # IAM SSOe Mock - Injects HTTP headers to simulate SSOe token header injection. Allows log in/out.
   iamssoe-proxy-mock:
@@ -801,6 +809,7 @@ services:
      - CONSUL_TOKEN=7BE784A4-7498-4469-BE2F-9C3B9444DFEF
      - CONSUL_PATH=appconfig/${VAMF_ENVIRONMENT}/personal-preference-service
      - "TRACE_URL=http://zipkin:9411/api/v1/spans"
+     - "JAVA_OPTS=-Xms256m -Xmx512m -XX:-TieredCompilation -Xss256k -XX:+UseG1GC -XX:+UseStringDeduplication"
 
    # Mock for VIA data service
    #  mock-via:
@@ -922,6 +931,7 @@ services:
      - CONSUL_TOKEN=7BE784A4-7498-4469-BE2F-9C3B9444DFEF
      - CONSUL_PATH=appconfig/local/staff-video-connect-service
      - "TRACE_URL=http://zipkin:9411/api/v1/spans"
+     - "JAVA_OPTS=-Xms256m -Xmx512m -XX:-TieredCompilation -Xss256k -XX:+UseG1GC -XX:+UseStringDeduplication"
 
   # apt-reminder-publisher:
   #   image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ablevets/apt-reminder-publisher:1.0.1
@@ -984,7 +994,7 @@ services:
      - CONSUL_PATH=appconfig/local/var-resources
      - mock.mvi=false
      - JWT_SECRET=testtesttest
-     - JAVA_OPTS=-XX:+CMSClassUnloadingEnabled -Xrs -Dcom.sun.xml.ws.transport.http.client.HttpTransportPipe.dump=true -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=64058
+     - "JAVA_OPTS=-Xms128m -Xmx2g -XX:-TieredCompilation -Xss256k -XX:+UseG1GC -XX:+UseStringDeduplication -Dcom.sun.xml.ws.transport.http.client.HttpTransportPipe.dump=true -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=64058"
 
   var-web:
     image: ${ENV_IMAGE_ROOT}/var-web:${VAR_WEB_VERSION}
@@ -1013,7 +1023,7 @@ services:
      - CONSUL_TOKEN=7BE784A4-7498-4469-BE2F-9C3B9444DFEF
      - CONSUL_PATH=appconfig/local/scheduling-manager-resources
      - JWT_SECRET=testtesttest
-     - JAVA_OPTS=-XX:+CMSClassUnloadingEnabled -Xrs -Dcom.sun.xml.ws.transport.http.client.HttpTransportPipe.dump=true -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=64059
+     - "JAVA_OPTS=-Xms256m -Xmx512m -XX:-TieredCompilation -Xss256k -XX:+UseG1GC -XX:+UseStringDeduplication -Dcom.sun.xml.ws.transport.http.client.HttpTransportPipe.dump=true -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=64059"
 
   scheduling-manager-web:
     image: ${ENV_IMAGE_ROOT}/scheduling-manager-web:${SM_WEB_VERSION}
@@ -1071,7 +1081,7 @@ services:
       - CONSUL_TOKEN=7BE784A4-7498-4469-BE2F-9C3B9444DFEF
       - CONSUL_PATH=appconfig/local/var-utility-resources
       - JWT_SECRET=testtesttest
-      - JAVA_OPTS=-XX:+CMSClassUnloadingEnabled -Xrs -Dcom.sun.xml.ws.transport.http.client.HttpTransportPipe.dump=true -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=64060
+      - "JAVA_OPTS=-Xms256m -Xmx512m -XX:-TieredCompilation -Xss256k -XX:+UseG1GC -XX:+UseStringDeduplication -Dcom.sun.xml.ws.transport.http.client.HttpTransportPipe.dump=true -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=64060"
 
   var-utility-web:
     image: ${ENV_IMAGE_ROOT}/var-utility-web:${VARUT_WEB_VERSION}
