@@ -24,12 +24,6 @@
 		"name" : "Podiatry (routine exam)"
 	},
 	{
-		"_id" : "CCPCPRVDR",
-		"confirmation" : "This request currently only supports the finding of a Primary Care Provider. If you have other needs, please contact your local VA Medical Center to discuss this issue. If you are distance eligible and do not have a Primary Care Provider, you can use this app to request help in getting one assigned.",
-		"details" : "If approved, you'll be assigned to a primary care provider in the community to whom we will send the approved referral. Once assigned, you will be provided information and will need to contact the provider’s office directly for preventive and other health care needs for the duration of the approved referral.",
-		"name" : "Find a Provider (primary care)"
-	},
-	{
 		"_id": "CCNUTRN",
 		"confirmation" : "This includes office visit(s) which will provide education on a healthy lifestyle including food and drink choices, reading food labels, and limits on nutritional intake. If you have other needs, please contact your local VA Medical Center to discuss this issue. If you are distance eligible and do not have a Primary Care Provider, you can use this app to request help in getting one assigned.",
 		"details" : "This includes office visit(s) which will provide education on a healthy lifestyle including food and drink choices, reading food labels, and limits on nutritional intake.",

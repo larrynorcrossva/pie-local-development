@@ -385,8 +385,7 @@ services:
 ### DATA SEED START ###
 #######################
   var-mongo-data-seed:
-    image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ablevets/var-mongo-data-seed:1.0.2
-#    image: dev/var-mongo-data-seed
+    image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ablevets/var-mongo-data-seed:1.0.3
     volumes:
       - ./var-mongo-db-mock/data:/docker-entrypoint-initdb.d/
     depends_on:
