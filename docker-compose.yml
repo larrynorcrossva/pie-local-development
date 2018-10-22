@@ -180,6 +180,7 @@ services:
   # End User License Agreement (EULA) Service v1
   eula-web:
     image: mobileapps.vaftl.us:9250/ckm/eula-web:1.0.4
+    container_name: eula-web
     ports:
       - 8101:80
     environment:
@@ -188,6 +189,7 @@ services:
 
   eula-service:
     image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ckm/eula-service:1.1.4
+    container_name: eula-service
     expose:
       - "8080"
     ports:
@@ -214,12 +216,14 @@ services:
   ## Swagger UI for working with contracts
   swagger-ui:
     image: swaggerapi/swagger-ui
+    container_name: swagger-ui
     ports:
      - "8091:8080"
 
   # Where Are You From? (WAYF) web App. WAYF is a CSS/HTML/JS client-side web application.
   wayf-web:
     image: mobileapps.vaftl.us:9250/ckm/wayf-app:1.0.3
+    container_name: wayf-web
     ports:
     - 8092:80
     environment:
@@ -320,6 +324,7 @@ services:
 
   vvs-mongo-mock:
     image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ckm/vamf/appointment-service-vvs-mongo-mock:1.0.0
+    container_name: vvs-mongo-mock
     ports:
       - "27014:27017"
     environment:
@@ -386,6 +391,7 @@ services:
 #######################
   var-mongo-data-seed:
     image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ablevets/var-mongo-data-seed:1.0.3
+    container_name: var-mongo-data-seed
     volumes:
       - ./var-mongo-db-mock/data:/docker-entrypoint-initdb.d/
     depends_on:
@@ -400,7 +406,7 @@ services:
 #############################
   var-messaging-microservice:
     image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ablevets/var-messaging-microservice:2.1.0
-    #image: dev/var-messaging-microservice
+    container_name: var-messaging-microservice
     expose:
       - "8080"
     environment:
@@ -412,7 +418,7 @@ services:
 
   facility-service:
     image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ablevets/facility-resources:2.1.0
-    #image: dev/facility-service
+    container_name: facility-service
     ports:
       - "7501:8080"
     expose:
@@ -427,6 +433,7 @@ services:
 
   vmr-mock-service:
     image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ablevets/vmr-mock-service:latest
+    container_name: vmr-mock-service
     ports:
      - "8284:8080"
     environment:
@@ -440,6 +447,7 @@ services:
 
   video-visits-service:
     image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ablevets/video-visits-service:2.4.3
+    container_name: video-visits-service
     ports:
       - "8079:8080"
     links:
@@ -461,6 +469,7 @@ services:
 
   messaging-publisher:
     image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ablevets/messaging-publisher:1.0.1
+    container_name: messaging-publisher
     hostname: "messaging-publisher"
     ports:
      - "7090:8080"
@@ -475,6 +484,7 @@ services:
 
   task-resources:
     image: mobileapps.vaftl.us:9250/ckm/task-resources:1.0.5
+    container_name: task-resources
     hostname: "task-resources"
     expose:
       - "8080"
@@ -494,6 +504,7 @@ services:
 
   mock-cdw:
     image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ckm/docker-cdw-mock:2.0
+
     environment:
       - ACCEPT_EULA=Y
       - SA_PASSWORD=IS4skwnfuglx928361V
@@ -545,6 +556,7 @@ services:
 
   adr-service:
     image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ckm/adr-services:1.2.0
+    container_name: adr-service
     ports:
     - "8083:8080"
     links:
@@ -635,6 +647,7 @@ services:
 
   veteran-video-connect-service:
     image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ablevets/veteran-video-connect-service:3.0.0
+    container_name: veteran-video-connect-service
     ports:
       - "8280:8080"
     environment:
@@ -682,6 +695,7 @@ services:
 #Patient context service
   patient-context:
     image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ablevets/patient-context:2.0.5
+    container_name: patient-context
     ports:
       - '3001:3001'
     links:
@@ -697,6 +711,7 @@ services:
 # Mock for IAM SAML token
   mock-wstrust:
     image: mobileapps.vaftl.us:9250/ckm/sts-mock:latest
+    container_name: mock-wstrust
     environment:
       - SERVICE_TAGS=local
       - SERVICE_NAME=mock-wstrust
@@ -704,6 +719,7 @@ services:
 # Mock SSOi
   ssoi-mock:
     image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ckm/ssoi-mock:latest
+    container_name: ssoi-mock
     ports:
       - 9001:80
     environment:
@@ -763,6 +779,7 @@ services:
 # Provider Context Selector Web Application
   pcs-web:
     image: mobileapps.vaftl.us:9250/ckm/pcs-web:1.0.1
+    container_name: pcs-web
     ports:
     - 8093:80
     environment:
@@ -771,6 +788,7 @@ services:
 
   personal-preference-service:
     image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ablevets/personal-preference-service:1.0.5
+    container_name: personal-preference-service
     ports:
      - "8287:8080"
     environment: #sub these with jenkins vars
@@ -791,7 +809,7 @@ services:
   # VistA Data Services (VDS) - exposes vista data by using the mdws to via adapter
   vista-data-services:
     image: mobileapps.vaftl.us:9250/ckm/docker-vista-data-services:1.9.0
-    #image: vista-data-services
+    container_name: vista-data-services
     ports:
      - 8085:8080
      - 64085:64085
@@ -819,6 +837,7 @@ services:
   # VistA Scheduling Service (VSS) - exposes vista data by using the mdws to via adapter
   vista-scheduling-service:
     image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ckm/vista-scheduling-service:2.1.0
+    container_name: vista-scheduling-service
     ports:
      - 8185:8080
      - 18096:5005
@@ -850,6 +869,7 @@ services:
   ### MDWS to VIA adapter
   mdws-via-adapter:
     image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ckm/mdws-via-adapter:1.4.0
+    container_name: mdws-via-adapter
     ports:
      - 8180:8080
      - 64087:64087
@@ -885,6 +905,7 @@ services:
 # Staff Video Connect Resources (SVC Services/Resource)
   staff-video-connect-service:
     image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ablevets/staff-video-connect-service:2.1.2
+    container_name: staff-video-connect-service
     ports:
      - "8293:8080"
     links:
@@ -945,6 +966,7 @@ services:
 
   var-resources:
     image: ${ENV_IMAGE_ROOT}/var-resources:${VAR_RESOURCES_VERSION}
+    container_name: var-resources
     ports:
      - "9092:8080"
      - "64058:64058"
@@ -966,6 +988,7 @@ services:
 
   var-web:
     image: ${ENV_IMAGE_ROOT}/var-web:${VAR_WEB_VERSION}
+    container_name: var-web
     ports:
       - "9090:80"
     environment:
@@ -978,6 +1001,7 @@ services:
 
   scheduling-manager-resources:
     image: ${ENV_IMAGE_ROOT}/scheduling-manager-resources:${SM_RESOURCES_VERSION}
+    container_name: scheduling-manager-resources
     ports:
      - "9070:8080"
      - "64059:64059"
@@ -993,6 +1017,7 @@ services:
 
   scheduling-manager-web:
     image: ${ENV_IMAGE_ROOT}/scheduling-manager-web:${SM_WEB_VERSION}
+    container_name: scheduling-manager-web
     ports:
       - "9071:80"
     environment:
@@ -1001,6 +1026,7 @@ services:
 
   appointment-service:
     image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ckm/mobile-appointment-service:1.2.2
+    container_name: appointment-service
     ports:
       - "9097:8080"
       - "19097:5005"
@@ -1033,6 +1059,7 @@ services:
 
   var-utility-resources:
     image: ${ENV_IMAGE_ROOT}/var-utility-resources:${VARUT_RESOURCES_VERSION}
+    container_name: var-utility-resources
     ports:
       - "9074:8080"
       - "64060:64060"
@@ -1048,6 +1075,7 @@ services:
 
   var-utility-web:
     image: ${ENV_IMAGE_ROOT}/var-utility-web:${VARUT_WEB_VERSION}
+    container_name: var-utility-web
     ports:
       - "9075:80"
     environment:
