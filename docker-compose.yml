@@ -530,8 +530,18 @@ services:
   # that allows VA apps to retrieve patient demographic and next-of-kin information
   mock-adr:
     image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ckm/docker-adr-mock:1.1.2
+    container_name: mock-adr
+    volumes:
+      - ./healthchecks:/opt/healthchecks
+    environment:
+      - "CATALINA_OPTS=-Xms128m -Xmx256m -XX:+UseSerialGC"
     ports:
     - "8090:8080"
+    healthcheck:
+      test: ["CMD", "bash", "/opt/healthchecks/healthcheck-adr.sh"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
 
   adr-service:
     image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ckm/adr-services:1.2.0
