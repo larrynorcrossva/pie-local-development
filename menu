@@ -64,6 +64,10 @@ validate_fixtures() {
 
     local ERROR
     ERROR=false
+
+    if [[ -z "$(docker ps -q --filter name=var-oracle-db-mock)" ]]; then
+        ERROR=true
+    fi
     
     validate_fixture_database "VARDB.FACILITY" || ERROR=true
     validate_fixture_database "MOCKDB.MOCK_USERS" || ERROR=true
