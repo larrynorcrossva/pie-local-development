@@ -726,9 +726,21 @@ do
 done
 }
 
+force_gc() {
+    printf "Current memory allocations . . .\n"
+    docker stats --all --format "table {{.Name}}\t     {{.MemUsage}}" --no-stream --no-trunc
+
+    printf "Forcing garbage collection on java containers\n"
+    for ID in $(docker ps -a -q); do docker exec -it $ID bash -c 'for JID in $(jcmd -l); do jcmd $JID GC.run &> /dev/null; done'; done &> /dev/null
+
+    printf "memory allocations after garbage collection.  There might be an additional delay between when garbage collection is triggered and when it is executed.\n"
+    docker stats --all --format "table {{.Name}}\t     {{.MemUsage}}" --no-stream --no-trunc
+}
+
+
 menu_main() {
 PS3='Please enter your choice: '
-options=("Login ECR" "Setup Menu" "Status Menu" "Quickstart Menu" "Build Menu" "Logs Menu" "Validate Menu" "Seed SQL Database" "Git Menu" "Quit")
+options=("Login ECR" "Setup Menu" "Status Menu" "Quickstart Menu" "Build Menu" "Logs Menu" "Validate Menu" "Seed SQL Database" "Java Force GC" "Git Menu" "Quit")
 select opt in "${options[@]}"
 do
     case $opt in
@@ -756,6 +768,9 @@ do
         "Seed SQL Database")
             echo "Manually seeding database.  Ensure that the fixures are up and running prior to running this command."
 			manually_seed
+            ;;
+        "Java Force GC")
+            force_gc
             ;;
         "Git Menu")
             cat <<EOF
