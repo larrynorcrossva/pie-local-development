@@ -91,7 +91,7 @@ services:
     environment:
       - SERVICE_TAGS=local
       - SERVICE_NAME=mock-mvi
-      - "CATALINA_OPTS=-Xms128m -Xmx256m -XX:-TieredCompilation -Xss256k -XX:+UseG1GC -XX:+UseStringDeduplication"
+      - "CATALINA_OPTS=-Xms64m -Xmx170m -XX:+UseSerialGC"
     healthcheck:
       test: ["CMD", "bash", "/opt/healthchecks/healthcheck-mvi.sh"]
       interval: 15s
@@ -141,7 +141,7 @@ services:
       - "AUTH_RULES_SVC_URL=http://authorization-rules-service:8080/rules/v1"
       - "AUTH_RULES_HOST=http://authorization-rules-service:8080/"
       - "MVI_VISTA_FACILITIES=101,111,222,313,372,376,442,500,516,553,631,688,777,523,636"
-      - "JAVA_OPTS=-Xms256m -Xmx512m -XX:-TieredCompilation -Xss256k -XX:+UseG1GC -XX:+UseStringDeduplication -agentlib:jdwp=transport=dt_socket,address=5005,server=y,suspend=n"
+      - "JAVA_OPTS=-Xms128m -Xmx256m -XX:+UseSerialGC -agentlib:jdwp=transport=dt_socket,address=5005,server=y,suspend=n"
       - "REDIS_HOST=redis"
       - ENABLE_ZIPKIN=false
       - "IAM_WST_URL=http://mock-wstrust:8080/services/sts"
@@ -160,7 +160,7 @@ services:
       - "8481:8080"
       - "18481:5005"
     environment:
-      - JAVA_OPTS=-Xms256m -Xmx512m -XX:-TieredCompilation -Xss256k -XX:+UseG1GC -XX:+UseStringDeduplication -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005
+      - JAVA_OPTS=-Xms64m -Xmx256m -XX:+UseSerialGC -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005
       - USE_ENVCONSUL=true
       - SERVER_USE_FORWARD_HEADERS=true
       - SERVICE_TAGS=local
@@ -213,7 +213,7 @@ services:
       - ENABLE_ZIPKIN=false
       - SERVICE_TAGS=local
       - SERVICE_NAME=eula-service
-      - "JAVA_OPTS=-Xms256m -Xmx512m -XX:-TieredCompilation -Xss256k -XX:+UseG1GC -XX:+UseStringDeduplication"
+      - "JAVA_OPTS=-Xms64m -Xmx128m -XX:+UseSerialGC"
 
   ## Swagger UI for working with contracts
   swagger-ui:
@@ -417,7 +417,7 @@ services:
       - CONSUL_SERVER=consul:8500
       - CONSUL_TOKEN=7BE784A4-7498-4469-BE2F-9C3B9444DFEF
       - CONSUL_PATH=appconfig/local/var-messaging-microservice
-      - "JAVA_OPTS=-Xms256m -Xmx512m -XX:-TieredCompilation -Xss256k -XX:+UseG1GC -XX:+UseStringDeduplication"
+      - "JAVA_OPTS=-Xms64m -Xmx170m -XX:+UseSerialGC"
 
   facility-service:
     image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ablevets/facility-resources:2.1.0
@@ -433,7 +433,7 @@ services:
       - CONSUL_SERVER=consul:8500
       - CONSUL_TOKEN=7BE784A4-7498-4469-BE2F-9C3B9444DFEF
       - CONSUL_PATH=appconfig/local/facility-resources
-      - "JAVA_OPTS=-Xms256m -Xmx512m -XX:-TieredCompilation -Xss256k -XX:+UseG1GC -XX:+UseStringDeduplication"
+      - "JAVA_OPTS=-Xms64m -Xmx170m -XX:+UseSerialGC"
 
   vmr-mock-service:
     image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ablevets/vmr-mock-service:latest
@@ -448,7 +448,7 @@ services:
      - CONSUL_SERVER=consul:8500
      - CONSUL_TOKEN=${CONSUL_MASTER_TOKEN}
      - CONSUL_PATH=appconfig/${VAMF_ENVIRONMENT}/vmr-mock-service
-     - "JAVA_OPTS=-Xms256m -Xmx512m -XX:-TieredCompilation -Xss256k -XX:+UseG1GC -XX:+UseStringDeduplication"
+      - "JAVA_OPTS=-Xms64m -Xmx170m -XX:+UseSerialGC"
 
   video-visits-service:
     image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ablevets/video-visits-service:2.4.3
@@ -471,7 +471,7 @@ services:
       - CONSUL_TOKEN=7BE784A4-7498-4469-BE2F-9C3B9444DFEF
       - CONSUL_PATH=appconfig/local/video-visits-service
       - "TRACE_URL=http://zipkin:9411/api/v1/spans"
-      - "JAVA_OPTS=-Xms256m -Xmx512m -XX:-TieredCompilation -Xss256k -XX:+UseG1GC -XX:+UseStringDeduplication"
+      - "JAVA_OPTS=-Xms64m -Xmx170m -XX:+UseSerialGC"
 
   messaging-publisher:
     image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ablevets/messaging-publisher:1.0.1
@@ -487,7 +487,7 @@ services:
      - CONSUL_TOKEN=${CONSUL_MASTER_TOKEN}
      - CONSUL_PATH=appconfig/${VAMF_ENVIRONMENT}/messaging-publisher
      - "TRACE_URL=http://zipkin:9411/api/v1/spans"
-     - "JAVA_OPTS=-Xms256m -Xmx512m -XX:-TieredCompilation -Xss256k -XX:+UseG1GC -XX:+UseStringDeduplication"
+     - "JAVA_OPTS=-Xms64m -Xmx170m -XX:+UseSerialGC"
 
   task-resources:
     image: mobileapps.vaftl.us:9250/ckm/task-resources:1.0.5
@@ -504,21 +504,20 @@ services:
       - "CONSUL_SERVER=consul:8500"
       - "CONSUL_TOKEN=7BE784A4-7498-4469-BE2F-9C3B9444DFEF"
       - "CONSUL_PATH=appconfig/${VAMF_ENVIRONMENT}/trs"
-      - "JAVA_OPTS=-Xms256m -Xmx512m -XX:-TieredCompilation -Xss256k -XX:+UseG1GC -XX:+UseStringDeduplication"
       - "USE_ENVCONSUL=true"
       - JWT_SECRET=testtesttest
       - "MONGODB_TASK_RESOURCES_URI=mongodb://testuser:testpass@mongo:27017/taskresourcesdb?ssl=false&connectTimeoutMS=20000&maxPoolSize=100"
+      - "JAVA_OPTS=-Xms64m -Xmx170m -XX:+UseSerialGC"
 
-  mock-cdw:
-    image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ckm/docker-cdw-mock:2.0
-
-    environment:
-      - ACCEPT_EULA=Y
-      - SA_PASSWORD=IS4skwnfuglx928361V
-    container_name: mock-cdw
-    ports:
-      - 1433:1433
-    mem_limit: 3GB
+  # mock-cdw:
+  #   image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ckm/docker-cdw-mock:2.0
+  #   environment:
+  #     - ACCEPT_EULA=Y
+  #     - SA_PASSWORD=IS4skwnfuglx928361V
+  #   container_name: mock-cdw
+  #   ports:
+  #     - 1433:1433
+  #   mem_limit: 3GB
 
   cdw-service:
     image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ckm/cdw-services:2.0.1
@@ -535,13 +534,13 @@ services:
 #     - DB_MOBILEHEALTH_PASSWORD=IS4skwnfuglx928361V
       - REDIS_HOST=redis
       - CORS_ALLOWED_ORIGIN=*
-      - JAVA_OPTS=-Xms64m -Xmx256m -XX:-TieredCompilation -Xss256k -XX:+UseG1GC -XX:+UseStringDeduplication
       - SERVICE_TAGS=${VAMF_ENVIRONMENT}
       - SERVICE_NAME=cdw-service
       - CONSUL_SERVER=${CONSUL_HTTP_ADDR}
       - CONSUL_TOKEN=${CONSUL_MASTER_TOKEN}
       - CONSUL_PATH=appconfig/${VAMF_ENVIRONMENT}/cdw-service
       - TRACE_URL=http://zipkin:9411/api/v1/spans
+      - "JAVA_OPTS=-Xms64m -Xmx170m -XX:+UseSerialGC"
     restart: on-failure:5
 
   # Administrative Data Repository (ADR) Service and Mock (SOAP) data source. ADR serves as a enterprise data service
@@ -552,7 +551,7 @@ services:
     volumes:
       - ./healthchecks:/opt/healthchecks
     environment:
-      - "CATALINA_OPTS=-Xms128m -Xmx256m -XX:+UseSerialGC"
+      - "CATALINA_OPTS=-Xms64m -Xmx170m -XX:+UseSerialGC"
     ports:
     - "8090:8080"
     healthcheck:
@@ -582,9 +581,9 @@ services:
     - CONSUL_TOKEN=$CONSUL_MASTER_TOKEN
     - CONSUL_PATH=appconfig/${VAMF_ENVIRONMENT}/adr-service
     - CORS_ALLOWED_ORIGIN=*
-    - JAVA_OPTS=-Xms128m -Xmx256m -XX:-TieredCompilation -Xss256k -XX:+UseG1GC -XX:+UseStringDeduplication
     - SERVICE_TAGS=local
     - SERVICE_NAME=adr-service
+    - "JAVA_OPTS=-Xms64m -Xmx170m -XX:+UseSerialGC"
 
 ###########################
 ### SHARED SERVICES END ###
@@ -616,10 +615,10 @@ services:
       - DB_ROA_USERNAME=HADB # pulled from vault
       - DB_ROA_PASSWORD=m0ckpass01 # pulled from vault
       - SERVICE_TAGS=local
-      - JAVA_OPTS=-Xms256m -Xmx512m -XX:-TieredCompilation -Xss256k -XX:+UseG1GC -XX:+UseStringDeduplication
       - JWT_SECRET=testtesttest
       - DB_ROA_URL=jdbc:oracle:thin:@mock-roa:1521:xe
       - VAMF_ENVIRONMENT=local
+      - "JAVA_OPTS=-Xms64m -Xmx170m -XX:+UseSerialGC"
 
 ## ROA WEB
   roa-web:
@@ -666,7 +665,7 @@ services:
       - CONSUL_TOKEN=7BE784A4-7498-4469-BE2F-9C3B9444DFEF
       - CONSUL_PATH=appconfig/${VAMF_ENVIRONMENT}/veteran-video-connect-service
       - "TRACE_URL=http://localhost:9411/api/v1/spans"
-      - "JAVA_OPTS=-Xms256m -Xmx512m -XX:-TieredCompilation -Xss256k -XX:+UseG1GC -XX:+UseStringDeduplication"
+      - "JAVA_OPTS=-Xms64m -Xmx170m -XX:+UseSerialGC"
 
 # IAM SSOe Mock - Injects HTTP headers to simulate SSOe token header injection. Allows log in/out.
   iamssoe-proxy-mock:
@@ -775,6 +774,7 @@ services:
       - APP_LOGGING_LEVEL=INFO
       - ROOT_LOGGING_LEVEL=INFO
       - VAMF_ENVIRONMENT=local
+      - "JAVA_OPTS=-Xms64m -Xmx170m -XX:+UseSerialGC"
     ports:
       - 8095:8080
 
@@ -809,7 +809,7 @@ services:
      - CONSUL_TOKEN=7BE784A4-7498-4469-BE2F-9C3B9444DFEF
      - CONSUL_PATH=appconfig/${VAMF_ENVIRONMENT}/personal-preference-service
      - "TRACE_URL=http://zipkin:9411/api/v1/spans"
-     - "JAVA_OPTS=-Xms256m -Xmx512m -XX:-TieredCompilation -Xss256k -XX:+UseG1GC -XX:+UseStringDeduplication"
+     - "JAVA_OPTS=-Xms64m -Xmx170m -XX:+UseSerialGC"
 
    # Mock for VIA data service
    #  mock-via:
@@ -835,13 +835,13 @@ services:
      - "CONSUL_PATH=appconfig/local/vista-data-services"
      - "VAMF_ENVIRONMENT=local"
      - MDWS_ADAPTER_BASE_URL=http://mdws-via-adapter:8080/MdwsViaAdapter/v1/services
-     - JAVA_OPTS=-Xms256m -Xmx512m -XX:-TieredCompilation -Xss256k -XX:+UseG1GC -XX:+UseStringDeduplication -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=64085
      - USER_SVC_URL=http://user-services:8080/users/v1
      - JWT_SECRET=testtesttest
      - "SERVER_USE_FORWARD_HEADERS=true"
      # Debug configuration (Ensure port ignored below is exposed for debugging in ports section)
      - SERVICE_8080_NAME=vista-data-services_v1
      - SERVICE_64085_IGNORE=true
+     - "JAVA_OPTS=-Xms64m -Xmx170m -XX:+UseSerialGC"
 
   # VistA Scheduling Service (VSS) - exposes vista data by using the mdws to via adapter
   vista-scheduling-service:
@@ -865,7 +865,6 @@ services:
      - "VAMF_ENVIRONMENT=local"
      - VIA_BASE_URL=http://10.1.0.8:8089/via-webservices/services
      - MDWS_ADAPTER_BASE_URL=http://mdws-via-adapter:8080/MdwsViaAdapter/v1/services
-     - JAVA_OPTS=-Xms256m -Xmx512m -XX:-TieredCompilation -Xss256k -XX:+UseG1GC -XX:+UseStringDeduplication -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005
      - USER_SVC_URL=http://user-services:8080/users/v1
      - JWT_SECRET=testtesttest
      - "SERVER_USE_FORWARD_HEADERS=true"
@@ -874,6 +873,7 @@ services:
      - REQUESTING_APP=VAR_App
      - CONSUMING_APP_TOKEN=APP_TOKEN
      - CONSUMING_APP_PASSWORD=passw0rd123
+     - "JAVA_OPTS=-Xms64m -Xmx170m -XX:+UseSerialGC"
 
   ### MDWS to VIA adapter
   mdws-via-adapter:
@@ -897,7 +897,6 @@ services:
     #- VIA_BASE_URL=http://mock-via:8080/via-webservices/via-webservices/services
     # Live Via (AV)
     - VIA_BASE_URL=http://10.1.0.8:8089/via-webservices/services
-    - JAVA_OPTS=-Xms256m -Xmx512m -XX:-TieredCompilation -Xss256k -XX:+UseG1GC -XX:+UseStringDeduplication -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=64087
     - TRUSTSTORE_PASSWORD=password
     - REDIS_HOST=redis
     - JWT_REQUIRED_ROLE=STAFF
@@ -910,6 +909,7 @@ services:
     - REQUESTING_APP=VAR_App
     - CONSUMING_APP_TOKEN=APP_TOKEN
     - CONSUMING_APP_PASSWORD=passw0rd123
+    - "JAVA_OPTS=-Xms64m -Xmx170m -XX:+UseSerialGC"
 
 # Staff Video Connect Resources (SVC Services/Resource)
   staff-video-connect-service:
@@ -931,7 +931,7 @@ services:
      - CONSUL_TOKEN=7BE784A4-7498-4469-BE2F-9C3B9444DFEF
      - CONSUL_PATH=appconfig/local/staff-video-connect-service
      - "TRACE_URL=http://zipkin:9411/api/v1/spans"
-     - "JAVA_OPTS=-Xms256m -Xmx512m -XX:-TieredCompilation -Xss256k -XX:+UseG1GC -XX:+UseStringDeduplication"
+     - "JAVA_OPTS=-Xms64m -Xmx170m -XX:+UseSerialGC"
 
   # apt-reminder-publisher:
   #   image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ablevets/apt-reminder-publisher:1.0.1
@@ -995,6 +995,7 @@ services:
      - mock.mvi=false
      - JWT_SECRET=testtesttest
      - "JAVA_OPTS=-Xms128m -Xmx2g -XX:-TieredCompilation -Xss256k -XX:+UseG1GC -XX:+UseStringDeduplication -Dcom.sun.xml.ws.transport.http.client.HttpTransportPipe.dump=true -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=64058"
+     - "JAVA_OPTS=-Xms128m -Xmx768m -XX:+UseSerialGC"
 
   var-web:
     image: ${ENV_IMAGE_ROOT}/var-web:${VAR_WEB_VERSION}
@@ -1023,7 +1024,7 @@ services:
      - CONSUL_TOKEN=7BE784A4-7498-4469-BE2F-9C3B9444DFEF
      - CONSUL_PATH=appconfig/local/scheduling-manager-resources
      - JWT_SECRET=testtesttest
-     - "JAVA_OPTS=-Xms256m -Xmx512m -XX:-TieredCompilation -Xss256k -XX:+UseG1GC -XX:+UseStringDeduplication -Dcom.sun.xml.ws.transport.http.client.HttpTransportPipe.dump=true -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=64059"
+     - "JAVA_OPTS=-Xms128m -Xmx768m -XX:+UseSerialGC"
 
   scheduling-manager-web:
     image: ${ENV_IMAGE_ROOT}/scheduling-manager-web:${SM_WEB_VERSION}
@@ -1045,7 +1046,6 @@ services:
       - vista-scheduling-service
       - video-visits-service
     environment:
-      - JAVA_OPTS=-Xms256m -Xmx512m -XX:-TieredCompilation -Xss256k -XX:+UseG1GC -XX:+UseStringDeduplication -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005
       - "USE_ENVCONSUL=false"
       - "CONSUL_SERVER=consul:8500"
       - "CONSUL_HTTP_ADDR=consul:8500"
@@ -1066,6 +1066,7 @@ services:
       - CONSUMING_APP_PASSWORD=TEST_PASSWORD
       - CONSUMING_APP_TOKEN=TEST_TOKEN
       - TRACE_URL=http://zipkin:9411/api/v1/spans
+      - "JAVA_OPTS=-Xms64m -Xmx170m -XX:+UseSerialGC"
 
   var-utility-resources:
     image: ${ENV_IMAGE_ROOT}/var-utility-resources:${VARUT_RESOURCES_VERSION}
@@ -1081,7 +1082,7 @@ services:
       - CONSUL_TOKEN=7BE784A4-7498-4469-BE2F-9C3B9444DFEF
       - CONSUL_PATH=appconfig/local/var-utility-resources
       - JWT_SECRET=testtesttest
-      - "JAVA_OPTS=-Xms256m -Xmx512m -XX:-TieredCompilation -Xss256k -XX:+UseG1GC -XX:+UseStringDeduplication -Dcom.sun.xml.ws.transport.http.client.HttpTransportPipe.dump=true -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=64060"
+      - "JAVA_OPTS=-Xms64m -Xmx170m -XX:+UseSerialGC"
 
   var-utility-web:
     image: ${ENV_IMAGE_ROOT}/var-utility-web:${VARUT_WEB_VERSION}
