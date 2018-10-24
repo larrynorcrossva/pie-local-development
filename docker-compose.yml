@@ -994,8 +994,7 @@ services:
      - CONSUL_PATH=appconfig/local/var-resources
      - mock.mvi=false
      - JWT_SECRET=testtesttest
-     - "JAVA_OPTS=-Xms128m -Xmx2g -XX:-TieredCompilation -Xss256k -XX:+UseG1GC -XX:+UseStringDeduplication -Dcom.sun.xml.ws.transport.http.client.HttpTransportPipe.dump=true -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=64058"
-     - "JAVA_OPTS=-Xms128m -Xmx768m -XX:+UseSerialGC"
+     - "JAVA_OPTS=-Xms128m -Xmx768m -XX:+UseSerialGC -Dcom.sun.xml.ws.transport.http.client.HttpTransportPipe.dump=true -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=64058"
 
   var-web:
     image: ${ENV_IMAGE_ROOT}/var-web:${VAR_WEB_VERSION}
@@ -1024,7 +1023,7 @@ services:
      - CONSUL_TOKEN=7BE784A4-7498-4469-BE2F-9C3B9444DFEF
      - CONSUL_PATH=appconfig/local/scheduling-manager-resources
      - JWT_SECRET=testtesttest
-     - "JAVA_OPTS=-Xms128m -Xmx768m -XX:+UseSerialGC"
+     - "JAVA_OPTS=-Xms128m -Xmx768m -XX:+UseSerialGC -Dcom.sun.xml.ws.transport.http.client.HttpTransportPipe.dump=true -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=64059"
 
   scheduling-manager-web:
     image: ${ENV_IMAGE_ROOT}/scheduling-manager-web:${SM_WEB_VERSION}
@@ -1082,8 +1081,7 @@ services:
       - CONSUL_TOKEN=7BE784A4-7498-4469-BE2F-9C3B9444DFEF
       - CONSUL_PATH=appconfig/local/var-utility-resources
       - JWT_SECRET=testtesttest
-      - "JAVA_OPTS=-Xms64m -Xmx170m -XX:+UseSerialGC"
-
+      - "JAVA_OPTS=-Xms64m -Xmx170m -XX:+UseSerialGC -Dcom.sun.xml.ws.transport.http.client.HttpTransportPipe.dump=true -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=64060"
   var-utility-web:
     image: ${ENV_IMAGE_ROOT}/var-utility-web:${VARUT_WEB_VERSION}
     container_name: var-utility-web
