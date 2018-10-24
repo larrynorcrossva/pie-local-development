@@ -727,13 +727,15 @@ done
 }
 
 force_gc() {
-    printf "Current memory allocations . . .\n"
+    printf "Current memory allocations . . .\n\n"
     docker stats --all --format "table {{.Name}}\t     {{.MemUsage}}" --no-stream --no-trunc
 
     printf "Forcing garbage collection on java containers\n"
     for ID in $(docker ps -a -q); do docker exec -it $ID bash -c 'for JID in $(jcmd -l); do jcmd $JID GC.run &> /dev/null; done'; done &> /dev/null
 
-    printf "memory allocations after garbage collection.  There might be an additional delay between when garbage collection is triggered and when it is executed.\n"
+    for ID in $(docker ps -a -q); do docker exec -it $ID bash -c 'for JID in $(jcmd -l); do jmap -histo:live $JID  &> /dev/null; done'; done &> /dev/null
+
+    printf "\nmemory allocations after garbage collection.  There might be an additional delay between when garbage collection is triggered and when it is executed.\n"
     docker stats --all --format "table {{.Name}}\t     {{.MemUsage}}" --no-stream --no-trunc
 }
 
