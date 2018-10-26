@@ -1035,7 +1035,7 @@ services:
       - SERVICE_NAME=scheduling-manager-web
 
   appointment-service:
-    image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ckm/mobile-appointment-service:1.2.2
+    image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ckm/mobile-appointment-service:1.4.2
     container_name: appointment-service
     ports:
       - "9097:8080"
@@ -1060,7 +1060,8 @@ services:
       - VDS_SCH_SERVICE_URL=http://vista-scheduling-service:8080/VistaSchedulingService/v2
       - CDW_SERVICE_BASE_URL=http://cdw-service:8080/cdw/v2
       # - CCS_BASE_URL= # not used if unspecified
-      - DISPLAY_APPOINTMENTS_CLINIC_DISPLAY_NULL=false # default: false, required for TH
+      - SHOW_CLINICS_WITH_NULL_CDW_DISPLAY_FLAG=false
+      - MERGE_VVS_ADHOC_APPOINTMENTS=true
       - REQUESTING_APP=
       - CONSUMING_APP_PASSWORD=TEST_PASSWORD
       - CONSUMING_APP_TOKEN=TEST_TOKEN
