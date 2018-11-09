@@ -145,6 +145,7 @@ validate_staff() {
     validate_url "vista-data-services"           "http://localhost:8085/VistaDataServices/v1/"              200
     validate_url "mdws-via-adapter"              "http://localhost:8180/MdwsViaAdapter/v1/services/MdwsEmrService?WSDL"    200
     validate_url "staff-video-connect-service"   "http://localhost:8293/staff-videoconnect-resources/v2/"   200
+    validate_url "vista-emr-service"             "http://localhost:9899/VistaEmrService/v2/"                200
 
     # mock-wstrust -- no exposed port
     # sud-service 
@@ -203,6 +204,13 @@ validate_sm() {
     printf "Checking %-25s\t%-60s\t%-40s\033[0m\n" "SM" "${URL}" "$RESULT"
 }
 
+validate_vats() {
+    stack_status vats
+    validate_url "var-utility-web"        "http://localhost:9075/va-tool-set/v3/version.json"        200
+    validate_url "var-utility-resources"  "http://localhost:9074/VarUtilityServices/"				 200
+
+}
+
 validate_apigateway() {
     printf "\n\nChecking apigateway. . . \n\n"
     validate_url "INVALID URL"                  "http://localhost:8089/INVALID_URL"                  404
@@ -214,7 +222,7 @@ validate_apigateway() {
     validate_url "video-visits-service"          "http://localhost:8089/video-visit-resources/v2/"   200
     validate_url "vista-scheduling-service"      "http://localhost:8089/VistaSchedulingService/v2/"  200
     validate_url "appointment-service"           "http://localhost:8089/appointments/v1/"            200
-    validate_url "cdw-service"                   "http://localhost:8089/cdw/v1/"                     200
+    validate_url "cdw-service"                   "http://localhost:8089/cdw/v2/"                     200
     validate_url "facility-service"              "http://localhost:8089/FacilityService/v2/rest/public/facility/timezone"   200
 
     printf "\n\nChecking vet. . . \n\n"
@@ -236,6 +244,9 @@ validate_apigateway() {
     validate_url "var-web"                      "http://localhost:9000/var/v4/version.json"                 200
     validate_url "var-resources"                "http://localhost:9000/var/VeteranAppointmentRequestService/v4/rest/" 200
 
+    printf "\n\nChecking vats. . . \n\n"
+    validate_url "var-utility-web"       "http://localhost:8089/va-tool-set/v3/version.json"         200
+    validate_url "var-utility-services"  "http://localhost:8089/VarUtilityServices/"				 200
 }
 
 validate_compose_config() {
@@ -255,7 +266,7 @@ validate_compose_config() {
 menu_validate() {
 PS3='Please enter your choice: '
 options=("Validate compose config"  "Validate fixtures" "Validate core" "Validate ss" "Validate vet" "Validate staff" 
-"Validate var" "Validate sm" "Validate apigateway" "Validate all"
+"Validate var" "Validate sm" "Validate vats"  "Validate apigateway" "Validate all"
 "Restart registrator"
 "Quit")
 select opt in "${options[@]}"
@@ -284,6 +295,9 @@ do
             ;;
         "Validate sm")
             validate_sm
+            ;;
+        "Validate vats")
+            validate_vats
             ;;
         "Validate apigateway")
             validate_apigateway
@@ -415,7 +429,7 @@ build_vats_web() {
     printf "\n\nBuilding branch: $(git -C . status | head -n 1 | awk '{print $3}')\n\n\n" 
     sleep 2
     
-    . app.env && ./build.sh && docker build -t dev/var-utility-web dist/
+    . app.env && ./build.sh skipTests && docker build -t dev/var-utility-web dist/
     popd || return
 }
 
@@ -437,7 +451,11 @@ build_vats_resources() {
 
 menu_build() {
 PS3='Please enter your choice: '
-options=("Setup Base Images" "Build Var Web" "Build Var Resources" "Build SM Web" "Build SM Resources" "Quit")
+options=("Setup Base Images"
+"Build Var Web" "Build Var Resources"
+"Build SM Web" "Build SM Resources" 
+"Build Vats Web" "Build Vats Resources"
+"Quit")
 select opt in "${options[@]}"
 do
     case $opt in
@@ -460,6 +478,14 @@ do
         "Build SM Resources")
             echo "Manually building scheduling-manager-resources"
             build_sm_resources
+            ;;
+        "Build Vats Web")
+            echo "Manually building vats-web"
+            build_vats_web
+            ;;
+        "Build Vats Resources")
+            echo "Manually building vats-resources"
+            build_vats_resources
             ;;
         "Quit")
             break

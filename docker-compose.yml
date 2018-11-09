@@ -234,6 +234,7 @@ services:
 
   # redis for container state
   redis:
+    container_name: redis
     image: mobileapps.vaftl.us:9250/ckm/vamf-redis:1.0.0
 
 # Third party as is mocks
@@ -874,6 +875,27 @@ services:
      - CONSUMING_APP_TOKEN=APP_TOKEN
      - CONSUMING_APP_PASSWORD=passw0rd123
      - "JAVA_OPTS=-Xms64m -Xmx170m -XX:+UseSerialGC"
+
+  vista-emr-service:
+    image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ckm/vista-emr-service:2.2.0
+    container_name: vista-emr-service
+    ports:
+    - 9899:8080
+    environment:
+    - "USE_ENVCONSUL=true"
+    - SERVICE_TAGS=local
+    - "VAMF_ENVIRONMENT=local"
+    - SERVICE_NAME=vista-emr-service
+    - "CONSUL_SERVER=consul:8500"
+    - "CONSUL_TOKEN=7BE784A4-7498-4469-BE2F-9C3B9444DFEF"
+    - "CONSUL_PATH=appconfig/local/vista-emr-service/v2"
+    - VIA_BASE_URL=http://10.1.0.8:8089/via-webservices/services
+    - REDIS_HOST=redis
+    - USER_SVC_URL=http://user-services:8080/users/v1
+    - REQUESTING_APP=VAR_App
+    - CONSUMING_APP_TOKEN=APP_TOKEN
+    - CONSUMING_APP_PASSWORD=passw0rd123
+    - "JAVA_OPTS=-Xms64m -Xmx170m -XX:+UseSerialGC"
 
   ### MDWS to VIA adapter
   mdws-via-adapter:
