@@ -86,12 +86,12 @@ function git_checkout_latest_dev_branch() {
 }
 
 function checkout_all_projects() {
-	checkout_project https://github.ablevets.com/MSE/mse/var-utility-resources.git
-	checkout_project https://github.ablevets.com/MSE/mse/var-utility-web.git
-	checkout_project https://github.ablevets.com/MSE/mse/var-web.git
-	checkout_project https://github.ablevets.com/MSE/mse/var-resources.git
-	checkout_project https://github.ablevets.com/MSE/mse/scheduling-manager-web.git
-	checkout_project https://github.ablevets.com/MSE/mse/scheduling-manager-resources.git
+	checkout_project https://github.ablevets.com/MSE/var-utility-resources.git
+	checkout_project https://github.ablevets.com/MSE/var-utility-web.git
+	checkout_project https://github.ablevets.com/MSE/var-web.git
+	checkout_project https://github.ablevets.com/MSE/var-resources.git
+	checkout_project https://github.ablevets.com/MSE/scheduling-manager-web.git
+	checkout_project https://github.ablevets.com/MSE/scheduling-manager-resources.git
 }
 
 checkout_all_projects
