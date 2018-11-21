@@ -76,7 +76,11 @@ function git_checkout_latest_dev_branch() {
 	done | sort -r | grep dev\/
 
 	local branch
-    branch=$(git branch -r | cut -d \/ -f 2- | sed -n -e '/^dev\/[0-9].[0-9]$/p' | sort -n  | tail -n 1)
+    branch=$(git branch -r | cut -d \/ -f 2- | sed -n -e '/^dev\/[0-9].[0-9][0-9]$/p' | sort -n  | tail -n 1)
+
+    if [[ -z "$branch" ]]; then
+        branch=$(git branch -r | cut -d \/ -f 2- | sed -n -e '/^dev\/[0-9].[0-9]$/p' | sort -n  | tail -n 1)
+    fi
 
     echo "Using latest dev branch: $branch"
 
