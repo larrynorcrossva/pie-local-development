@@ -82,7 +82,9 @@ services:
   # to create JWT security tokens and augmenting user identities with other identifiers from the MVI (specifically ICN)
   #
   mock-mvi:
-    image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ablevets/var-mock-mvi:1.1-user-services-1.8.0-mockuser25-VAR-13144
+    # Image is built from MSE Jenkins:
+    # https://mse-demo.vaftl.us:8080/job/var-mock-mvi/
+    image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ablevets/var-mock-mvi:201811220206_473690
     container_name: mock-mvi
     volumes:
       - ./healthchecks:/opt/healthchecks
@@ -670,7 +672,9 @@ services:
 
 # IAM SSOe Mock - Injects HTTP headers to simulate SSOe token header injection. Allows log in/out.
   iamssoe-proxy-mock:
-    image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ablevets/idp-proxy-mock-shared:1.1-user-services-1.8.0
+    # Image is built from MSE Jenkins:
+    # https://mse-demo.vaftl.us:8080/job/var-idp-mock/
+    image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ablevets/idp-proxy-mock-shared:201811220217_460c98
     container_name: iamssoe-proxy-mock
     ports:
       - 9000:80
@@ -684,7 +688,9 @@ services:
 
 #Mock database to store identity information
   iamssoe-db-mock:
-    image:  181140462490.dkr.ecr.us-east-1.amazonaws.com/ablevets/idp-db-mock-shared:1.1.3-VAR-13144
+    # Image is built from MSE Jenkins:
+    # https://mse-demo.vaftl.us:8080/job/var-idp-mock/
+    image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ablevets/idp-db-mock-shared:201811220215_460c98
     container_name: iamssoe-db-mock
     ports:
       - 3306:3306
