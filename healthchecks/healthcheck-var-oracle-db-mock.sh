@@ -8,7 +8,7 @@ validate_fixture_database() {
     desc ${db};
 EOF
     grep -s "does not exist" /tmp/validatedb.log
-    if [[ $0 -ne 0 ]]; then
+    if [[ $? -eq 0 ]]; then
         echo "Database does not contain table ${db}.  The database will need to be seeded."
         exit 1
     fi
