@@ -13,6 +13,7 @@ services:
     command: "consul agent -server -rejoin -bootstrap-expect=1 -ui -client 0.0.0.0 -data-dir /consul/data -config-dir /consul/config"
     volumes:
     - ./healthchecks:/opt/healthchecks
+    - "./consul/config:/consul/config/"
     # - "/consul/data"
     # - "/consul/config"
     ports:
@@ -84,7 +85,7 @@ services:
   mock-mvi:
     # Image is built from MSE Jenkins:
     # https://mse-demo.vaftl.us:8080/job/var-mock-mvi/
-    image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ablevets/var-mock-mvi:201811220206_473690
+    image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ablevets/var-mock-mvi:201812202020_680472
     container_name: mock-mvi
     volumes:
       - ./healthchecks:/opt/healthchecks
@@ -291,22 +292,16 @@ services:
       retries: 3
 
   var-oracle-db-mock:
-    image: sath89/oracle-xe-11g:latest
+    image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ablevets/var-oracle-db-mock:201812210021_8c38ad
     container_name: var-oracle-db-mock
     ports:
       - "1521:1521"
     volumes:
-      - ./var-oracle-db-mock:/docker-entrypoint-initdb.d
       - ./healthchecks:/opt/healthchecks
     environment:
       - constraint:nodetype==*service*
       - SERVICE_NAME=var-oracle-db-mock
       - SERVICE_TAGS=local
-      - JWT_SECRET=testtesttest
-      - CONSUL_SERVER=consul:8500
-      - CONSUL_TOKEN=${CONSUL_MASTER_TOKEN}
-      - CONSUL_PATH=appconfig/${VAMF_ENVIRONMENT}/var-oracle-db-mock
-      - CLEAR_CACHE=true
     healthcheck:
       test: ["CMD", "bash", "/opt/healthchecks/healthcheck-var-oracle-db-mock.sh"]
       interval: 1m
@@ -690,7 +685,7 @@ services:
   iamssoe-db-mock:
     # Image is built from MSE Jenkins:
     # https://mse-demo.vaftl.us:8080/job/var-idp-mock/
-    image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ablevets/idp-db-mock-shared:201811220215_460c98
+    image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ablevets/idp-db-mock-shared:201812031800_52b365
     container_name: iamssoe-db-mock
     ports:
       - 3306:3306

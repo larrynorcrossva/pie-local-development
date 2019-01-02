@@ -140,7 +140,8 @@ validate_staff() {
 
     validate_url "patient-context"               "http://localhost:3001/patient-context/v2/"                200
     validate_url "ssoi-mock"                     "http://localhost:9001/loginPage/status.html"              200
-    validate_url "pcs-web"                       "http://localhost:8093/pcs/v1/index.html"                  200
+    validate_url "pcs-web"                       "http://localhost:8093/pcs-web/index.html"                 200
+    validate_url "pcs-service"                   "http://localhost:17313/pcs/v1/"                           200
     validate_url "personal-preference-service"   "http://localhost:8287/personal-preferences/v1/"           200
     validate_url "vista-data-services"           "http://localhost:8085/VistaDataServices/v1/"              200
     validate_url "mdws-via-adapter"              "http://localhost:8180/MdwsViaAdapter/v1/services/MdwsEmrService?WSDL"    200
@@ -232,7 +233,8 @@ validate_apigateway() {
 
     printf "\n\nChecking staff. . . \n\n"
     validate_url "patient-context"               "http://localhost:9001/patient-context/v2/"                200
-    validate_url "pcs-web"                       "http://localhost:9001/pcs/v1/index.html"                  200
+    validate_url "pcs-service"                   "http://localhost:9001/pcs/v1/"                            200
+    validate_url "pcs-web"                       "http://localhost:9001/pcs-web/index.html"                 200
     validate_url "vista-data-services"           "http://localhost:9001/VistaDataServices/v1/"              200
     validate_url "staff-video-connect-service"   "http://localhost:9001/staff-videoconnect-resources/v2/"   200
 
@@ -772,7 +774,7 @@ force_gc() {
 
 menu_main() {
 PS3='Please enter your choice: '
-options=("Login ECR" "Setup Menu" "Status Menu" "Quickstart Menu" "Build Menu" "Logs Menu" "Validate Menu" "Seed SQL Database" "Java Force GC" "Git Menu" "Quit")
+options=("Login ECR" "Setup Menu" "Status Menu" "Quickstart Menu" "Build Menu" "Logs Menu" "Validate Menu" "Java Force GC" "Git Menu" "Quit")
 select opt in "${options[@]}"
 do
     case $opt in
@@ -796,10 +798,6 @@ do
             ;;
         "Validate Menu")
             menu_validate
-            ;;
-        "Seed SQL Database")
-            echo "Manually seeding database.  Ensure that the fixures are up and running prior to running this command."
-			manually_seed
             ;;
         "Java Force GC")
             force_gc

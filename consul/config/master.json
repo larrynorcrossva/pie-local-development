@@ -1,0 +1,6 @@
+{
+  "acl_datacenter": "dc1",
+  "acl_default_policy": "allow",
+  "acl_down_policy": "extend-cache",
+  "acl_master_token": "7BE784A4-7498-4469-BE2F-9C3B9444DFEF" 
+}
