@@ -863,7 +863,7 @@ services:
 
   # VistA Scheduling Service (VSS) - exposes vista data by using the mdws to via adapter
   vista-scheduling-service:
-    image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ckm/vista-scheduling-service:2.1.2
+    image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ckm/vista-scheduling-service:2.1.9
     container_name: vista-scheduling-service
     ports:
      - 8185:8080
