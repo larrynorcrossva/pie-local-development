@@ -405,7 +405,7 @@ services:
 ### SHARED SERVICES START ###
 #############################
   var-messaging-microservice:
-    image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ablevets/var-messaging-microservice:2.1.0
+    image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ablevets/var-messaging-microservice:2.1-av
     container_name: var-messaging-microservice
     expose:
       - "8080"
@@ -418,7 +418,7 @@ services:
       - "JAVA_OPTS=-Xms64m -Xmx170m -XX:+UseSerialGC"
 
   facility-service:
-    image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ablevets/facility-resources:2.1.0
+    image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ablevets/facility-resources:2.1-av
     container_name: facility-service
     ports:
       - "7501:8080"
