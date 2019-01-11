@@ -4,7 +4,13 @@
 
 echo "********************* Register SM with API Gateway *********************"
 curl -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -s -X PUT http://${HOST_DOMAIN}:8500/v1/kv/vamf/${VAMF_ENVIRONMENT}/apigateway/1.0/services/scheduling-manager-resources -d '{"location":"/SchedulingManagerService","service":"scheduling-manager-resources-8080","redirect":"off","headers":{"X-Real-IP":"$remote_addr","host":"$http_host"}}' > /dev/null && \
-curl -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -s -X PUT http://${HOST_DOMAIN}:8500/v1/kv/vamf/${VAMF_ENVIRONMENT}/apigateway/1.0/services/scheduling-manager -d '{"location":"/scheduling-manager","service":"scheduling-manager-web","redirect":"off","headers":{"X-Real-IP":"$remote_addr"}}' > /dev/null && \
+curl -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -s -X PUT http://${HOST_DOMAIN}:8500/v1/kv/vamf/${VAMF_ENVIRONMENT}/apigateway/1.0/services/scheduling-manager -d '{"location":"/scheduling-manager","service":"scheduling-manager-web","redirect":"off","headers":{"X-Real-IP":"$remote_addr"}}' > /dev/null
+
+curl -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -s -X PUT http://${HOST_DOMAIN}:8500/v1/kv/vamf/${VAMF_ENVIRONMENT}/apigateway/1.0/services/scheduling-manager-resources-beta -d '{"location":"/SchedulingManagerServiceBeta","service":"scheduling-manager-resources-beta","redirect":"off","headers":{"X-Real-IP":"$remote_addr","host":"$http_host"}}' > /dev/null
+curl -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -s -X PUT http://${HOST_DOMAIN}:8500/v1/kv/vamf/${VAMF_ENVIRONMENT}/apigateway/1.0/services/scheduling-manager-beta -d '{"location":"/scheduling-manager-beta","service":"scheduling-manager-web-beta","redirect":"off","headers":{"X-Real-IP":"$remote_addr"}}' > /dev/null
+
+
+
 
 echo "********************* Register NextGen consul variables for scheduling-manager-resources *********************"
 curl -H "Content-Type: application/json" -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -X PUT -d "var-mongo-db-mock:27017" http://${HOST_DOMAIN}:8500/v1/kv/appconfig/${VAMF_ENVIRONMENT}/scheduling-manager-resources/mongo.host > /dev/null

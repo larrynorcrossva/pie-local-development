@@ -405,10 +405,10 @@ services:
 ### SHARED SERVICES START ###
 #############################
   var-messaging-microservice:
-    image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ablevets/var-messaging-microservice:2.1-av
+    image: ${ENV_IMAGE_ROOT}/var-messaging-microservice:${VMM_VERSION}
     container_name: var-messaging-microservice
-    expose:
-      - "8080"
+    ports:
+      - "7502:8080"
     environment:
       - SERVICE_TAGS=local
       - SERVICE_NAME=var-messaging-microservice
@@ -418,20 +418,47 @@ services:
       - "JAVA_OPTS=-Xms64m -Xmx170m -XX:+UseSerialGC"
 
   facility-service:
-    image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ablevets/facility-resources:2.1-av
+    image: ${ENV_IMAGE_ROOT}/facility-resources:${FACILITY_RESOURCES_VERSION}
     container_name: facility-service
     ports:
       - "7501:8080"
-    expose:
-      - "8080"
     environment:
       - SERVICE_TAGS=local
-      - SERVICE_NAME=facility-service
-      - SERVICE_8080_NAME=facility-service
+      - SERVICE_NAME=facility-resources
+      - SERVICE_8080_NAME=facility-resources
       - CONSUL_SERVER=consul:8500
       - CONSUL_TOKEN=7BE784A4-7498-4469-BE2F-9C3B9444DFEF
       - CONSUL_PATH=appconfig/local/facility-resources
       - "JAVA_OPTS=-Xms64m -Xmx170m -XX:+UseSerialGC"
+
+  var-messaging-microservice-beta:
+    image: ${ENV_IMAGE_ROOT}/var-messaging-microservice:${VMM_VERSION}
+    container_name: var-messaging-microservice-beta
+    ports:
+      - "17998:8080"
+    environment:
+      - SERVICE_TAGS=local
+      - SERVICE_NAME=var-messaging-microservice-beta
+      - CONSUL_SERVER=consul:8500
+      - CONSUL_TOKEN=7BE784A4-7498-4469-BE2F-9C3B9444DFEF
+      - CONSUL_PATH=appconfig/local/var-messaging-microservice-beta
+      - "JAVA_OPTS=-Xms64m -Xmx170m -XX:+UseSerialGC"
+
+  facility-service-beta:
+    image: ${ENV_IMAGE_ROOT}/facility-resources:${FACILITY_RESOURCES_VERSION}
+    container_name: facility-service-beta
+    ports:
+      - "29776:8080"
+    environment:
+      - SERVICE_TAGS=local
+      - SERVICE_NAME=facility-resources-beta
+      - SERVICE_8080_NAME=facility-resources-beta
+      - CONSUL_SERVER=consul:8500
+      - CONSUL_TOKEN=7BE784A4-7498-4469-BE2F-9C3B9444DFEF
+      - CONSUL_PATH=appconfig/local/facility-resources-beta
+      - "JAVA_OPTS=-Xms64m -Xmx170m -XX:+UseSerialGC"
+
+
 
   vmr-mock-service:
     image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ablevets/vmr-mock-service:latest
@@ -559,6 +586,7 @@ services:
       retries: 3
 
   adr-service:
+ #  image: mobileapps.vaftl.us:9250/ckm/adr-service:2.0.0
     image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ckm/adr-services:1.2.0
     container_name: adr-service
     ports:
@@ -574,6 +602,7 @@ services:
     #- VAULT_ADDR=http://vault:8200
     #- SECRET_PATH=secret/local/adr-service
     # Use Consul
+    - JWT_SECRET=testtesttest
     - USE_ENVCONSUL=true
     - CONSUL_SERVER=consul:8500
     - CONSUL_TOKEN=$CONSUL_MASTER_TOKEN
@@ -1048,6 +1077,42 @@ services:
       - CONSUL_PATH=appconfig/local/var-web
       - VAMF_ENVIRONMENT=local
 
+  var-resources-beta:
+    image: ${ENV_IMAGE_ROOT}/var-resources:${VAR_RESOURCES_VERSION}
+    container_name: var-resources-beta
+    ports:
+     - "9093:8080"
+    links:
+     - var-messaging-microservice
+     - facility-service
+     - mock-mvi
+    environment:
+     - SERVICE_64058_IGNORE=true
+     - SERVICE_8080_NAME=var-resources-beta
+     - SERVICE_TAGS=local
+     - SERVICE_NAME=var-resources-beta
+     - CONSUL_SERVER=consul:8500
+     - CONSUL_TOKEN=7BE784A4-7498-4469-BE2F-9C3B9444DFEF
+     - CONSUL_PATH=appconfig/local/var-resources-beta
+     - mock.mvi=false
+     - JWT_SECRET=testtesttest
+     - "JAVA_OPTS=-Xms128m -Xmx768m -XX:+UseSerialGC -Dcom.sun.xml.ws.transport.http.client.HttpTransportPipe.dump=true -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=64058"
+
+  var-web-beta:
+    image: ${ENV_IMAGE_ROOT}/var-web:${VAR_WEB_VERSION}
+    container_name: var-web-beta
+    ports:
+      - "9094:80"
+    environment:
+      - SERVICE_TAGS=local
+      - SERVICE_NAME=var-web-beta
+      - CONSUL_SERVER=consul:8500
+      - CONSUL_TOKEN=7BE784A4-7498-4469-BE2F-9C3B9444DFEF
+      - CONSUL_PATH=appconfig/local/var-web
+      - VAMF_ENVIRONMENT=local
+
+
+
   scheduling-manager-resources:
     image: ${ENV_IMAGE_ROOT}/scheduling-manager-resources:${SM_RESOURCES_VERSION}
     container_name: scheduling-manager-resources
@@ -1064,6 +1129,30 @@ services:
      - JWT_SECRET=testtesttest
      - "JAVA_OPTS=-Xms128m -Xmx768m -XX:+UseSerialGC -Dcom.sun.xml.ws.transport.http.client.HttpTransportPipe.dump=true -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=64059"
 
+  scheduling-manager-web-beta:
+    image: ${ENV_IMAGE_ROOT}/scheduling-manager-web:${SM_WEB_VERSION}
+    container_name: scheduling-manager-web-beta
+    ports:
+      - "9072:80"
+    environment:
+      - SERVICE_TAGS=local
+      - SERVICE_NAME=scheduling-manager-web-beta
+
+  scheduling-manager-resources-beta:
+    image: ${ENV_IMAGE_ROOT}/scheduling-manager-resources:${SM_RESOURCES_VERSION}
+    container_name: scheduling-manager-resources-beta
+    ports:
+     - "9073:8080"
+    environment:
+     - SERVICE_64059_IGNORE=true
+     - SERVICE_TAGS=local
+     - SERVICE_NAME=scheduling-manager-resources-beta
+     - CONSUL_SERVER=consul:8500
+     - CONSUL_TOKEN=7BE784A4-7498-4469-BE2F-9C3B9444DFEF
+     - CONSUL_PATH=appconfig/local/scheduling-manager-resources
+     - JWT_SECRET=testtesttest
+     - "JAVA_OPTS=-Xms128m -Xmx768m -XX:+UseSerialGC -Dcom.sun.xml.ws.transport.http.client.HttpTransportPipe.dump=true -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=64059"
+
   scheduling-manager-web:
     image: ${ENV_IMAGE_ROOT}/scheduling-manager-web:${SM_WEB_VERSION}
     container_name: scheduling-manager-web
@@ -1072,6 +1161,8 @@ services:
     environment:
       - SERVICE_TAGS=local
       - SERVICE_NAME=scheduling-manager-web
+
+
 
   appointment-service:
     image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ckm/mobile-appointment-service:1.5.0
@@ -1122,6 +1213,22 @@ services:
       - CONSUL_PATH=appconfig/local/var-utility-resources
       - JWT_SECRET=testtesttest
       - "JAVA_OPTS=-Xms64m -Xmx170m -XX:+UseSerialGC -Dcom.sun.xml.ws.transport.http.client.HttpTransportPipe.dump=true -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=64060"
+
+  var-utility-resources-beta:
+    image: ${ENV_IMAGE_ROOT}/var-utility-resources:${VARUT_RESOURCES_VERSION}
+    container_name: var-utility-resources-beta
+    ports:
+      - "9076:8080"
+    environment:
+      - SERVICE_64060_IGNORE=true
+      - SERVICE_TAGS=local
+      - SERVICE_NAME=var-utility-resources-beta
+      - CONSUL_SERVER=consul:8500
+      - CONSUL_TOKEN=7BE784A4-7498-4469-BE2F-9C3B9444DFEF
+      - CONSUL_PATH=appconfig/local/var-utility-resources
+      - JWT_SECRET=testtesttest
+      - "JAVA_OPTS=-Xms64m -Xmx170m -XX:+UseSerialGC -Dcom.sun.xml.ws.transport.http.client.HttpTransportPipe.dump=true -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=64060"
+
   var-utility-web:
     image: ${ENV_IMAGE_ROOT}/var-utility-web:${VARUT_WEB_VERSION}
     container_name: var-utility-web
@@ -1129,7 +1236,25 @@ services:
       - "9075:80"
     environment:
       - SERVICE_TAGS=local
-      - SERVICE_NAME=var-utility-web
+      - SERVICE_NAME=va-tool-set-web
+      - CONSUL_SERVER=consul:8500
+      - CONSUL_TOKEN=7BE784A4-7498-4469-BE2F-9C3B9444DFEF
+      - CONSUL_PATH=appconfig/local/var-utility-web
+      - VAMF_ENVIRONMENT=local
+
+  var-utility-web-beta:
+    image: ${ENV_IMAGE_ROOT}/var-utility-web:${VARUT_WEB_VERSION}
+    container_name: var-utility-web-beta
+    ports:
+      - "9077:80"
+    environment:
+      - SERVICE_TAGS=local
+      - SERVICE_NAME=va-tool-set-web-beta
+      - CONSUL_SERVER=consul:8500
+      - CONSUL_TOKEN=7BE784A4-7498-4469-BE2F-9C3B9444DFEF
+      - CONSUL_PATH=appconfig/local/var-utility-web-beta
+      - VAMF_ENVIRONMENT=local
+
 
 
 networks:

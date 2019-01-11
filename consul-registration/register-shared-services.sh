@@ -11,7 +11,13 @@ curl -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -s -X PUT http://${HOST_DOMAIN}
 curl -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -s -X PUT http://${HOST_DOMAIN}:8500/v1/kv/vamf/${VAMF_ENVIRONMENT}/apigateway/1.0/services/apt-reminder-subscriber -d '{"location":"/apt-reminder-subscriber","service":"apt-reminder-subscriber","redirect":"off","headers":{"X-Real-IP":"$remote_addr", "HOST":"$http_host"}}' >/dev/null
 curl -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -s -X PUT http://${HOST_DOMAIN}:8500/v1/kv/vamf/${VAMF_ENVIRONMENT}/apigateway/1.0/services/trs -d '{"location":"/trs","service":"task-resources","redirect":"off","headers":{"X-Real-IP":"$remote_addr", "X-Forwarded-Host" : "$host"}}' > /dev/null
 curl -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -s -X PUT http://${HOST_DOMAIN}:8500/v1/kv/vamf/${VAMF_ENVIRONMENT}/apigateway/1.0/services/appointment-service -d '{"location":"/appointments/v1","service":"appointment-service","redirect":"off","headers":{"X-Real-IP":"$remote_addr"}}' > /dev/null
-curl -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -s -X PUT http://${HOST_DOMAIN}:8500/v1/kv/vamf/${VAMF_ENVIRONMENT}/apigateway/1.0/services/facility-service -d '{"location":"/FacilityService","service":"facility-service","redirect":"off","headers":{"X-Real-IP":"$remote_addr"}}' > /dev/null
+curl -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -s -X PUT http://${HOST_DOMAIN}:8500/v1/kv/vamf/${VAMF_ENVIRONMENT}/apigateway/1.0/services/facility-service -d '{"location":"/FacilityService","service":"facility-resources","redirect":"off","headers":{"X-Real-IP":"$remote_addr"}}' > /dev/null
+
+
+echo "********************* Register Shared Services Beta with API Gateway *********************"
+curl -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -s -X PUT http://${HOST_DOMAIN}:8500/v1/kv/vamf/${VAMF_ENVIRONMENT}/apigateway/1.0/services/facility-service-beta -d '{"location":"/FacilityServiceBeta","service":"facility-resources-beta","redirect":"off","headers":{"X-Real-IP":"$remote_addr"}}' > /dev/null
+
+
 
 echo "********************* Register NextGen consul variables for video-visits-service  *********************"
 curl -H "Content-Type: application/json" -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -X PUT -d "http://${MDWS_HOST}/mdws3.2.8/SchedulingSvc.asmx" http://${HOST_DOMAIN}:8500/v1/kv/appconfig/${VAMF_ENVIRONMENT}/video-visits-service/APP_VVS_MDWS_SCHEDULINGSERVICE_SOAP_URI > /dev/null
@@ -59,11 +65,44 @@ curl -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -s -X PUT localhost:8500/v1/kv/
 curl -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -s -X PUT localhost:8500/v1/kv/appconfig/local/facility-resources/APPDYNAMICS_NODE_PREFIX -d 'FACILITY-SERVICE' > /dev/null
 curl -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -s -X PUT localhost:8500/v1/kv/appconfig/local/facility-resources/app.var.facility.mongo.host -d 'var-mongo-db-mock:27017' > /dev/null
 
+
 echo "********************* Register NextGen consul variables for veteran-messaging-microservice *********************"
 curl -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -s -X PUT localhost:8500/v1/kv/appconfig/local/var-messaging-microservice/APPDYNAMICS_MONITORING_ENABLED -d 'true' > /dev/null
 curl -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -s -X PUT localhost:8500/v1/kv/appconfig/local/var-messaging-microservice/APPDYNAMICS_APPLICATION_NAME -d 'VAMF LOCAL VAR-MESSAGING-MICROSERVICE' > /dev/null
 curl -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -s -X PUT localhost:8500/v1/kv/appconfig/local/var-messaging-microservice/APPDYNAMICS_NODE_PREFIX -d 'VAR-MESSAGING-MICROSERVICE' > /dev/null
 curl -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -s -X PUT localhost:8500/v1/kv/appconfig/local/var-messaging-microservice/app.vmm.mongo.connection -d 'mongodb://vmm:vmm@var-mongo-db-mock:27017/vmm' > /dev/null
+
+curl -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -X PUT http://${HOST_DOMAIN}:8500/v1/kv/appconfig/${VAMF_ENVIRONMENT}/var-messaging-microservice/app.vmm.smtp.host -d ${SMTP_HOST}  > /dev/null
+curl -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -X PUT http://${HOST_DOMAIN}:8500/v1/kv/appconfig/${VAMF_ENVIRONMENT}/var-messaging-microservice/app.vmm.smtp.port -d "25"  > /dev/null
+curl -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -X PUT http://${HOST_DOMAIN}:8500/v1/kv/appconfig/${VAMF_ENVIRONMENT}/var-messaging-microservice/app.vmm.smtp.useSSL -d "false" > /dev/null
+curl -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -X PUT http://${HOST_DOMAIN}:8500/v1/kv/appconfig/${VAMF_ENVIRONMENT}/var-messaging-microservice/app.vmm.smtp.from.password -d ${SMTP_HOST_AV_PASS} > /dev/null
+
+echo "********************* Register NextGen consul variables for facility-service-beta *********************"
+curl -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -s -X PUT localhost:8500/v1/kv/appconfig/local/facility-resources-beta/APPDYNAMICS_MONITORING_ENABLED -d 'true' > /dev/null
+curl -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -s -X PUT localhost:8500/v1/kv/appconfig/local/facility-resources-beta/APPDYNAMICS_APPLICATION_NAME -d 'VAMF LOCAL FACILITY-SERVICE' > /dev/null
+curl -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -s -X PUT localhost:8500/v1/kv/appconfig/local/facility-resources-beta/APPDYNAMICS_NODE_PREFIX -d 'FACILITY-SERVICE' > /dev/null
+curl -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -s -X PUT localhost:8500/v1/kv/appconfig/local/facility-resources-beta/app.var.facility.mongo.host -d 'var-mongo-db-mock:27017' > /dev/null
+
+echo "********************* Register NextGen consul variables for veteran-messaging-microservice-beta *********************"
+curl -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -s -X PUT localhost:8500/v1/kv/appconfig/local/var-messaging-microservice-beta/APPDYNAMICS_MONITORING_ENABLED -d 'true' > /dev/null
+curl -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -s -X PUT localhost:8500/v1/kv/appconfig/local/var-messaging-microservice-beta/APPDYNAMICS_APPLICATION_NAME -d 'VAMF LOCAL VAR-MESSAGING-MICROSERVICE' > /dev/null
+curl -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -s -X PUT localhost:8500/v1/kv/appconfig/local/var-messaging-microservice-beta/APPDYNAMICS_NODE_PREFIX -d 'VAR-MESSAGING-MICROSERVICE' > /dev/null
+curl -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -s -X PUT localhost:8500/v1/kv/appconfig/local/var-messaging-microservice-beta/app.vmm.mongo.connection -d 'mongodb://vmm:vmm@var-mongo-db-mock:27017/vmm' > /dev/null
+curl -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -s -X PUT http://${HOST_DOMAIN}:8500/v1/kv/appconfig/${VAMF_ENVIRONMENT}/var-messaging-microservice-beta/app.vmm.smtp.host -d ${SMTP_HOST}  > /dev/null
+curl -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -s -X PUT http://${HOST_DOMAIN}:8500/v1/kv/appconfig/${VAMF_ENVIRONMENT}/var-messaging-microservice-beta/app.vmm.smtp.port -d "25"  > /dev/null
+curl -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -s -X PUT http://${HOST_DOMAIN}:8500/v1/kv/appconfig/${VAMF_ENVIRONMENT}/var-messaging-microservice-beta/app.vmm.smtp.useSSL -d "false" > /dev/null
+curl -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -s -X PUT http://${HOST_DOMAIN}:8500/v1/kv/appconfig/${VAMF_ENVIRONMENT}/var-messaging-microservice-beta/app.vmm.smtp.from.password -d ${SMTP_HOST_AV_PASS} > /dev/null
+
+
+
+echo "********************* Register NextGen consul variables for task-resources-service *********************"
+curl -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -s -X PUT localhost:8500/v1/kv/appconfig/local/trs/MONGODB_TASK_RESOURCES_COLLECTION -d 'taskresources' > /dev/null
+curl -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -s -X PUT localhost:8500/v1/kv/appconfig/local/trs/MONGODB_TASK_RESOURCES_DB -d 'taskresourcesdb' > /dev/null
+curl -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -s -X PUT localhost:8500/v1/kv/appconfig/local/trs/MONGODB_TASK_RESOURCES_URI -d 'mongodb://testuser:testpass@mongo:27017/taskresourcesdb?ssl=false&connectTimeoutMS=20000&maxPoolSize=100' > /dev/null
+
+
+
+
 
 echo "********************* Register NextGen consul variables for task-resources-service *********************"
 curl -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -s -X PUT localhost:8500/v1/kv/appconfig/local/trs/MONGODB_TASK_RESOURCES_COLLECTION -d 'taskresources' > /dev/null
@@ -72,10 +111,6 @@ curl -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -s -X PUT localhost:8500/v1/kv/
 
 
 #if you prefer internal vpn, use this to override. if you want emails.
-curl  -H "Content-Type: application/json" -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -X PUT -d ${SMTP_HOST} http://${HOST_DOMAIN}:8500/v1/kv/appconfig/${VAMF_ENVIRONMENT}/var-messaging-microservice/app.vmm.smtp.host   > /dev/null
-curl  -H "Content-Type: application/json" -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -X PUT -d "25" http://${HOST_DOMAIN}:8500/v1/kv/appconfig/${VAMF_ENVIRONMENT}/var-messaging-microservice/app.vmm.smtp.port   > /dev/null
-curl  -H "Content-Type: application/json" -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -X PUT -d "false" http://${HOST_DOMAIN}:8500/v1/kv/appconfig/${VAMF_ENVIRONMENT}/var-messaging-microservice/app.vmm.smtp.useSSL  > /dev/null
-curl  -H "Content-Type: application/json" -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -X PUT -d ${SMTP_HOST_AV_PASS} http://${HOST_DOMAIN}:8500/v1/kv/appconfig/${VAMF_ENVIRONMENT}/var-messaging-microservice/app.vmm.smtp.from.password  > /dev/null
 
 echo "********************* Register NextGen consul variables for apt-reminder-publisher *********************"
 curl -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -X PUT http://${HOST_DOMAIN}:8500/v1/kv/appconfig/${VAMF_ENVIRONMENT}/apt-reminder-publisher/APP_ARP_MONGO_ARP_DATABASE_NAME -d "personalpreferences"  > /dev/null

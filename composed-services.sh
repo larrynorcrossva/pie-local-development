@@ -12,9 +12,22 @@ vet=(roa-services roa-web eula-service eula-web veteran-video-connect-service ia
 
 staff=(patient-context mock-wstrust ssoi-mock sud-service sud-web pcs-service pcs-web personal-preference-service vista-data-services mdws-via-adapter staff-video-connect-service vista-emr-service)
 
-var=(var-resources var-web)
+var=()
 
-sm=(scheduling-manager-resources scheduling-manager-web)
+sm=()
 
-vats=(var-utility-resources var-utility-web)
+vats=()
+
+
+# Comment the following to disable the regular URLs
+ss+=(var-messaging-microservice facility-service)
+var+=(var-resources var-web)
+sm+=(scheduling-manager-resources scheduling-manager-web)
+vats+=(var-utility-resources var-utility-web)
+
+# Uncomment the following to enable beta deployments
+# vats+=(var-utility-resources-beta var-utility-web-beta)
+# sm+=(scheduling-manager-resources-beta scheduling-manager-web-beta)
+# var+=(var-resources-beta var-web-beta)
+# ss+=(var-messaging-microservice-beta facility-service-beta)
 

@@ -251,6 +251,16 @@ validate_apigateway() {
     validate_url "var-utility-services"  "http://localhost:8089/VarUtilityServices/"				 200
 }
 
+validate_beta() {
+    printf "\n\nChecking var. . . \n\n"
+    validate_url "var-web-beta"                      "http://localhost:9000/var-beta/v4/version.json"                           200
+    validate_url "var-resources-beta"                "http://localhost:9000/var-beta/VeteranAppointmentRequestService/v4/rest/" 200
+    validate_url "scheduling-manager-web-beta"       "http://localhost:9001/scheduling-manager-beta/v3/version.json"            200
+    validate_url "scheduling-manager-resources-beta" "http://localhost:9001/SchedulingManagerServiceBeta/"                      200
+    validate_url "var-utility-web"                   "http://localhost:8089/va-tool-set-beta/v3/version.json"                   200
+    validate_url "var-utility-services"              "http://localhost:8089/VarUtilityServicesBeta/"				            200
+}
+
 validate_compose_config() {
     . app.env
 	docker-compose config --resolve-image-digests || {
@@ -268,7 +278,7 @@ validate_compose_config() {
 menu_validate() {
 PS3='Please enter your choice: '
 options=("Validate compose config"  "Validate fixtures" "Validate core" "Validate ss" "Validate vet" "Validate staff" 
-"Validate var" "Validate sm" "Validate vats"  "Validate apigateway" "Validate all"
+"Validate var" "Validate sm" "Validate vats"  "Validate apigateway" "Validate all" "Validate beta"
 "Restart registrator"
 "Quit")
 select opt in "${options[@]}"
@@ -314,6 +324,10 @@ do
             validate_sm
             validate_apigateway
             ;;
+        "Validate beta")
+            validate_beta
+            ;;
+
 
         "Restart registrator")
             docker-compose up -d --force-recreate --no-deps registrator
@@ -365,7 +379,7 @@ build_var_web() {
     printf "\n\nBuilding branch: $(git -C . status | head -n 1 | awk '{print $3}')\n\n\n" 
     sleep 2
     
-    . app.env && ./build.sh && docker build -t dev/var-web dist/
+    . app.env && ./build.sh && docker build --force-rm --no-cache -t dev/var-web dist/
     popd || return
 }
 
@@ -381,7 +395,7 @@ build_var_resources() {
     printf "\n\nBuilding branch: $(git -C . status | head -n 1 | awk '{print $3}')\n\n\n" 
     sleep 2
 
-    . app.env && ./build.sh && docker build -t dev/var-resources dist/
+    . app.env && ./build.sh && docker build --force-rm --no-cache -t dev/var-resources dist/
     popd || return
 }
 
@@ -398,7 +412,7 @@ build_sm_web() {
     sleep 2
 
     npm install
-    . app.env && ./build.sh && docker build -t dev/scheduling-manager-web dist/
+    . app.env && ./build.sh && docker build --force-rm --no-cache -t dev/scheduling-manager-web dist/
     popd || return
 }
 
@@ -414,7 +428,7 @@ build_sm_resources() {
     printf "\n\nBuilding branch: $(git -C . status | head -n 1 | awk '{print $3}')\n\n\n" 
     sleep 2
 
-    . app.env && ./build.sh && docker build -t dev/scheduling-manager-resources dist/
+    . app.env && ./build.sh && docker build --force-rm --no-cache -t dev/scheduling-manager-resources dist/
     popd || return
 }
 
@@ -431,23 +445,39 @@ build_vats_web() {
     printf "\n\nBuilding branch: $(git -C . status | head -n 1 | awk '{print $3}')\n\n\n" 
     sleep 2
     
-    . app.env && ./build.sh skipTests && docker build -t dev/var-utility-web dist/
+    . app.env && ./build.sh skipTests && docker build --force-rm --no-cache -t dev/var-utility-web dist/
     popd || return
 }
 
-build_vats_resources() {
-    if [ ! -d ../var-utility-resources/ ] ; then
-        echo "Could not find directory ../var-utility-resources/"
+build_vmm() {
+    if [ ! -d ../var-messaging-microservice/ ] ; then
+        echo "Could not find directory ../var-messaging-microservice/"
         echo "Clone the repository to a folder next to var-nextgen-local-environment"
         return
     fi
 
-    pushd ../var-utility-resources/ || return
+    pushd ../var-messaging-microservice/ || return
 
     printf "\n\nBuilding branch: $(git -C . status | head -n 1 | awk '{print $3}')\n\n\n" 
     sleep 2
 
-    . app.env && ./build.sh && docker build -t dev/var-utility-resources dist/
+    . app.env && ./build.sh && docker build --force-rm --no-cache -t dev/var-messaging-microservice dist/
+    popd || return
+}
+
+build_facility_resources() {
+    if [ ! -d ../facility-resources/ ] ; then
+        echo "Could not find directory ../facility-resources/"
+        echo "Clone the repository to a folder next to var-nextgen-local-environment"
+        return
+    fi
+
+    pushd ../facility-resources/ || return
+
+    printf "\n\nBuilding branch: $(git -C . status | head -n 1 | awk '{print $3}')\n\n\n" 
+    sleep 2
+
+    . app.env && ./build.sh && docker build --force-rm --no-cache -t dev/facility-resources dist/
     popd || return
 }
 
@@ -457,6 +487,7 @@ options=("Setup Base Images"
 "Build Var Web" "Build Var Resources"
 "Build SM Web" "Build SM Resources" 
 "Build Vats Web" "Build Vats Resources"
+"Build Facility Resources" "Build VMM"
 "Quit")
 select opt in "${options[@]}"
 do
@@ -488,6 +519,14 @@ do
         "Build Vats Resources")
             echo "Manually building vats-resources"
             build_vats_resources
+            ;;
+        "Build Facility Resources")
+            echo "Manually building facility-resources"
+            build_facility_resources
+            ;;
+        "Build VMM")
+            echo "Manually building vmm"
+            build_vmm
             ;;
         "Quit")
             break
