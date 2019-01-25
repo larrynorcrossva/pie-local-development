@@ -120,7 +120,6 @@ The script will check for the latest version of each docker image on https://mob
 - Mobile Blue Button PDF generation (MBB-PDF) - https://coderepo.mobilehealth.va.gov/projects/VAMFC/repos/docker-mbb-pdfservice/browse
 - MDWS-VIA-Adapter - https://coderepo.mobilehealth.va.gov/projects/VDSMS/repos/mdws-via-adapter/browse
 - Vista Data Services (VDS) - https://coderepo.mobilehealth.va.gov/projects/VDSMS/repos/vista-data-services/browse
-- Health Data Repository (HDR) Service - https://coderepo.mobilehealth.va.gov/projects/VAMFC/repos/hdr-mock/browse
 - Staff User Disclosure (SUD) Data Service - https://coderepo.mobilehealth.va.gov/projects/VDMS/repos/sud-service/browse
 - Patient Notification Services (PNS) - https://coderepo.mobilehealth.va.gov/projects/VDMS/repos/vamf-notification-services/browse
 
@@ -134,7 +133,6 @@ The script will check for the latest version of each docker image on https://mob
 - MVI - https://coderepo.mobilehealth.va.gov/projects/VAMFC/repos/docker-mvi-mock/browse
 - MVI - https://coderepo.mobilehealth.va.gov/projects/VAMFC/repos/docker-roa-mock/browse
 - VIA - https://coderepo.mobilehealth.va.gov/projects/VDSMS/repos/via-mock-service/browse
-- HDR - https://coderepo.mobilehealth.va.gov/projects/VAMFC/repos/hdr-mock/browse
 
 
 ### Sample Apps (offical Stash Repos):
@@ -150,7 +148,6 @@ Swagger UI is available on http://localhost:8091
 - ROA: http://localhost:8086/roa/v1/
 - User Service: http://localhost:8081/users/v1/
 - VDS: http://localhost:8085/VistaDataServices/v1/
-- HDR: http://localhost:8089/hdr/v1/
 - SUD: http://localhost:8089/sud/v1/
 - PNS: http://localhost:8098/pns/v1/
 
