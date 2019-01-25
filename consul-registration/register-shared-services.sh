@@ -11,12 +11,10 @@ curl -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -s -X PUT http://${HOST_DOMAIN}
 curl -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -s -X PUT http://${HOST_DOMAIN}:8500/v1/kv/vamf/${VAMF_ENVIRONMENT}/apigateway/1.0/services/trs -d '{"location":"/trs","service":"task-resources","redirect":"off","headers":{"X-Real-IP":"$remote_addr", "X-Forwarded-Host" : "$host"}}' > /dev/null
 curl -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -s -X PUT http://${HOST_DOMAIN}:8500/v1/kv/vamf/${VAMF_ENVIRONMENT}/apigateway/1.0/services/appointment-service -d '{"location":"/appointments/v1","service":"appointment-service","redirect":"off","headers":{"X-Real-IP":"$remote_addr"}}' > /dev/null
 curl -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -s -X PUT http://${HOST_DOMAIN}:8500/v1/kv/vamf/${VAMF_ENVIRONMENT}/apigateway/1.0/services/facility-service -d '{"location":"/FacilityService","service":"facility-resources","redirect":"off","headers":{"X-Real-IP":"$remote_addr"}}' > /dev/null
-
+curl -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -s -X PUT http://${HOST_DOMAIN}:8500/v1/kv/vamf/${VAMF_ENVIRONMENT}/apigateway/1.0/services/adr -d '{"location":"/adr","service":"adr-service","redirect":"off","request_headers":"on","headers":{"X-Real-IP":"$remote_addr","X-Forwarded-For":"$proxy_add_x_forwarded_for","X-Forwarded-Server":"$host","X-Forwarded-Host":"$host"}}' > /dev/null
 
 echo "********************* Register Shared Services Beta with API Gateway *********************"
 curl -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -s -X PUT http://${HOST_DOMAIN}:8500/v1/kv/vamf/${VAMF_ENVIRONMENT}/apigateway/1.0/services/facility-service-beta -d '{"location":"/FacilityServiceBeta","service":"facility-resources-beta","redirect":"off","headers":{"X-Real-IP":"$remote_addr"}}' > /dev/null
-
-
 
 echo "********************* Register NextGen consul variables for video-visits-service  *********************"
 curl -H "Content-Type: application/json" -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -X PUT -d "http://${MDWS_HOST}/mdws3.2.8/SchedulingSvc.asmx" http://${HOST_DOMAIN}:8500/v1/kv/appconfig/${VAMF_ENVIRONMENT}/video-visits-service/APP_VVS_MDWS_SCHEDULINGSERVICE_SOAP_URI > /dev/null
@@ -110,3 +108,9 @@ curl -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -s -X PUT localhost:8500/v1/kv/
 
 ## user service app token public key adding telehealth.messaging.subscriber.v1  just for reference
 ## curl -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -X PUT http://${HOST_DOMAIN}:8500/v1/kv/appconfig/${VAMF_ENVIRONMENT}/user-services/JWTISSUER_CONFIG_JSON -d "[{\"rsaPublicKeyB64\":\"MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAtxwSTqAC49xXxWIX/kpb4EWXjnpN8ii5FbjAOmubKA32ZVHC+OSj14uRkKJp5EgU0aOO6cbm7jTnGjOFq+KC540qtBMP6/bd/rcXNCb7t8ajb2eWC1PdvYCrpXM/IAZvdrOGhc9sU+8DeZj2dJg+WIlWkrnXsHMbAd5ePt1mCx6NPADFBRVSJg9MAN04yzBAcgmAeOgcZGYqHcihov3hIi0UnAwi0wtBHIquGcRKhUAG5clOY3YxyNJZ2HWglrCHtz1sHe7OGFBfGGR18C+S6CK7GDB2zm3IkJ16uqf/F3s+tF7u88mE3t6gr/Y/1U6OH99xm1Ta0Yqzie351qEXSwIDAQAB\",\"iss\":\"gov.va.mhv.idp.v1\",\"userType\":\"VETERAN\"},{\"rsaPublicKeyB64\":\"MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAtxwSTqAC49xXxWIX/kpb4EWXjnpN8ii5FbjAOmubKA32ZVHC+OSj14uRkKJp5EgU0aOO6cbm7jTnGjOFq+KC540qtBMP6/bd/rcXNCb7t8ajb2eWC1PdvYCrpXM/IAZvdrOGhc9sU+8DeZj2dJg+WIlWkrnXsHMbAd5ePt1mCx6NPADFBRVSJg9MAN04yzBAcgmAeOgcZGYqHcihov3hIi0UnAwi0wtBHIquGcRKhUAG5clOY3YxyNJZ2HWglrCHtz1sHe7OGFBfGGR18C+S6CK7GDB2zm3IkJ16uqf/F3s+tF7u88mE3t6gr/Y/1U6OH99xm1Ta0Yqzie351qEXSwIDAQAB\",\"iss\":\"external.idp.test1\",\"userType\":\"VETERAN\"},{\"rsaPublicKeyB64\":\"MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQC/FshF558yJSPEGm11CZBPYP7D5+dPd2THXK82yJ4GeKGaHGUK0GzzGlPbls0SEPV24eS2EEoPJNqGD05hnogTzykvwO1wdNPZRNJil3qDx3xDXz7SXnxBrhwyyYrl+ehwPcPz3cyXqYIs4QRwoKGDhihRKZ+RHz8BcPdEM6mLnwIDAQAB\",\"iss\":\"telehealth.messaging.subscriber.v1\",\"userType\":\"VETERAN\"}]" > /dev/null
+
+echo "********************* Register NextGen consul variables for ADR *********************"
+curl -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -X PUT http://${HOST_DOMAIN}:8500/v1/kv/appconfig/${VAMF_ENVIRONMENT}/adr-service/WSDL_URL     -d "http://mock-adr:8080/adr/mockeeSummaryPortSoap11?WSDL"  > /dev/null
+curl -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -X PUT http://${HOST_DOMAIN}:8500/v1/kv/appconfig/${VAMF_ENVIRONMENT}/adr-service/ENDPOINT_URL -d "http://mock-adr:8080/adr/mockeeSummaryPortSoap11"  > /dev/null
+curl -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -X PUT http://${HOST_DOMAIN}:8500/v1/kv/appconfig/${VAMF_ENVIRONMENT}/adr-service/TRACE_URL    -d "http://zipkin:9411/api/v1/spans"  > /dev/null
+curl -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -X PUT http://${HOST_DOMAIN}:8500/v1/kv/appconfig/${VAMF_ENVIRONMENT}/adr-service/JWT_SECRET   -d "testtesttest"  > /dev/null
