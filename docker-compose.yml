@@ -900,7 +900,7 @@ services:
 
   ### MDWS to VIA adapter
   mdws-via-adapter:
-    image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ckm/mdws-via-adapter:1.5.1
+    image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ckm/mdws-via-adapter:1.5.3
     container_name: mdws-via-adapter
     ports:
      - 8180:8080
