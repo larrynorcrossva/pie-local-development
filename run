@@ -31,6 +31,8 @@ function set_stack_mode_dev(){
     export SM_WEB_VERSION=latest
     export VARUT_RESOURCES_VERSION=latest
     export VARUT_WEB_VERSION=latest
+    export FACILITY_RESOURCES_VERSION=latest
+    export VMM_VERSION=latest
 }
 
 # In test mode, all applications will pull from the ECR based on the version tagged in this dev/release branch.

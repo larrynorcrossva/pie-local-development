@@ -381,7 +381,7 @@ services:
 ### SHARED SERVICES START ###
 #############################
   var-messaging-microservice:
-    image: ${ENV_IMAGE_ROOT}/var-messaging-microservice:${VMM_VERSION}
+    image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ablevets/var-messaging-microservice:${VMM_VERSION}
     container_name: var-messaging-microservice
     ports:
       - "7502:8080"
@@ -395,7 +395,7 @@ services:
       - "JAVA_OPTS=-Xms64m -Xmx170m -XX:+UseSerialGC -agentlib:jdwp=transport=dt_socket,address=5005,server=y,suspend=n"
 
   facility-service:
-    image: ${ENV_IMAGE_ROOT}/facility-resources:${FACILITY_RESOURCES_VERSION}
+    image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ablevets/facility-resources:${FACILITY_RESOURCES_VERSION}
     container_name: facility-service
     ports:
       - "7501:8080"
