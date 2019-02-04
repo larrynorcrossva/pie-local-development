@@ -412,8 +412,10 @@ build_sm_web() {
     sleep 2
 
     npm install
+    export BUILD_NUMBER=3
     . app.env && ./build.sh && docker build --force-rm --no-cache -t dev/scheduling-manager-web dist/
     popd || return
+    unset BUILD_NUMBER
 }
 
 build_sm_resources() {

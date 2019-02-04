@@ -24,3 +24,9 @@ curl -H "Content-Type: application/json" -H "X-Consul-Token: ${CONSUL_MASTER_TOK
 curl -H "Content-Type: application/json" -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -X PUT -d "Agilexadmin99$" http://${HOST_DOMAIN}:8500/v1/kv/appconfig/${VAMF_ENVIRONMENT}/scheduling-manager-resources/vardb_password > /dev/null
 curl -H "Content-Type: application/json" -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -X PUT -d "tk1ZXVsKmafZFt8p" http://${HOST_DOMAIN}:8500/v1/kv/appconfig/${VAMF_ENVIRONMENT}/scheduling-manager-resources/cdw_password > /dev/null
 curl -H "Content-Type: application/json" -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -X PUT -d "AmnHW8q6mYRKqNHeYisDTW3FlfaXcgbijqwqq/hI/0hJ" http://${HOST_DOMAIN}:8500/v1/kv/appconfig/${VAMF_ENVIRONMENT}/scheduling-manager-resources/smtp.password > /dev/null
+
+
+echo "********************* Register NextGen consul variables for scheduling-manager-web*********************"
+curl  -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -X PUT -d "https://staff.mobilehealth.va.gov/launchpad" http://${HOST_DOMAIN}:8500/v1/kv/appconfig/${VAMF_ENVIRONMENT}/staff/scheduling-manager-web/LAUNCHPAD_URL > /dev/null
+curl  -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -X PUT -d "https://staff.mobilehealth.va.gov/launchpad" http://${HOST_DOMAIN}:8500/v1/kv/appconfig/${VAMF_ENVIRONMENT}/staff/scheduling-manager-web-beta/LAUNCHPAD_URL > /dev/null
+
