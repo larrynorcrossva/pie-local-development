@@ -451,6 +451,22 @@ build_vats_web() {
     popd || return
 }
 
+build_vats_resources() {
+    if [ ! -d ../var-utility-resources/ ] ; then
+        echo "Could not find directory ../var-utility-resources/"
+        echo "Clone the repository to a folder next to var-nextgen-local-environment"
+        return
+    fi
+
+    pushd ../var-utility-resources/ || return
+
+    printf "\n\nBuilding branch: $(git -C . status | head -n 1 | awk '{print $3}')\n\n\n" 
+    sleep 2
+
+    . app.env && ./build.sh && docker build -t dev/var-utility-resources dist/
+    popd || return
+}
+
 build_vmm() {
     if [ ! -d ../var-messaging-microservice/ ] ; then
         echo "Could not find directory ../var-messaging-microservice/"
