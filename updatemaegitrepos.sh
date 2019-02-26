@@ -46,7 +46,7 @@ function checkout_project() {
         echo "Project: $project does not exist..."
         git clone $repo
         cd $project
-        git_checkout_latest_dev_branch
+        git_checkout_latest_release_branch
 		setup_project
     else
         echo "Project: $project already downloaded, stashing working changes before checking out changes..."
@@ -54,13 +54,13 @@ function checkout_project() {
         git status -b
         git stash save "Automated backup before checkout."
         git fetch origin
-        git_checkout_latest_dev_branch
+        git_checkout_latest_release_branch
         git submodule update --init --recursive --remote
 		setup_project
     fi
 }
 
-function git_checkout_latest_dev_branch() {
+function git_checkout_latest_release_branch() {
 	if [ ! -d .git ]; then
 		echo "Assert Failed; current working dir is not a git repository"
 		return 1
@@ -73,16 +73,16 @@ function git_checkout_latest_dev_branch() {
 
 	for branch in `git branch -r | grep -v HEAD`; do 
 		echo -e `git show --format="%ci %cr" $branch | head -n 1` \\t$branch; 
-	done | sort -r | grep dev\/
+	done | sort -r | grep release\/
 
 	local branch
-    branch=$(git branch -r | cut -d \/ -f 2- | sed -n -e '/^dev\/[0-9].[0-9][0-9]$/p' | sort -n  | tail -n 1)
+    branch=$(git branch -r | cut -d \/ -f 2- | sed -n -e '/^release\/[0-9].[0-9][0-9]$/p' | sort -n  | tail -n 1)
 
     if [[ -z "$branch" ]]; then
-        branch=$(git branch -r | cut -d \/ -f 2- | sed -n -e '/^dev\/[0-9].[0-9]$/p' | sort -n  | tail -n 1)
+        branch=$(git branch -r | cut -d \/ -f 2- | sed -n -e '/^release\/[0-9].[0-9]$/p' | sort -n  | tail -n 1)
     fi
 
-    echo "Using latest dev branch: $branch"
+    echo "Using latest release branch: $branch"
 
     git checkout $branch || { echo " Failed to checkout branch. " ; exit 3 ; }
     git pull || { echo " Failed to pull branch $branch. " ; exit 3 ; }
