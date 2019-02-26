@@ -362,6 +362,43 @@ services:
 ### DB FIXTURES END ###
 #######################
 
+  via-weblogic:
+    image: mobileapps.vaftl.us:9250/ckm/vamf/via-weblogic:4.0.25
+    tty: true
+    ports:
+      - "7011:7011"
+      - "8000:8000"
+    environment:
+      - USE_MOCK_RESULTS=true
+      - MOCK_RESULTS_URL=http://via-mock-engine:8080/mock/results/
+      - SIMULATE_SSOI=true
+      - SIMULATED_SSOI_ACCESS_CODE=FakeDoc1
+      - SIMULATED_SSOI_VERIFY_CODE=FD3456!!
+    depends_on:
+      - via-oracle
+      - via-vista
+      - via-mock-engine
+
+  via-oracle:
+    image: mobileapps.vaftl.us:9250/ckm/vamf/via-oracle:4.0.25
+    ports:
+      - "1522:1521"
+
+  via-vista:
+    image: mobileapps.vaftl.us:9250/ckm/vamf/via-vista:4.0.25
+    ports:
+      - "8001:8001"
+      - "2222:22"
+      - "9430:9430"
+
+  via-mock-engine:
+    image: mobileapps.vaftl.us:9250/ckm/vamf/via-mock-engine:4.0.25
+    ports:
+      - "8082:8080"
+      - "5005:5005"
+#   volumes:
+#     - ./via-mock-files/SchedulingService:/opt/via-mock-files
+
 #######################
 ### DATA SEED START ###
 #######################

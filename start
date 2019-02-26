@@ -49,6 +49,16 @@ function start_fixtures(){
     docker-compose up -d --force-recreate --no-deps "${fixtures[@]}"
 }
 
+function start_via(){
+    echo e "\nStarting VIA\n"
+    docker-compose stop "${via[@]}"
+    if [ "$PULL" = true ] ; then
+        docker-compose pull --ignore-pull-failures "${via[@]}"
+    fi
+    docker-compose up -d --force-recreate --no-deps "${via[@]}"
+}
+
+
 function start_data_seed(){
     echo -e "\nStarting Data Seed\n"
     docker-compose stop var-mongo-data-seed

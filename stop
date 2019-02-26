@@ -8,6 +8,10 @@ function stop_fixtures(){
     docker-compose rm -v -s -f "${fixtures[@]}"
 }
 
+function stop_via(){
+    docker-compose rm -v -s -f "${via[@]}"
+}
+
 function stop_core(){
     docker-compose rm -v -s -f "${core[@]}"
     docker-compose rm -v -s -f "consul"
@@ -57,6 +61,7 @@ while [[ "$#" > 0 ]]; do case $1 in
   a|all|-a|--all) stop_all; shift;;
   c|core|-c|--core) stop_core; shift;;
   f|fixtures|-f|--fixtures) stop_fixtures; shift;;
+  via|--via) stop_via; shift;;
   s|ss|-s|--shared-services) stop_shared_services; shift;;
   v|vet|-v|--vet) stop_vet; shift;;
   staff|--staff) stop_staff; shift;;
