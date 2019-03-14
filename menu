@@ -354,16 +354,20 @@ manually_seed() {
 }
 
 build_base_images() {
-    aws ecr get-login --region us-east-1 --no-include-email | bash
-    local DTR_PREFIX_AWS="181140462490.dkr.ecr.us-east-1.amazonaws.com"
-    docker pull ${DTR_PREFIX_AWS}/ablevets/openjdk8-tomcat-appdynamics:1.0.1
-    docker tag ${DTR_PREFIX_AWS}/ablevets/openjdk8-tomcat-appdynamics:1.0.1 dev/openjdk8-tomcat-appdynamics:1.0.0
+    docker login mobileapps.vaftl.us:9250
+    local DTR_PREFIX="mobileapps.vaftl.us:9250"
+    docker pull ${DTR_PREFIX}/md/map/openjdk8-tomcat-appdynamics:1.0.1
+    docker tag ${DTR_PREFIX}/md/map/openjdk8-tomcat-appdynamics:1.0.1 dev/openjdk8-tomcat-appdynamics:1.0.1
      
-    docker pull ${DTR_PREFIX_AWS}/ablevets/centos7-nginx
-    docker tag ${DTR_PREFIX_AWS}/ablevets/centos7-nginx dev/centos7-nginx
+    docker pull ${DTR_PREFIX}/md/map/centos7-nginx
+    docker tag ${DTR_PREFIX}/md/map/centos7-nginx dev/centos7-nginx
 
-    docker pull ${DTR_PREFIX_AWS}/ablevets/centos7-openjdk8-tomcat:latest
-    docker tag ${DTR_PREFIX_AWS}/ablevets/centos7-openjdk8-tomcat:latest dev/openjdk8-tomcat:latest
+    docker pull ${DTR_PREFIX}/md/map/centos7-openjdk8-tomcat:latest
+    docker tag ${DTR_PREFIX}/md/map/centos7-openjdk8-tomcat:latest dev/openjdk8-tomcat:latest
+
+    docker pull ${DTR_PREFIX}/images/oraclejdk8-tomcat-appdynamics:2.0.0
+    docker tag ${DTR_PREFIX}/images/oraclejdk8-tomcat-appdynamics:2.0.0 dev/oraclejdk8-tomcat-appdynamics:2.0.0
+   
 }
 
 build_var_web() {
@@ -831,12 +835,12 @@ force_gc() {
 
 menu_main() {
 PS3='Please enter your choice: '
-options=("Login ECR" "Setup Menu" "Status Menu" "Quickstart Menu" "Build Menu" "Logs Menu" "Validate Menu" "Java Force GC" "Git Menu" "Quit")
+options=("Login DTR" "Setup Menu" "Status Menu" "Quickstart Menu" "Build Menu" "Logs Menu" "Validate Menu" "Java Force GC" "Git Menu" "Quit")
 select opt in "${options[@]}"
 do
     case $opt in
-        "Login ECR")
-            aws ecr get-login --region us-east-1 --no-include-email | bash
+        "Login DTR")
+            docker login mobileapps.vaftl.us:9250
             ;;
         "Status Menu")
             main_status

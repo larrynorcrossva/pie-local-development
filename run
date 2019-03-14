@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 . app.env
+docker-compose rm -v -s -f "consul" # stop consul prior to spinning up the stack
 . start
 
 export PULL=false
