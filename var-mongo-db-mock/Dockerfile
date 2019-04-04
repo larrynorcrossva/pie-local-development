@@ -1,9 +1,4 @@
-FROM mongo:3.6.6
-
-ENV DEBIAN_FRONTEND noninteractive
-RUN apt-get update \
-    && apt-get install -y --no-install-recommends ssl-cert \
-    && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+FROM mongo:3.6.11-xenial
 
 COPY ssl/certs/ /etc/ssl/certs/
 COPY conf/mongod.conf /etc/mongod.conf

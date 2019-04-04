@@ -13,13 +13,22 @@ if [[ "$JVM_VERSION" > "1.9" ]]; then
     exit 1
 fi
 
-# Make sure hostlocal.io is set up before continuing…
 echo -e "***ENVIRONMENT VALIDATION***"
 echo -e "Checking if hostlocal.io is set up properly…"
-ping -c 1 hostlocal.io > /dev/null;
+# Make sure hostlocal.io is set up before continuing…
+function check_hostlocal() {
+    ping -c 1 hostlocal.io > /dev/null;
+}
+
+check_hostlocal
 
 if [ $? -ne 0 ]; then
-	echo -e "\n\nThe hostname 'hostlocal.io' is not set up properly and is required to support local development environments. Please run ./add-hostlocal.sh and try again." >&2
-	exit 1
+	echo -e "\nThe hostname 'hostlocal.io' is not set up properly and is required to support local development environments. \nInitializing hostlocal.io now...\n" >&2
+	. add-hostlocal.sh
+    check_hostlocal
+    if [ $? -ne 0 ]; then
+        echo -e "\nCould not initialize hostlocal.io...\n"
+        exit 1
+    fi
 fi
-echo -e "hostlocal.io is responding. Now starting the docker-compose services…"
+echo -e "\nhostlocal.io is responding. Now starting the requested services…\n"

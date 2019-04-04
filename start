@@ -12,6 +12,9 @@ function start_all_shared(){
     start_core
     sleep 15
     start_shared_services
+    # added by VAOS Internal team
+    sleep 15
+    start_via
 }
 
 function start_all(){
@@ -50,7 +53,7 @@ function start_fixtures(){
 }
 
 function start_via(){
-    echo e "\nStarting VIA\n"
+    echo -e "\nStarting VIA\n"
     docker-compose stop "${via[@]}"
     if [ "$PULL" = true ] ; then
         docker-compose pull --ignore-pull-failures "${via[@]}"
@@ -139,4 +142,3 @@ function start_vats(){
     fi
     docker-compose up -d --force-recreate --no-deps "${vats[@]}"
 }
-

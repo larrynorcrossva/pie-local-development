@@ -85,7 +85,7 @@ services:
   mock-mvi:
     # Image is built from MSE Jenkins:
     # https://mse-demo.vaftl.us:8080/job/var-mock-mvi/
-    image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ablevets/var-mock-mvi:201812202020_680472
+    image: mobileapps.vaftl.us:9250/md/map/var-mock-mvi:201812202020_680472
     container_name: mock-mvi
     volumes:
       - ./healthchecks:/opt/healthchecks
@@ -102,7 +102,7 @@ services:
       retries: 3
 
   user-services:
-    image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ckm/docker-user-service:1.9.2
+    image: mobileapps.vaftl.us:9250/md/map/docker-user-service:1.9.2
     container_name: user-services
     links:
       - mock-mvi
@@ -157,7 +157,7 @@ services:
       - "IDP_CONFIG_JSON=[{\"idpId\": \"gov.va.iam.ssoe.v1\",\"friendlyName\": \"VAAFI SSOe\",\"description\": \"Veteran login supporting DSLogon, Symantec, and other CSPs.\",\"versionId\": \"v1\",\"scope\": \"VETERAN\",\"logoUrl\": \"img/dslogon-logo.png\",\"loginUrl\": \"http://${HOST_DOMAIN}:9000/users/v1/landing\",\"logoutUrl\": \"http://iamssoe-proxy-mock/ssoeproxy/logout\",\"landingPage\": \"http://${HOST_DOMAIN}:9000/ssoeproxy/logout\"},{\"idpId\": \"gov.va.iam.ssoi.v1\",\"friendlyName\": \"VAAFI SSOi\",\"description\": \"Staff login supporting PIV authentication.\",\"versionId\": \"v1\",\"scope\": \"STAFF\",\"logoUrl\": \"img/logo_navbar_ipad.png\",\"loginUrl\": \"http://localhost:9001/users/v1/landing\",\"logoutUrl\": \"http://${HOST_DOMAIN}:9001/ssoiproxy/logout\",\"landingPage\": \"http://${HOST_DOMAIN}/users/v1/landing\"},{\"idpId\": \"gov.va.mhv.v1\",\"friendlyName\": \"My HealtheVet\",\"description\": \"Staff login supporting PIV authentication.\",\"versionId\": \"v1\",\"scope\": \"VETERAN\",\"logoUrl\": \"img/mhv-logo.png\",\"loginUrl\": \"http://${HOST_DOMAIN}:8080/ssoiproxy/login\",\"logoutUrl\": \"http://${HOST_DOMAIN}:8080/ssoiproxy/logout\",\"landingPage\": \"http://${HOST_DOMAIN}:8080/users/v1/landing\"}]"
 
   authorization-rules-service:
-    image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ckm/authorization-rules-service:1.1.1
+    image: mobileapps.vaftl.us:9250/md/map/authorization-rules-service:1.1.1
     container_name: authorization-rules-service
     ports:
       - "8481:8080"
@@ -192,7 +192,7 @@ services:
       - SERVICE_TAGS=local
 
   eula-service:
-    image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ckm/eula-service:1.3.0
+    image: mobileapps.vaftl.us:9250/md/map/eula-service:1.3.0
     container_name: eula-service
     expose:
       - "8080"
@@ -242,6 +242,7 @@ services:
 
 # Third party as is mocks
   zipkin:
+    container_name: zipkin
     image: mobileapps.vaftl.us:9250/ckm/k8-pod-infra-containers/zipkin
     ports:
       - "9411:9411"
@@ -271,7 +272,7 @@ services:
       retries: 3
 
   var-mongo-db-mock:
-    image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ablevets/var-mongo-db-mock:1.0.1_096653d5a212
+    image: mobileapps.vaftl.us:9250/md/map/var-mongo-db-mock:1.0.1_096653d5a212
     container_name: var-mongo-db-mock
     volumes:
       - ./healthchecks:/opt/healthchecks
@@ -284,6 +285,7 @@ services:
       - JWT_SECRET=testtesttest
       - CONSUL_SERVER=consul:8500
       - CONSUL_TOKEN=${CONSUL_MASTER_TOKEN}
+      - VAMF_ENVIRONMENT=local
       - CONSUL_PATH=appconfig/${VAMF_ENVIRONMENT}/var-mongo-db-mock
     healthcheck:
       test: ["CMD", "bash", "/opt/healthchecks/healthcheck-mongo.sh"]
@@ -292,7 +294,7 @@ services:
       retries: 3
 
   var-oracle-db-mock:
-    image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ablevets/var-oracle-db-mock:201812210021_8c38ad
+    image: mobileapps.vaftl.us:9250/md/map/var-oracle-db-mock:201812210021_8c38ad
     container_name: var-oracle-db-mock
     ports:
       - "1521:1521"
@@ -310,7 +312,7 @@ services:
 
   video-visits-mongo-mock:
     container_name: video-visits-mongo-mock
-    image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ablevets/video-visits-mongo-mock:1.1.1-VAR-13407-ee2e9693db65
+    image: mobileapps.vaftl.us:9250/md/map/video-visits-mongo-mock:1.1.1-VAR-13407-ee2e9693db65
     ports:
       - "27015:27017"
     environment:
@@ -320,10 +322,11 @@ services:
       - JWT_SECRET=testtesttest
       - CONSUL_SERVER=consul:8500
       - CONSUL_TOKEN=${CONSUL_MASTER_TOKEN}
+      - VAMF_ENVIRONMENT=local
       - CONSUL_PATH=appconfig/${VAMF_ENVIRONMENT}/video-visits-mongo-mock
 
   vvs-mongo-mock:
-    image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ckm/vamf/appointment-service-vvs-mongo-mock:1.0.0
+    image: mobileapps.vaftl.us:9250/md/map/appointment-service-vvs-mongo-mock:1.0.0
     container_name: vvs-mongo-mock
     ports:
       - "27014:27017"
@@ -363,36 +366,45 @@ services:
 #######################
 
   via-weblogic:
-    image: mobileapps.vaftl.us:9250/ckm/vamf/via-weblogic:4.0.25
+    container_name: via-weblogic
+    image: mobileapps.vaftl.us:9250/ckm/vamf-via-weblogic:latest
     tty: true
     ports:
       - "7011:7011"
       - "8000:8000"
     environment:
-      - USE_MOCK_RESULTS=true
+      - USE_MOCK_RESULTS=false
       - MOCK_RESULTS_URL=http://via-mock-engine:8080/mock/results/
-      - SIMULATE_SSOI=true
+      - SIMULATE_SSOI=false
       - SIMULATED_SSOI_ACCESS_CODE=FakeDoc1
       - SIMULATED_SSOI_VERIFY_CODE=FD3456!!
+      - VISTA_CONFIG_JSON=[{"visnName":"VA New England Health Care System","visnId":"1","siteName":"Dockerized,Vista","siteId":"500","host":"via-vista","vlPort":"8001"}]
     depends_on:
       - via-oracle
       - via-vista
       - via-mock-engine
 
   via-oracle:
-    image: mobileapps.vaftl.us:9250/ckm/vamf/via-oracle:4.0.25
+    container_name: via-oracle
+    image: mobileapps.vaftl.us:9250/ckm/vamf-via-oracle:4.1.4
     ports:
       - "1522:1521"
 
   via-vista:
-    image: mobileapps.vaftl.us:9250/ckm/vamf/via-vista:4.0.25
+    container_name: via-vista
+    image: mobileapps.vaftl.us:9250/md/map/vista:1.1.0
     ports:
       - "8001:8001"
-      - "2222:22"
       - "9430:9430"
+      - "9081:9081"
+      - "57772:57772"
+    environment:
+      - CACHE_KEY=<base 64 cache.key provided>
+      - SITE=500
 
   via-mock-engine:
-    image: mobileapps.vaftl.us:9250/ckm/vamf/via-mock-engine:4.0.25
+    container_name: via-mock-engine
+    image: mobileapps.vaftl.us:9250/ckm/vamf/via-mock-engine:4.1.3
     ports:
       - "8082:8080"
       - "5005:5005"
@@ -403,7 +415,8 @@ services:
 ### DATA SEED START ###
 #######################
   var-mongo-data-seed:
-    image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ablevets/var-mongo-data-seed:1.0.3
+    container_name: var-mongo-data-seed
+    image: mobileapps.vaftl.us:9250/md/map/var-mongo-data-seed:1.0.3
     container_name: var-mongo-data-seed
     volumes:
       - ./var-mongo-db-mock/data:/docker-entrypoint-initdb.d/
@@ -418,7 +431,8 @@ services:
 ### SHARED SERVICES START ###
 #############################
   var-messaging-microservice:
-    image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ablevets/var-messaging-microservice:${VMM_VERSION}
+    container_name: var-messaging-microservice
+    image: mobileapps.vaftl.us:9250/md/map/var-messaging-microservice:${VMM_VERSION}
     container_name: var-messaging-microservice
     ports:
       - "7502:8080"
@@ -432,7 +446,8 @@ services:
       - "JAVA_OPTS=-Xms64m -Xmx170m -XX:+UseSerialGC -agentlib:jdwp=transport=dt_socket,address=5005,server=y,suspend=n"
 
   facility-service:
-    image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ablevets/facility-resources:${FACILITY_RESOURCES_VERSION}
+    container_name: facility-service
+    image: mobileapps.vaftl.us:9250/md/map/facility-resources:${FACILITY_RESOURCES_VERSION}
     container_name: facility-service
     ports:
       - "7501:8080"
@@ -475,13 +490,14 @@ services:
 
 
   vmr-mock-service:
-    image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ablevets/vmr-mock-service:latest
+    image: mobileapps.vaftl.us:9250/md/map/vmr-mock-service:latest
     container_name: vmr-mock-service
     ports:
      - "8284:8080"
     environment:
      - constraint:nodetype==*service*
      - SERVICE_NAME=vmr-mock-service
+     - VAMF_ENVIRONMENT=local
      - SERVICE_TAGS=${VAMF_ENVIRONMENT}
      - JWT_SECRET=testtesttest
      - CONSUL_SERVER=consul:8500
@@ -490,7 +506,7 @@ services:
       - "JAVA_OPTS=-Xms64m -Xmx170m -XX:+UseSerialGC"
 
   video-visits-service:
-    image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ablevets/video-visits-service:2.4.3
+    image: mobileapps.vaftl.us:9250/md/map/video-visits-service:2.4.3
     container_name: video-visits-service
     ports:
       - "8079:8080"
@@ -513,7 +529,7 @@ services:
       - "JAVA_OPTS=-Xms64m -Xmx170m -XX:+UseSerialGC"
 
   messaging-publisher:
-    image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ablevets/messaging-publisher:1.0.1
+    image: mobileapps.vaftl.us:9250/md/map/messaging-publisher:1.0.1
     container_name: messaging-publisher
     hostname: "messaging-publisher"
     ports:
@@ -524,6 +540,7 @@ services:
      - JWT_SECRET=${JWT_SECRET}
      - CONSUL_SERVER=${CONSUL_SERVER}
      - CONSUL_TOKEN=${CONSUL_MASTER_TOKEN}
+     - VAMF_ENVIRONMENT=local
      - CONSUL_PATH=appconfig/${VAMF_ENVIRONMENT}/messaging-publisher
      - "TRACE_URL=http://zipkin:9411/api/v1/spans"
      - "JAVA_OPTS=-Xms64m -Xmx170m -XX:+UseSerialGC"
@@ -542,24 +559,16 @@ services:
       - "SERVICE_TAGS=local"
       - "CONSUL_SERVER=consul:8500"
       - "CONSUL_TOKEN=7BE784A4-7498-4469-BE2F-9C3B9444DFEF"
+      - VAMF_ENVIRONMENT=local
       - "CONSUL_PATH=appconfig/${VAMF_ENVIRONMENT}/trs"
       - "USE_ENVCONSUL=true"
       - JWT_SECRET=testtesttest
       - "MONGODB_TASK_RESOURCES_URI=mongodb://testuser:testpass@mongo:27017/taskresourcesdb?ssl=false&connectTimeoutMS=20000&maxPoolSize=100"
       - "JAVA_OPTS=-Xms64m -Xmx170m -XX:+UseSerialGC"
 
-  # mock-cdw:
-  #   image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ckm/docker-cdw-mock:2.0
-  #   environment:
-  #     - ACCEPT_EULA=Y
-  #     - SA_PASSWORD=IS4skwnfuglx928361V
-  #   container_name: mock-cdw
-  #   ports:
-  #     - 1433:1433
-  #   mem_limit: 3GB
 
   cdw-service:
-    image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ckm/cdw-services:2.0.1
+    image: mobileapps.vaftl.us:9250/md/map/cdw-services:2.0.1
     container_name: cdw-service
     ports:
       - 8072:8080
@@ -573,6 +582,7 @@ services:
 #     - DB_MOBILEHEALTH_PASSWORD=IS4skwnfuglx928361V
       - REDIS_HOST=redis
       - CORS_ALLOWED_ORIGIN=*
+      - VAMF_ENVIRONMENT=local
       - SERVICE_TAGS=${VAMF_ENVIRONMENT}
       - SERVICE_NAME=cdw-service
       - CONSUL_SERVER=${CONSUL_HTTP_ADDR}
@@ -601,7 +611,7 @@ services:
 
   adr-service:
  #  image: mobileapps.vaftl.us:9250/ckm/adr-service:2.0.0
-    image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ckm/adr-services:1.2.0
+    image: mobileapps.vaftl.us:9250/md/map/adr-services:1.2.0
     container_name: adr-service
     ports:
     - "8083:8080"
@@ -639,6 +649,7 @@ services:
 #
   roa-services:
     image: mobileapps.vaftl.us:9250/ckm/docker-roa-service:1.0.11
+    container_name: roa-services
     restart: on-failure
     links:
       - mock-roa
@@ -663,6 +674,7 @@ services:
 
 ## ROA WEB
   roa-web:
+    container_name: roa-web
     image: mobileapps.vaftl.us:9250/ckm/docker-roa-web
     ports:
      - "8087:80"
@@ -671,7 +683,7 @@ services:
     - SERVICE_NAME=roa-web
 
   veteran-video-connect-service:
-    image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ablevets/veteran-video-connect-service:3.0.0
+    image: mobileapps.vaftl.us:9250/md/map/veteran-video-connect-service:3.0.0
     container_name: veteran-video-connect-service
     ports:
       - "8280:8080"
@@ -682,6 +694,7 @@ services:
       - JWT_SECRET=testtesttest
       - CONSUL_SERVER=consul:8500
       - CONSUL_TOKEN=7BE784A4-7498-4469-BE2F-9C3B9444DFEF
+      - VAMF_ENVIRONMENT=local
       - CONSUL_PATH=appconfig/${VAMF_ENVIRONMENT}/veteran-video-connect-service
       - "TRACE_URL=http://localhost:9411/api/v1/spans"
       - "JAVA_OPTS=-Xms64m -Xmx170m -XX:+UseSerialGC"
@@ -690,7 +703,7 @@ services:
   iamssoe-proxy-mock:
     # Image is built from MSE Jenkins:
     # https://mse-demo.vaftl.us:8080/job/var-idp-mock/
-    image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ablevets/idp-proxy-mock-shared:201811220217_460c98
+    image: mobileapps.vaftl.us:9250/md/map/idp-proxy-mock-shared:201811220217_460c98
     container_name: iamssoe-proxy-mock
     ports:
       - 9000:80
@@ -706,7 +719,7 @@ services:
   iamssoe-db-mock:
     # Image is built from MSE Jenkins:
     # https://mse-demo.vaftl.us:8080/job/var-idp-mock/
-    image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ablevets/idp-db-mock-shared:201812031800_52b365
+    image: mobileapps.vaftl.us:9250/md/map/idp-db-mock-shared:201812031800_52b365
     container_name: iamssoe-db-mock
     ports:
       - 3306:3306
@@ -724,7 +737,7 @@ services:
 
 #Patient context service
   patient-context:
-    image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ablevets/patient-context:2.0.5
+    image: mobileapps.vaftl.us:9250/md/map/patient-context:2.0.5
     container_name: patient-context
     ports:
       - '3001:3001'
@@ -748,7 +761,7 @@ services:
 
 # Mock SSOi
   ssoi-mock:
-    image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ckm/ssoi-mock:latest
+    image: mobileapps.vaftl.us:9250/md/map/ssoi-mock:latest
     container_name: ssoi-mock
     ports:
       - 9001:80
@@ -777,6 +790,7 @@ services:
 
 # SUD Service
   sud-service:
+    container_name: sud-service
     image: mobileapps.vaftl.us:9250/ckm/docker-sud-service:1.1.2
     restart: on-failure
     links:
@@ -803,6 +817,7 @@ services:
 
 # SUD Web Application
   sud-web:
+    container_name: sud-web
     image: mobileapps.vaftl.us:9250/ckm/docker-sud-web:1222
     ports:
       - 8096:80
@@ -834,7 +849,7 @@ services:
       - "JAVA_OPTS=-Xms64m -Xmx170m -XX:+UseSerialGC"
 
   personal-preference-service:
-    image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ablevets/personal-preference-service:1.0.5
+    image: mobileapps.vaftl.us:9250/md/map/personal-preference-service:1.0.5
     container_name: personal-preference-service
     ports:
      - "8287:8080"
@@ -884,7 +899,7 @@ services:
 
   # VistA Scheduling Service (VSS) - exposes vista data by using the mdws to via adapter
   vista-scheduling-service:
-    image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ckm/vista-scheduling-service:2.1.9
+    image: mobileapps.vaftl.us:9250/md/map/vista-scheduling-service:2.1.9
     container_name: vista-scheduling-service
     ports:
      - 8185:8080
@@ -915,7 +930,7 @@ services:
      - "JAVA_OPTS=-Xms64m -Xmx170m -XX:+UseSerialGC"
 
   vista-emr-service:
-    image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ckm/vista-emr-service:2.2.0
+    image: mobileapps.vaftl.us:9250/md/map/vista-emr-service:2.2.0
     container_name: vista-emr-service
     ports:
     - 9899:8080
@@ -937,7 +952,7 @@ services:
 
   ### MDWS to VIA adapter
   mdws-via-adapter:
-    image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ckm/mdws-via-adapter:1.5.3
+    image: mobileapps.vaftl.us:9250/md/map/mdws-via-adapter:1.5.3
     container_name: mdws-via-adapter
     ports:
      - 8180:8080
@@ -973,7 +988,7 @@ services:
 
 # Staff Video Connect Resources (SVC Services/Resource)
   staff-video-connect-service:
-    image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ablevets/staff-video-connect-service:2.1.2
+    image: mobileapps.vaftl.us:9250/md/map/staff-video-connect-service:2.1.2
     container_name: staff-video-connect-service
     ports:
      - "8293:8080"
@@ -1124,7 +1139,7 @@ services:
       - CONSUL_PATH=appconfig/local/staff/scheduling-manager-web-beta
 
   appointment-service:
-    image: 181140462490.dkr.ecr.us-east-1.amazonaws.com/ckm/mobile-appointment-service:1.5.0
+    image: mobileapps.vaftl.us:9250/md/map/mobile-appointment-service:1.5.0
     container_name: appointment-service
     ports:
       - "9097:8080"
@@ -1219,5 +1234,5 @@ services:
 networks:
   default:
     external:
-      name: varnextgenlocalenvironment_default
+      name: vaos_default
 

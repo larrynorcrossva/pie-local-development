@@ -48,6 +48,8 @@ function stop_vats(){
 function stop_all(){
     stop_core;
     stop_fixtures;
+    # added by VAOS Internal team
+    stop_via;
     stop_data_seed;
     stop_shared_services;
     stop_vet;
