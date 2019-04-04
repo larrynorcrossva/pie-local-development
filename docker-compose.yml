@@ -242,6 +242,7 @@ services:
 
 # Third party as is mocks
   zipkin:
+    container_name: zipkin
     image: mobileapps.vaftl.us:9250/ckm/k8-pod-infra-containers/zipkin
     ports:
       - "9411:9411"
@@ -284,6 +285,7 @@ services:
       - JWT_SECRET=testtesttest
       - CONSUL_SERVER=consul:8500
       - CONSUL_TOKEN=${CONSUL_MASTER_TOKEN}
+      - VAMF_ENVIRONMENT=local
       - CONSUL_PATH=appconfig/${VAMF_ENVIRONMENT}/var-mongo-db-mock
     healthcheck:
       test: ["CMD", "bash", "/opt/healthchecks/healthcheck-mongo.sh"]
@@ -320,6 +322,7 @@ services:
       - JWT_SECRET=testtesttest
       - CONSUL_SERVER=consul:8500
       - CONSUL_TOKEN=${CONSUL_MASTER_TOKEN}
+      - VAMF_ENVIRONMENT=local
       - CONSUL_PATH=appconfig/${VAMF_ENVIRONMENT}/video-visits-mongo-mock
 
   vvs-mongo-mock:
@@ -363,36 +366,45 @@ services:
 #######################
 
   via-weblogic:
-    image: mobileapps.vaftl.us:9250/ckm/vamf/via-weblogic:4.0.25
+    container_name: via-weblogic
+    image: mobileapps.vaftl.us:9250/ckm/vamf-via-weblogic:latest
     tty: true
     ports:
       - "7011:7011"
       - "8000:8000"
     environment:
-      - USE_MOCK_RESULTS=true
+      - USE_MOCK_RESULTS=false
       - MOCK_RESULTS_URL=http://via-mock-engine:8080/mock/results/
-      - SIMULATE_SSOI=true
+      - SIMULATE_SSOI=false
       - SIMULATED_SSOI_ACCESS_CODE=FakeDoc1
       - SIMULATED_SSOI_VERIFY_CODE=FD3456!!
+      - VISTA_CONFIG_JSON=[{"visnName":"VA New England Health Care System","visnId":"1","siteName":"Dockerized,Vista","siteId":"500","host":"via-vista","vlPort":"8001"}]
     depends_on:
       - via-oracle
       - via-vista
       - via-mock-engine
 
   via-oracle:
-    image: mobileapps.vaftl.us:9250/ckm/vamf/via-oracle:4.0.25
+    container_name: via-oracle
+    image: mobileapps.vaftl.us:9250/ckm/vamf-via-oracle:4.1.4
     ports:
       - "1522:1521"
 
   via-vista:
-    image: mobileapps.vaftl.us:9250/ckm/vamf/via-vista:4.0.25
+    container_name: via-vista
+    image: mobileapps.vaftl.us:9250/md/map/vista:1.1.0
     ports:
       - "8001:8001"
-      - "2222:22"
       - "9430:9430"
+      - "9081:9081"
+      - "57772:57772"
+    environment:
+      - CACHE_KEY=<base 64 cache.key provided>
+      - SITE=500
 
   via-mock-engine:
-    image: mobileapps.vaftl.us:9250/ckm/vamf/via-mock-engine:4.0.25
+    container_name: via-mock-engine
+    image: mobileapps.vaftl.us:9250/ckm/vamf/via-mock-engine:4.1.3
     ports:
       - "8082:8080"
       - "5005:5005"
@@ -403,6 +415,7 @@ services:
 ### DATA SEED START ###
 #######################
   var-mongo-data-seed:
+    container_name: var-mongo-data-seed
     image: mobileapps.vaftl.us:9250/md/map/var-mongo-data-seed:1.0.3
     container_name: var-mongo-data-seed
     volumes:
@@ -418,6 +431,7 @@ services:
 ### SHARED SERVICES START ###
 #############################
   var-messaging-microservice:
+    container_name: var-messaging-microservice
     image: mobileapps.vaftl.us:9250/md/map/var-messaging-microservice:${VMM_VERSION}
     container_name: var-messaging-microservice
     ports:
@@ -432,6 +446,7 @@ services:
       - "JAVA_OPTS=-Xms64m -Xmx170m -XX:+UseSerialGC -agentlib:jdwp=transport=dt_socket,address=5005,server=y,suspend=n"
 
   facility-service:
+    container_name: facility-service
     image: mobileapps.vaftl.us:9250/md/map/facility-resources:${FACILITY_RESOURCES_VERSION}
     container_name: facility-service
     ports:
@@ -482,6 +497,7 @@ services:
     environment:
      - constraint:nodetype==*service*
      - SERVICE_NAME=vmr-mock-service
+     - VAMF_ENVIRONMENT=local
      - SERVICE_TAGS=${VAMF_ENVIRONMENT}
      - JWT_SECRET=testtesttest
      - CONSUL_SERVER=consul:8500
@@ -524,6 +540,7 @@ services:
      - JWT_SECRET=${JWT_SECRET}
      - CONSUL_SERVER=${CONSUL_SERVER}
      - CONSUL_TOKEN=${CONSUL_MASTER_TOKEN}
+     - VAMF_ENVIRONMENT=local
      - CONSUL_PATH=appconfig/${VAMF_ENVIRONMENT}/messaging-publisher
      - "TRACE_URL=http://zipkin:9411/api/v1/spans"
      - "JAVA_OPTS=-Xms64m -Xmx170m -XX:+UseSerialGC"
@@ -542,6 +559,7 @@ services:
       - "SERVICE_TAGS=local"
       - "CONSUL_SERVER=consul:8500"
       - "CONSUL_TOKEN=7BE784A4-7498-4469-BE2F-9C3B9444DFEF"
+      - VAMF_ENVIRONMENT=local
       - "CONSUL_PATH=appconfig/${VAMF_ENVIRONMENT}/trs"
       - "USE_ENVCONSUL=true"
       - JWT_SECRET=testtesttest
@@ -564,6 +582,7 @@ services:
 #     - DB_MOBILEHEALTH_PASSWORD=IS4skwnfuglx928361V
       - REDIS_HOST=redis
       - CORS_ALLOWED_ORIGIN=*
+      - VAMF_ENVIRONMENT=local
       - SERVICE_TAGS=${VAMF_ENVIRONMENT}
       - SERVICE_NAME=cdw-service
       - CONSUL_SERVER=${CONSUL_HTTP_ADDR}
@@ -630,6 +649,7 @@ services:
 #
   roa-services:
     image: mobileapps.vaftl.us:9250/ckm/docker-roa-service:1.0.11
+    container_name: roa-services
     restart: on-failure
     links:
       - mock-roa
@@ -654,6 +674,7 @@ services:
 
 ## ROA WEB
   roa-web:
+    container_name: roa-web
     image: mobileapps.vaftl.us:9250/ckm/docker-roa-web
     ports:
      - "8087:80"
@@ -673,6 +694,7 @@ services:
       - JWT_SECRET=testtesttest
       - CONSUL_SERVER=consul:8500
       - CONSUL_TOKEN=7BE784A4-7498-4469-BE2F-9C3B9444DFEF
+      - VAMF_ENVIRONMENT=local
       - CONSUL_PATH=appconfig/${VAMF_ENVIRONMENT}/veteran-video-connect-service
       - "TRACE_URL=http://localhost:9411/api/v1/spans"
       - "JAVA_OPTS=-Xms64m -Xmx170m -XX:+UseSerialGC"
@@ -768,6 +790,7 @@ services:
 
 # SUD Service
   sud-service:
+    container_name: sud-service
     image: mobileapps.vaftl.us:9250/ckm/docker-sud-service:1.1.2
     restart: on-failure
     links:
@@ -794,6 +817,7 @@ services:
 
 # SUD Web Application
   sud-web:
+    container_name: sud-web
     image: mobileapps.vaftl.us:9250/ckm/docker-sud-web:1222
     ports:
       - 8096:80
@@ -1210,5 +1234,5 @@ services:
 networks:
   default:
     external:
-      name: varnextgenlocalenvironment_default
+      name: vaos_default
 

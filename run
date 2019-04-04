@@ -1,12 +1,14 @@
 #!/usr/bin/env bash
 
+. prerequisites-check.sh
 . app.env
-docker-compose rm -v -s -f "consul" # stop consul prior to spinning up the stack
+# echo -e "\nStop Consul prior to spinning up the stack...\n"
+# docker-compose rm -v -s -f "consul"
 . start
 
 export PULL=false
 
-docker network create varnextgenlocalenvironment_default
+docker network create vaos_default
 
 function set_pull(){
     export PULL=true
