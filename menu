@@ -161,7 +161,8 @@ validate_staff() {
     local RESULT
     RESULT="UNKNOWN"
 
-    JWT=$(cat /tmp/cookie.jar | grep vamfjwt | awk '{print $7}')
+    JWT=$(cat /tmp/cookie.jar | grep vamfjwtv1 | awk '{print $7}')
+
     curl -sL -o /dev/null --cookie-jar /tmp/cookie.jar -H "X-VAMF-JWT: $JWT" "http://localhost:8089/users/v1/session/vars/ssoiWstToken"
 
     URL="http://localhost:8089/VistaDataServices/v1/patient/523/100865"

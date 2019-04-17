@@ -1,6 +1,6 @@
-# NOTE: This is a stripped down version of the Docker Local Development (https://coderepo.mobilehealth.va.gov/projects/DEV/repos/docker-local-development/browse) code that ONLY stands up the services required for VAR-related development
+# ** DRAFT ** NOTE: This is a stripped down version of the Docker Local Development (https://coderepo.mobilehealth.va.gov/projects/DEV/repos/docker-local-development/browse) code that ONLY stands up the services required for VAR-related development
 
-##VAR Development Environment Setup
+###VAR Development Environment Setup
 For best performance, it is recommended you allocate 10GB to Docker in a machine of a minimum 16GB available RAM.
 The stack is broken down into five main components:
 
@@ -11,6 +11,7 @@ The stack is broken down into five main components:
 - Data (Seeding mock databases) (short-running)
 - Applications (VAR, SM, VATS, etc) (development-centric)
 
+Prior to starting the stack, you may find it helpful to use the `./menu` script to log-in to the DTR, pull the images, and build the current project source. The resulting containers will be tagged 
 The stack should be stood up in this order to guarantee all dependencies are met at each segment of the infrastructure.
 Be sure to run the ECR login command such as
 `$(aws ecr get-login --no-include-email)` so the scripts are are able to properly pull prior to standing up each segment
@@ -22,7 +23,7 @@ of the stack.
    
 2. Seed mock fixtures
 
-  `./run data`
+   `./run data`
    
 3. Stand up NextGen Core Infrastructure:
    
@@ -34,17 +35,27 @@ of the stack.
    
 5. Stand up vet services (if running vet apps):
 
-  `./run vet`
+   `./run vet`
   
 6. Stand up staff services (if running vet apps):
 
-  `./run staff`
-   
+   `./run staff`
+
 7. Stand up necessary applications
 
    `./run var`
    
    `./run sm`
+
+   `./run vats` [if testing/developing VATS or modifying config]
+
+8. Stand up VIA services:
+
+   `./run via`
+
+9. Stand up vaos-vista container:
+
+   `./run vista`
 
 - To stand up the entire stack all in one go:
 
@@ -69,6 +80,14 @@ will delete the Oracle container cache, and next startup will do a full rebuild
 - Stop shared services containers:
    
    `./stop.sh shared-services`
+
+- Stop VIA services containers:
+   
+   `./stop.sh via`
+
+- Stop VistA container:
+   
+   `./stop.sh vista`
 
 - Stop VAR containers:
    

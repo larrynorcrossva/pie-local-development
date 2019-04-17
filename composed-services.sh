@@ -2,7 +2,9 @@
 
 fixtures=(mock-roa var-mongo-db-mock var-oracle-db-mock video-visits-mongo-mock vvs-mongo-mock mock-adr mongo)
 
-via=(via-mock-engine via-oracle via-vista via-weblogic)
+vista=(vaos-vista) # start vista independently for proof-of-concept...
+
+via=(via-oracle via-weblogic)
 
 core=(registrator apigateway user-services mock-mvi wayf-web authorization-rules-service redis)
 

@@ -8,6 +8,10 @@ function stop_fixtures(){
     docker-compose rm -v -s -f "${fixtures[@]}"
 }
 
+function stop_vista(){
+    docker-compose rm -v -s -f "${vista[@]}"
+}
+
 function stop_via(){
     docker-compose rm -v -s -f "${via[@]}"
 }
@@ -50,6 +54,7 @@ function stop_all(){
     stop_fixtures;
     # added by VAOS Internal team
     stop_via;
+    stop_vista;
     stop_data_seed;
     stop_shared_services;
     stop_vet;
@@ -70,6 +75,7 @@ while [[ "$#" > 0 ]]; do case $1 in
   var|--var) stop_var; shift;;
   sm|--sm) stop_sm; shift;;
   vats|--vats) stop_vats; shift;;
+  vista|--vista) stop_vista; shift;;
   *) echo "Unknown parameter: $1"; exit 1;;
 esac; done
 

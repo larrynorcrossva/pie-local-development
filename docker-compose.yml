@@ -365,51 +365,50 @@ services:
 ### DB FIXTURES END ###
 #######################
 
+  via-oracle:
+    container_name: via-oracle
+    image: mobileapps.vaftl.us:9250/ckm/oracle-test:1.0.0
+    ports:
+      - "22:22"
+      - "1522:1521"
+
   via-weblogic:
     container_name: via-weblogic
     image: mobileapps.vaftl.us:9250/ckm/vamf-via-weblogic:latest
-    tty: true
     ports:
       - "7011:7011"
-      - "8000:8000"
     environment:
-      - USE_MOCK_RESULTS=false
-      - MOCK_RESULTS_URL=http://via-mock-engine:8080/mock/results/
-      - SIMULATE_SSOI=false
-      - SIMULATED_SSOI_ACCESS_CODE=FakeDoc1
-      - SIMULATED_SSOI_VERIFY_CODE=FD3456!!
-      - VISTA_CONFIG_JSON=[{"visnName":"VA New England Health Care System","visnId":"1","siteName":"Dockerized,Vista","siteId":"500","host":"via-vista","vlPort":"8001"}]
+      - ORACLE_CONNECTION_URL=jdbc:oracle:thin:@//via-oracle:1521/xe
+      - ORACLE_CONNECTION_PASSWORD=VIA_PASSWORD
+      - VISTA_CONFIG_JSON=[{"visnName":"VA New England Health Care System","visnId":"1","siteName":"CAMP MASTER","siteId":"523","host":"vaos-vista","vistaPort":"9210", "vlPort":"8000","accessCode":"VBpeQlYen8JCQI+4XkQupg==","verifyCode":"3ien7ibTi2/IWO3q0ULXXA=="}]
     depends_on:
       - via-oracle
-      - via-vista
-      - via-mock-engine
+      - vaos-vista
 
-  via-oracle:
-    container_name: via-oracle
-    image: mobileapps.vaftl.us:9250/ckm/vamf-via-oracle:4.1.4
+  vaos-vista:
+    container_name: vaos-vista
+    image: mobileapps.vaftl.us:9250/md/map/vista:vaos-1.0.1
     ports:
-      - "1522:1521"
-
-  via-vista:
-    container_name: via-vista
-    image: mobileapps.vaftl.us:9250/md/map/vista:1.1.0
-    ports:
-      - "8001:8001"
-      - "9430:9430"
-      - "9081:9081"
+      - "8000:8000"
+      - "9210:9210"
       - "57772:57772"
     environment:
-      - CACHE_KEY=<base 64 cache.key provided>
-      - SITE=500
+      - CACHE_KEY=W0NvbmZpZ0ZpbGVdDQpGaWxlVHlwZT1MaWNlbnNlIDIwMTENCg0KW0xpY2Vuc2VdDQpMaWNlbnNlQ2FwYWNpdHk9Q2FjaGUgMjAxOC4xIEVudGVycHJpc2UgLSBDb25jdXJyZW50IFVzZXJzOjEyNSwgRGV2ZWxvcG1lbnQgTGljZW5zZSwgTXVsdGktU2VydmVyLCBQbGF0Zm9ybSBJbmRlcGVuZGVudA0KQ3VzdG9tZXJOYW1lPVZBIENJT0ZPIFNhbHQgTGFrZSBDaXR5DQpPcmRlck51bWJlcj0yMDE5MDUxOTENCkV4cGlyYXRpb25EYXRlPTEwLzEvMjAyNQ0KQXV0aG9yaXphdGlvbktleT00MTI0NzAwMDEyNTAwMDEyNTAwMDAwMDAwMDBFQjRDODlFNTE3MTAwNDENCk1hY2hpbmVJRD0NCg0K
 
-  via-mock-engine:
-    container_name: via-mock-engine
-    image: mobileapps.vaftl.us:9250/ckm/vamf/via-mock-engine:4.1.3
-    ports:
-      - "8082:8080"
-      - "5005:5005"
-#   volumes:
-#     - ./via-mock-files/SchedulingService:/opt/via-mock-files
+  ######################
+  # Gold VistA - will need long-term
+  #via-vista:
+  #  container_name: via-vista
+  #  image: mobileapps.vaftl.us:9250/md/map/vista:1.1.0
+  #  ports:
+  #    - "8001:8001"
+  #    - "9430:9430"
+  #    - "9081:9081"
+  #    - "57773:57772"
+  #  environment:
+  #    - CACHE_KEY=W0NvbmZpZ0ZpbGVdDQpGaWxlVHlwZT1MaWNlbnNlIDIwMTENCg0KW0xpY2Vuc2VdDQpMaWNlbnNlQ2FwYWNpdHk9Q2FjaGUgMjAxOC4xIEVudGVycHJpc2UgLSBDb25jdXJyZW50IFVzZXJzOjEyNSwgRGV2ZWxvcG1lbnQgTGljZW5zZSwgTXVsdGktU2VydmVyLCBQbGF0Zm9ybSBJbmRlcGVuZGVudA0KQ3VzdG9tZXJOYW1lPVZBIENJT0ZPIFNhbHQgTGFrZSBDaXR5DQpPcmRlck51bWJlcj0yMDE5MDUxOTENCkV4cGlyYXRpb25EYXRlPTEwLzEvMjAyNQ0KQXV0aG9yaXphdGlvbktleT00MTI0NzAwMDEyNTAwMDEyNTAwMDAwMDAwMDBFQjRDODlFNTE3MTAwNDENCk1hY2hpbmVJRD0NCg0K
+  #    - SITE=510
+  #####################
 
 #######################
 ### DATA SEED START ###
@@ -838,12 +837,12 @@ services:
     ports:
       - 17313:8080
     environment:
-      - VIA_BASE_URL=http://10.1.0.8:8089/via-webservices/services
+      - VIA_BASE_URL=http://via-weblogic:7011/via-webservices/services
       - SERVICE_NAME=pcs-service
       - USER_SVC_URL=http://user-services:8080/users/v1
-      - REQUESTING_APP=VAR_App
-      - CONSUMING_APP_TOKEN=APP_TOKEN
-      - CONSUMING_APP_PASSWORD=passw0rd123
+      - REQUESTING_APP=TEST_APP
+      - CONSUMING_APP_TOKEN=TEST_TOKEN
+      - CONSUMING_APP_PASSWORD=TEST_PASSWORD
       - "CONSUL_TOKEN=7BE784A4-7498-4469-BE2F-9C3B9444DFEF"
       - JWT_SECRET=testtesttest
       - "JAVA_OPTS=-Xms64m -Xmx170m -XX:+UseSerialGC"
@@ -917,16 +916,16 @@ services:
      - "CONSUL_TOKEN=7BE784A4-7498-4469-BE2F-9C3B9444DFEF"
      - "CONSUL_PATH=appconfig/local/VistaSchedulingService"
      - "VAMF_ENVIRONMENT=local"
-     - VIA_BASE_URL=http://10.1.0.8:8089/via-webservices/services
+     - VIA_BASE_URL=http://via-weblogic:7011/via-webservices/services
      - MDWS_ADAPTER_BASE_URL=http://mdws-via-adapter:8080/MdwsViaAdapter/v1/services
      - USER_SVC_URL=http://user-services:8080/users/v1
      - JWT_SECRET=testtesttest
      - "SERVER_USE_FORWARD_HEADERS=true"
      # Debug configuration (Ensure port ignored below is exposed for debugging in ports section)
      - SERVICE_64085_IGNORE=true
-     - REQUESTING_APP=VAR_App
-     - CONSUMING_APP_TOKEN=APP_TOKEN
-     - CONSUMING_APP_PASSWORD=passw0rd123
+     - REQUESTING_APP=TEST_APP
+     - CONSUMING_APP_TOKEN=TEST_TOKEN
+     - CONSUMING_APP_PASSWORD=TEST_PASSWORD
      - "JAVA_OPTS=-Xms64m -Xmx170m -XX:+UseSerialGC"
 
   vista-emr-service:
@@ -942,12 +941,12 @@ services:
     - "CONSUL_SERVER=consul:8500"
     - "CONSUL_TOKEN=7BE784A4-7498-4469-BE2F-9C3B9444DFEF"
     - "CONSUL_PATH=appconfig/local/vista-emr-service/v2"
-    - VIA_BASE_URL=http://10.1.0.8:8089/via-webservices/services
+    - VIA_BASE_URL=http://via-weblogic:7011/via-webservices/services
     - REDIS_HOST=redis
     - USER_SVC_URL=http://user-services:8080/users/v1
-    - REQUESTING_APP=VAR_App
-    - CONSUMING_APP_TOKEN=APP_TOKEN
-    - CONSUMING_APP_PASSWORD=passw0rd123
+    - REQUESTING_APP=TEST_APP
+    - CONSUMING_APP_TOKEN=TEST_TOKEN
+    - CONSUMING_APP_PASSWORD=TEST_PASSWORD
     - "JAVA_OPTS=-Xms64m -Xmx170m -XX:+UseSerialGC"
 
   ### MDWS to VIA adapter
@@ -971,7 +970,7 @@ services:
     # Mock Via
     #- VIA_BASE_URL=http://mock-via:8080/via-webservices/via-webservices/services
     # Live Via (AV)
-    - VIA_BASE_URL=http://10.1.0.8:8089/via-webservices/services
+    - VIA_BASE_URL=http://via-weblogic:7011/via-webservices/services
     - TRUSTSTORE_PASSWORD=password
     - REDIS_HOST=redis
     - JWT_REQUIRED_ROLE=STAFF
@@ -981,9 +980,9 @@ services:
     # Debug configuration (Ensure port ignored below is exposed for debugging in ports section)
     - SERVICE_8080_NAME=mdws-via-adapter
     - SERVICE_64087_IGNORE=true
-    - REQUESTING_APP=VAR_App
-    - CONSUMING_APP_TOKEN=APP_TOKEN
-    - CONSUMING_APP_PASSWORD=passw0rd123
+    - REQUESTING_APP=TEST_APP
+    - CONSUMING_APP_TOKEN=TEST_TOKEN
+    - CONSUMING_APP_PASSWORD=TEST_PASSWORD
     - "JAVA_OPTS=-Xms64m -Xmx170m -XX:+UseSerialGC"
 
 # Staff Video Connect Resources (SVC Services/Resource)
@@ -1159,7 +1158,7 @@ services:
       - SERVICE_64085_IGNORE=true
       - MAX_RESULTSET_SIZE=40
       - MAX_PAGE_SIZE=20
-      - VIA_BASE_URL=http://10.1.0.8:8089/via-webservices/services # ablevets VIA instance
+      - VIA_BASE_URL=http://via-weblogic:7011/via-webservices/services # ablevets VIA instance
       - VVS_BASE_URL=http://video-visits-service:8080/video-visit-resources/v2
       - VDS_SCH_SERVICE_URL=http://vista-scheduling-service:8080/VistaSchedulingService/v2
       - CDW_SERVICE_BASE_URL=http://cdw-service:8080/cdw/v2
