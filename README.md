@@ -1,8 +1,43 @@
-# ** DRAFT ** NOTE: This is a stripped down version of the Docker Local Development (https://coderepo.mobilehealth.va.gov/projects/DEV/repos/docker-local-development/browse) code that ONLY stands up the services required for VAR-related development
+# ** DRAFT ** #
+## NOTE: This is a stripped down version of the [Docker Local Development](https://coderepo.mobilehealth.va.gov/projects/DEV/repos/docker-local-development/browse) code that ONLY stands up the services required for VAR-related development ##
 
-###VAR Development Environment Setup
-For best performance, it is recommended you allocate 10GB to Docker in a machine of a minimum 16GB available RAM.
-The stack is broken down into five main components:
+### VAR Development Environment Setup ###
+For best performance, it is recommended you allocate at least 10GB to Docker in a machine of a minimum 16GB available RAM (I've allocated 14GB, and increased swap size to 2GB). Also, check the Disk tab in your Docker Preferences dialog. You'll need to allocate at least 50GB of disk for your local Docker image repository.
+
+Before you begin, if you currently have Docker images that were pulled from the AbleVets ECR, you'll want to start fresh, by doing a Docker system prune as follows:
+
+```
+$ docker system prune -a --volumes
+WARNING! This will remove:
+       - all stopped containers
+       - all networks not used by at least one container
+       - all volumes not used by at least one container`
+       - all images without at least one container associated to them
+       - all build cache
+Are you sure you want to continue? [y/N] y
+Deleted Networks:
+vaos_default
+
+Deleted Images:
+untagged: dev/openjdk8-tomcat-appdynamics:1.0.1
+untagged: mobileapps.vaftl.us:9250/md/map/openjdk8-tomcat-appdynamics:1.0.1
+untagged: mobileapps.vaftl.us:9250/md/map/openjdk8-tomcat-appdynamics@sha256:11ef552a5e4eff5269fe0da0d762f5f9dc50a19a3fa0e896c2e6b989012ff75b
+  .
+  .
+  .
+deleted: sha256:676041b403df05d8cd9cf67de96df8a8836aea4a353c936b79204250af001c76
+deleted: sha256:70942dd8c59734fc31e8f6820a3b22d4ace67f102d4c05e02a33033601e562c7
+deleted: sha256:36018b5e978717a047892794aebab513ba6856dbe1bdfeb478ca1219df2c7e9c
+
+Total reclaimed space: 45.74GB
+$
+ ```
+
+***NOTE: Be sure that you've pulled the latest commits from the Bitbucket (Stash) repositories for the [var-web (release 4.17)](https://coderepo.mobilehealth.va.gov/projects/VAR/repos/var-web/browse?at=refs%2Fheads%2Frelease%2F4.17 "VAOS Web"), [var-resources (release 4.17)](https://coderepo.mobilehealth.va.gov/projects/VAR/repos/var-resources/browse "VAOS Resources"), [scheduling-manager-web (release 3.0)](https://coderepo.mobilehealth.va.gov/projects/VAR/repos/scheduling-manager-web/browse?at=refs%2Fheads%2Frelease%2F3.0 "SM Web"), [scheduling-manager-resources (release 3.0)](https://coderepo.mobilehealth.va.gov/projects/VAR/repos/scheduling-manager-resources/browse "SM Resources"), [var-utility-web (release 3.1)](https://coderepo.mobilehealth.va.gov/projects/VAR/repos/var-utility-web/browse?at=refs%2Fheads%2Frelease%2F3.1 "VATS Web"), [var-utility-resources (release 3.1)](https://coderepo.mobilehealth.va.gov/projects/VAR/repos/var-utility-resources/browse "VATS Resources").***
+
+And finally, replace the <base 64 cache.key> tag at line 396 in the docker-compose.yml file with the key that you've been provided by encrypted email.
+
+The stack is broken down into seven main components:
 
 - NextGen Core Infrastructure (long-running)
 - Fixtures (Mock Databases) (long-running)
@@ -10,12 +45,74 @@ The stack is broken down into five main components:
 - Vet/Staff Only Services (short-running)
 - Data (Seeding mock databases) (short-running)
 - Applications (VAR, SM, VATS, etc) (development-centric)
+- VIA and VistA (backend services & Database) (long-running) - these are brought up last to avoid race conditions
 
-Prior to starting the stack, you may find it helpful to use the `./menu` script to log-in to the DTR, pull the images, and build the current project source. The resulting containers will be tagged 
+### Menu Script ###
+Prior to starting the stack, you may find it helpful to use the `./menu` script to log-in to the DTR, pull the images, and build the current project source. The locally built images will be tagged as `dev/` images, and will be brought up when you run the stack in `dev` mode, using the `--dev` command line argument for the `./run` script. The following options should prepare you to get up and running:
+
+1. Run the menu script and log-in to the DTR (1) (note that you no longer need the AWS credentials for the AV ECR, and that the prerequisite check and hostlocal.io initialization will be automatic). Then choose the Setup menu (2) and pull the Docker images (3):
+
+```
+./menu
+
+Verifying prerequisites / required tools…
+
+Java version: 1.8.0_201
+***ENVIRONMENT VALIDATION***
+Checking if hostlocal.io is set up properly…
+
+hostlocal.io is responding. Now starting the requested services…
+
+1) Login DTR	      5) Build Menu	   9) Git Menu
+2) Setup Menu	      6) Logs Menu	  10) Quit
+3) Status Menu	      7) Validate Menu
+4) Quickstart Menu    8) Java Force GC
+Please enter your choice: 1
+Authenticating with existing credentials...
+Login Succeeded
+Please enter your choice: 2
+1) Stop Stack		 6) Check Database	11) Start var (DEV)
+2) Reset Docker		 7) Start data core ss	12) Start sm (DEV)
+3) Docker Pull Images	 8) Start vet		13) Start vats (DEV)
+4) Build Menu		 9) Start staff		14) Quit
+5) Start fixtures	10) Features Flags
+Please enter your choice: 3
+Pulling latest images of the stack
+Pulling consul                            ... 
+Pulling registrator                       ... 
+Pulling mock-mvi                          ...
+.
+.
+.
+Pulling var-utility-resources-beta        ... done
+Pulling var-utility-web                   ... done
+Pulling var-utility-web-beta              ... done
+Please enter your choice:
+```
+2. Next choose the Build Menu (4) and Setup Base Images (1). Then Build each of the projects for Var Web, Var Resources, SM Web, SM Resources, Vats Web, Vats Resources, Facility Resources, and VMM. The resulting images will be tagged with the /dev prefix and spun up when you run the stack in --dev mode (as shown below). Monitor the console output to be sure that you don't encounter any build errors.
+
+3. When all of the builds have successfully completed, you're ready to run the stack. Exit the menu and invoke the run script as shown below. A variety of other menu options are offered as alternatives to the command line invocations of the scripts. The Validation menu may be particularly helpful if you need to troubleshoot a problem.
+
+### Run Script ###
+
+If you haven't logged in to the DTR using either the menu script (as shown above) or from the command line, be sure to run the Docker login command as:
+
+```
+$ docker login mobileapps.vaftl.us:9250
+Authenticating with existing credentials...
+Login Succeeded
+$
+``` 
+
+to assure that the scripts are able to properly pull the images prior to standing up each segment of the stack.
+
+- The fastest way to get up and running is to stand up the entire stack all in one go as follows:
+
+   `./run all --dev`
+
+   (omitting the --dev argument will bring up the images pulled from the DTR, rather than the ones you build locally)
+
 The stack should be stood up in this order to guarantee all dependencies are met at each segment of the infrastructure.
-Be sure to run the ECR login command such as
-`$(aws ecr get-login --no-include-email)` so the scripts are are able to properly pull prior to standing up each segment
-of the stack.
 
 1. Stand up mock fixtures:
 
@@ -57,44 +154,45 @@ of the stack.
 
    `./run vista`
 
-- To stand up the entire stack all in one go:
-
-   `./run all`
-
-###Stopping containers
+### Stopping containers ###
 To stop containers, run the stop script, adding additional parameters where necessary.  Note that running ./stop.sh
 will delete the Oracle container cache, and next startup will do a full rebuild
 
 - Stop all containers:
    
-   `./stop.sh all`
+   `./stop all`
 
 - Stop NextGen Core containers:
    
-   `./stop.sh`
+   `./stop core`
 
 - Stop fixtures containers:
    
-   `./stop.sh fixtures`
+   `./stop fixtures`
 
 - Stop shared services containers:
    
-   `./stop.sh shared-services`
-
-- Stop VIA services containers:
-   
-   `./stop.sh via`
-
-- Stop VistA container:
-   
-   `./stop.sh vista`
+   `./stop shared-services`
 
 - Stop VAR containers:
    
-   `./stop.sh var`
+   `./stop var`
 
-###Building fixture and seed containers
-By default, the var-related fixtures and data seeds are pulled from the latst in the ECR, however it may be necessary to build
+- Stop SM containers:
+   
+   `./stop vm`
+
+- Stop VIA services containers:
+   
+   `./stop via`
+
+- Stop VistA container:
+   
+   `./stop vista`
+
+
+### Building fixture and seed containers ###
+By default, the var-related fixtures and data seeds are pulled from the latest in the ECR, however it may be necessary to build
 and seed manually.  If this is the case, follow the steps to build the mocks out:
 
 - Build VAR Mongo mock
@@ -108,9 +206,9 @@ and seed manually.  If this is the case, follow the steps to build the mocks out
 From here, swap the commented image definitions in the fixtures and data seed compose file accordingly.  This will enable
 the consumption of the locally built docker images.
 
-## Original README below.
+# Original README below #
 
-# Docker Compose project to stand up API Gateway, Consul and VAMF Micro Services
+## Docker Compose project to stand up API Gateway, Consul and VAMF Micro Services ##
 
 The latest version of micro services docker images passing local integration tests are stored in the VA Innovations Gitlab registry https://mobileapps.vaftl.us:9250 The compose file in this project pulls the latest images and connects them together in the same manner as ece-dev for local testing purposes.
 
