@@ -55,7 +55,7 @@ services:
   # * Consul-Template: Rewrites _nginx.conf_ based on Consul configurations
   #
   apigateway:
-    image: mobileapps.vaftl.us:9250/ckm/apigateway:1.3.3
+    image: mobileapps.vaftl.us:9250/ckm/apigateway:1.4.5
     container_name: apigateway
     ports:
       - "8089:80"
