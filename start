@@ -12,9 +12,6 @@ function start_all_shared(){
     start_core
     sleep 15
     start_shared_services
-    # added by VAOS Internal team
-    sleep 15
-    start_via
 }
 
 function start_all(){
@@ -22,9 +19,17 @@ function start_all(){
     sleep 15
     start_vet
     start_staff
-    sleep 15
+    # added by VAOS Internal team
+    echo -e "\nWaiting 30s for Staff Services...\n"
+    sleep 30
     start_var
+    sleep 15
     start_sm
+    sleep 15
+    start_via
+    echo -e "\nWaiting 30s for VIA...\n"
+    sleep 30
+    start_vista
 }
 
 function start_all_vet(){
@@ -52,15 +57,26 @@ function start_fixtures(){
     docker-compose up -d --force-recreate --no-deps "${fixtures[@]}"
 }
 
+function start_vista(){
+    echo -e "\nStarting VistA\n"
+    docker-compose stop "${vista[@]}"
+    if [ "$PULL" = true ] ; then
+        docker-compose pull --ignore-pull-failures "${vista[@]}"
+    fi
+    docker-compose up -d --force-recreate --no-deps "${vista[@]}"
+}
+
 function start_via(){
     echo -e "\nStarting VIA\n"
     docker-compose stop "${via[@]}"
     if [ "$PULL" = true ] ; then
         docker-compose pull --ignore-pull-failures "${via[@]}"
     fi
-    docker-compose up -d --force-recreate --no-deps "${via[@]}"
+    docker-compose up -d --force-recreate --no-deps via-oracle
+    echo -e "\nWaiting 30s for via-oracle...\n"
+    sleep 30
+    docker-compose up -d --force-recreate --no-deps via-weblogic
 }
-
 
 function start_data_seed(){
     echo -e "\nStarting Data Seed\n"
@@ -91,6 +107,7 @@ function start_core(){
 }
 
 function start_shared_services(){
+    echo -e "\n Starting Shared Sercices\n"
     ./consul-registration/register-shared-services.sh
     docker-compose stop "${ss[@]}"
     if [ "$PULL" = true ] ; then
@@ -100,6 +117,7 @@ function start_shared_services(){
 }
 
 function start_vet(){
+    echo -e "\nStarting all Veteran Services\n"
     docker-compose stop "${vet[@]}"
     if [ "$PULL" = true ] ; then
         docker-compose pull "${vet[@]}"
@@ -108,6 +126,7 @@ function start_vet(){
 }
 
 function start_staff(){
+    echo -e "\nStarting all Staff Services\n"
     ./consul-registration/register-staff.sh
     docker-compose stop "${staff[@]}"
     if [ "$PULL" = true ] ; then
@@ -117,6 +136,7 @@ function start_staff(){
 }
 
 function start_var(){
+    echo -e "\nStarting VAOS\n"
     ./consul-registration/register-var.sh
     docker-compose stop "${var[@]}"
     if [ "$PULL" = true ] ; then
@@ -126,6 +146,7 @@ function start_var(){
 }
 
 function start_sm(){
+    echo -e "\nStarting Scheduling Manager\n"
     ./consul-registration/register-sm.sh
     docker-compose stop "${sm[@]}"
     if [ "$PULL" = true ] ; then
@@ -135,6 +156,7 @@ function start_sm(){
 }
 
 function start_vats(){
+    echo -e "\nStarting VATS\n"
     ./consul-registration/register-vats.sh
     docker-compose stop "${vats[@]}"
     if [ "$PULL" = true ] ; then
