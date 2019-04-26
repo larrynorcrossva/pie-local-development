@@ -108,7 +108,7 @@ to assure that the scripts are able to properly pull the images prior to standin
 
 - The fastest way to get up and running is to stand up the entire stack all in one go as follows:
 
-   `./run all --dev`
+   `./run --dev all`
 
    (omitting the --dev argument will bring up the images pulled from the DTR, rather than the ones you build locally)
 
@@ -138,21 +138,23 @@ The stack should be stood up in this order to guarantee all dependencies are met
 
    `./run staff`
 
-7. Stand up necessary applications
+7. Stand up vaos-vista container:
 
-   `./run var`
-   
-   `./run sm`
+   `./run vista`
 
-   `./run vats` [if testing/developing VATS or modifying config]
+8. Wait for the vaos-vista container to come up and show a healthy status (this may take two or three minutes)
 
 8. Stand up VIA services:
 
    `./run via`
 
-9. Stand up vaos-vista container:
+9. Stand up necessary applications (use optional --dev argument to run the dev images)
 
-   `./run vista`
+   `./run [--dev] var`
+   
+   `./run [--dev] sm`
+
+   `./run [--dev] vats` [if testing/developing VATS or modifying config]
 
 ### Stopping containers ###
 To stop containers, run the stop script, adding additional parameters where necessary.  Note that running ./stop.sh

@@ -22,21 +22,28 @@ function start_all(){
     # added by VAOS Internal team
     echo -e "\nWaiting 30s for Staff Services...\n"
     sleep 30
+    start_vista
+    start_via
+    echo -e "\nWaiting 30s for VIA...\n"
+    sleep 30
     start_var
     sleep 15
     start_sm
     sleep 15
-    start_via
-    echo -e "\nWaiting 30s for VIA...\n"
-    sleep 30
-    start_vista
+    start_vats
 }
 
 function start_all_vet(){
     start_all_shared
     sleep 15
     start_vet
-    sleep 15
+    # added by VAOS Internal team
+    echo -e "\nWaiting 30s for Vet Services...\n"
+    sleep 30
+    start_vista
+    start_via
+    echo -e "\nWaiting 30s for VIA...\n"
+    sleep 30
     start_var
 }
 
@@ -44,7 +51,13 @@ function start_all_staff(){
     start_all_shared
     sleep 15
     start_staff
-    sleep 15
+    # added by VAOS Internal team
+    echo -e "\nWaiting 30s for Staff Services...\n"
+    sleep 30
+    start_vista
+    start_via
+    echo -e "\nWaiting 30s for VIA...\n"
+    sleep 30
     start_sm
 }
 
@@ -57,6 +70,20 @@ function start_fixtures(){
     docker-compose up -d --force-recreate --no-deps "${fixtures[@]}"
 }
 
+function wait_container_healthy() {
+    echo -e "\nWaiting for $1 to be ready"
+    while true; do
+        status=$(docker inspect --format="{{.State.Health.Status}}" $1)
+        if [[ $status == "healthy" ]];
+            then
+                break;
+        fi
+        printf "."
+        sleep 1s
+    done
+    echo
+}
+
 function start_vista(){
     echo -e "\nStarting VistA\n"
     docker-compose stop "${vista[@]}"
@@ -64,6 +91,7 @@ function start_vista(){
         docker-compose pull --ignore-pull-failures "${vista[@]}"
     fi
     docker-compose up -d --force-recreate --no-deps "${vista[@]}"
+    wait_container_healthy vaos-vista
 }
 
 function start_via(){
@@ -94,8 +122,7 @@ function start_core(){
 
     docker-compose up -d consul || (echo "*** FAILED: Could not start Consul or Vault using docker-compose." && exit -1)
 
-    echo -e "\nWaiting 30s for Consul and Vault...\n"
-    sleep 30s
+    wait_container_healthy consul
 
     echo -e "\nRegistering core services to Consul... \n"
     ./consul-registration/register-core.sh
@@ -107,7 +134,7 @@ function start_core(){
 }
 
 function start_shared_services(){
-    echo -e "\n Starting Shared Sercices\n"
+    echo -e "\n Starting Shared Services\n"
     ./consul-registration/register-shared-services.sh
     docker-compose stop "${ss[@]}"
     if [ "$PULL" = true ] ; then
