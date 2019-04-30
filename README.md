@@ -126,15 +126,15 @@ The stack should be stood up in this order to guarantee all dependencies are met
    
    `./run core`
    
-4. Stand up shared services:
+4. Stand up shared services (use optional --dev argument to run dev images for facility and vmm services):
 
-   `./run ss`
+   `./run [--dev] ss`
    
 5. Stand up vet services (if running vet apps):
 
    `./run vet`
   
-6. Stand up staff services (if running vet apps):
+6. Stand up staff services (if running staff apps):
 
    `./run staff`
 
