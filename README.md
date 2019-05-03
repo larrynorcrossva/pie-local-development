@@ -35,7 +35,7 @@ $
 
 ***NOTE: Be sure that you've pulled the latest commits from the Bitbucket (Stash) repositories for the [var-web (release 4.17)](https://coderepo.mobilehealth.va.gov/projects/VAR/repos/var-web/browse?at=refs%2Fheads%2Frelease%2F4.17 "VAOS Web"), [var-resources (release 4.17)](https://coderepo.mobilehealth.va.gov/projects/VAR/repos/var-resources/browse "VAOS Resources"), [scheduling-manager-web (release 3.0)](https://coderepo.mobilehealth.va.gov/projects/VAR/repos/scheduling-manager-web/browse?at=refs%2Fheads%2Frelease%2F3.0 "SM Web"), [scheduling-manager-resources (release 3.0)](https://coderepo.mobilehealth.va.gov/projects/VAR/repos/scheduling-manager-resources/browse "SM Resources"), [var-utility-web (release 3.1)](https://coderepo.mobilehealth.va.gov/projects/VAR/repos/var-utility-web/browse?at=refs%2Fheads%2Frelease%2F3.1 "VATS Web"), [var-utility-resources (release 3.1)](https://coderepo.mobilehealth.va.gov/projects/VAR/repos/var-utility-resources/browse "VATS Resources").***
 
-And finally, replace the <base 64 cache.key> tag at line 396 in the docker-compose.yml file with the key that you've been provided by encrypted email.
+And finally, replace the <base 64 cache.key> tag at line 397 in the docker-compose.yml file with the key that you've been provided by encrypted email.
 
 The stack is broken down into seven main components:
 
@@ -108,7 +108,7 @@ to assure that the scripts are able to properly pull the images prior to standin
 
 - The fastest way to get up and running is to stand up the entire stack all in one go as follows:
 
-   `./run all --dev`
+   `./run --dev all`
 
    (omitting the --dev argument will bring up the images pulled from the DTR, rather than the ones you build locally)
 
@@ -126,33 +126,35 @@ The stack should be stood up in this order to guarantee all dependencies are met
    
    `./run core`
    
-4. Stand up shared services:
+4. Stand up shared services (use optional --dev argument to run dev images for facility and vmm services):
 
-   `./run ss`
+   `./run [--dev] ss`
    
 5. Stand up vet services (if running vet apps):
 
    `./run vet`
   
-6. Stand up staff services (if running vet apps):
+6. Stand up staff services (if running staff apps):
 
    `./run staff`
 
-7. Stand up necessary applications
+7. Stand up vaos-vista container:
 
-   `./run var`
-   
-   `./run sm`
+   `./run vista`
 
-   `./run vats` [if testing/developing VATS or modifying config]
+8. Wait for the vaos-vista container to come up and show a healthy status (this may take two or three minutes)
 
 8. Stand up VIA services:
 
    `./run via`
 
-9. Stand up vaos-vista container:
+9. Stand up necessary applications (use optional --dev argument to run the dev images)
 
-   `./run vista`
+   `./run [--dev] var`
+   
+   `./run [--dev] sm`
+
+   `./run [--dev] vats` [if testing/developing VATS or modifying config]
 
 ### Stopping containers ###
 To stop containers, run the stop script, adding additional parameters where necessary.  Note that running ./stop.sh

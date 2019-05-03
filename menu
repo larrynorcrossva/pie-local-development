@@ -632,22 +632,22 @@ select opt in "${options[@]}"
 do
     case $opt in
         "All staff")
-            ./run --vpn --dev all-staff
+            ./run --dev all-staff
             ;;
         "All vet")
-            ./run --vpn --dev all-vet
+            ./run --dev all-vet
             ;;
         "Build Menu")
              menu_build
              ;;
         "Start var (DEV)")
-            ./run --vpn --dev var
+            ./run --dev var
             ;;
         "Start sm (DEV)")
-            ./run --vpn --dev sm
+            ./run --dev sm
             ;;
         "Start vats (DEV)")
-            ./run --vpn --dev vats
+            ./run --dev vats
             ;;
         "Validate Menu")
             menu_validate
@@ -757,7 +757,7 @@ menu_setup() {
 PS3='Please enter your choice: '
 options=("Stop Stack" "Reset Docker" "Docker Pull Images" "Build Menu" 
 "Start fixtures" "Check Database"  "Start data core ss" "Start vet" "Start staff"
-"Features Flags"
+"Features Flags" "Start vista" "Start via (after vista is healthy)"
 "Start var (DEV)" "Start sm (DEV)" "Start vats (DEV)"
 "Quit")
 select opt in "${options[@]}"
@@ -791,13 +791,20 @@ do
             validate_fixtures
             ;;
         "Start data core ss")
-            ./run --vpn data core ss
+            ./run data core ss
             ;;
         "Start vet")
-            ./run --vpn vet
+            ./run vet
             ;;
         "Start staff")
-            ./run --vpn staff
+            ./run staff
+            ;;
+        "Start vista")
+            echo -e "Starting vista... Waiting for a healthy status..."
+            ./run vista
+            ;;
+        "Start via (after vista is healthy)")
+            ./run via
             ;;
         "Features Flags")
             #printf "Default VAR_DISABLED_FEATURES_SET = %s\n\n" "${VAR_DISABLED_FEATURES_SET}"
@@ -805,13 +812,13 @@ do
             menu_features
             ;;
         "Start var (DEV)")
-            ./run --vpn --dev var
+            ./run --dev var
             ;;
         "Start sm (DEV)")
-            ./run --vpn --dev sm
+            ./run --dev sm
             ;;
         "Start vats (DEV)")
-            ./run --vpn --dev vats
+            ./run --dev vats
             ;;
         "Quit")
             break
