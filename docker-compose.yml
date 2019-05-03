@@ -388,13 +388,13 @@ services:
 
   vaos-vista:
     container_name: vaos-vista
-    image: mobileapps.vaftl.us:9250/md/map/vista:vaos-1.0.2
+    image: mobileapps.vaftl.us:9250/md/map/vista:vaos-1.0.3
     ports:
       - "8000:8000"
       - "9210:9210"
       - "57772:57772"
     environment:
-      - CACHE_KEY=W0NvbmZpZ0ZpbGVdDQpGaWxlVHlwZT1MaWNlbnNlIDIwMTENCg0KW0xpY2Vuc2VdDQpMaWNlbnNlQ2FwYWNpdHk9Q2FjaGUgMjAxOC4xIEVudGVycHJpc2UgLSBDb25jdXJyZW50IFVzZXJzOjEyNSwgRGV2ZWxvcG1lbnQgTGljZW5zZSwgTXVsdGktU2VydmVyLCBQbGF0Zm9ybSBJbmRlcGVuZGVudA0KQ3VzdG9tZXJOYW1lPVZBIENJT0ZPIFNhbHQgTGFrZSBDaXR5DQpPcmRlck51bWJlcj0yMDE5MDUxOTENCkV4cGlyYXRpb25EYXRlPTEwLzEvMjAyNQ0KQXV0aG9yaXphdGlvbktleT00MTI0NzAwMDEyNTAwMDEyNTAwMDAwMDAwMDBFQjRDODlFNTE3MTAwNDENCk1hY2hpbmVJRD0NCg0K
+      - CACHE_KEY=<base 64 cache.key>
       
   ######################
   # Gold VistA - will need long-term
