@@ -394,7 +394,7 @@ services:
       - "9210:9210"
       - "57772:57772"
     environment:
-      - CACHE_KEY=<base 64 cache.key>
+      - CACHE_KEY=${VISTA_CACHE_KEY}
       
   ######################
   # Gold VistA - will need long-term
