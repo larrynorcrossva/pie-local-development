@@ -505,6 +505,18 @@ build_facility_resources() {
     popd || return
 }
 
+build_all(){
+    build_base_images
+    build_var_web
+    build_var_resources
+    build_sm_web
+    build_sm_resources
+    build_vats_web
+    build_vats_resources
+    build_facility_resources
+    build_vmm
+}
+
 menu_build() {
 PS3='Please enter your choice: '
 options=("Setup Base Images"
@@ -512,7 +524,7 @@ options=("Setup Base Images"
 "Build SM Web" "Build SM Resources" 
 "Build Vats Web" "Build Vats Resources"
 "Build Facility Resources" "Build VMM"
-"Quit")
+"Build All" "Quit")
 select opt in "${options[@]}"
 do
     case $opt in
@@ -551,6 +563,10 @@ do
         "Build VMM")
             echo "Manually building vmm"
             build_vmm
+            ;;
+        "Build All")
+            echo "Building All"
+            build_all
             ;;
         "Quit")
             break
@@ -755,10 +771,10 @@ done
 
 menu_setup() {
 PS3='Please enter your choice: '
-options=("Stop Stack" "Reset Docker" "Docker Pull Images" "Build Menu" 
+options=("Stop Stack" "Reset Docker" "Docker Pull Images" "Pull and Build All Images" "Build Menu" 
 "Start fixtures" "Check Database"  "Start data core ss" "Start vet" "Start staff"
 "Features Flags" "Start vista" "Start via (after vista is healthy)"
-"Start var (DEV)" "Start sm (DEV)" "Start vats (DEV)"
+"Start var (DEV)" "Start sm (DEV)" "Start vats (DEV)" "Start All (DEV)"
 "Quit")
 select opt in "${options[@]}"
 do
@@ -780,6 +796,11 @@ do
             echo "Pulling latest images of the stack"
             docker-compose pull --ignore-pull-failures
             ;;
+        "Pull and Build All Images")
+            echo "Pulling latest images of the stack"
+            docker-compose pull --ignore-pull-failures
+            build_all
+             ;;
         "Build Menu")
              menu_build
              ;;
@@ -819,6 +840,9 @@ do
             ;;
         "Start vats (DEV)")
             ./run --dev vats
+            ;;
+        "Start All (DEV)")
+            ./run --dev all
             ;;
         "Quit")
             break
