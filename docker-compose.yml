@@ -931,7 +931,7 @@ services:
      - "JAVA_OPTS=-Xms64m -Xmx170m -XX:+UseSerialGC"
 
   vista-emr-service:
-    image: mobileapps.vaftl.us:9250/md/map/vista-emr-service:2.2.0
+    image: mobileapps.vaftl.us:9250/ckm/vista-emr-service:2.5.4
     container_name: vista-emr-service
     ports:
     - 9899:8080
