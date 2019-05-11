@@ -86,7 +86,7 @@ services:
   mock-mvi:
     # Image is built from MSE Jenkins:
     # https://mse-demo.vaftl.us:8080/job/var-mock-mvi/
-    image: mobileapps.vaftl.us:9250/md/map/var-mock-mvi:201812202020_680472
+    image: mobileapps.vaftl.us:9250/md/map/var-mock-mvi:cc-1.0.0
     container_name: mock-mvi
     volumes:
       - ./healthchecks:/opt/healthchecks
@@ -950,6 +950,7 @@ services:
     - CONSUMING_APP_TOKEN=TEST_TOKEN
     - CONSUMING_APP_PASSWORD=TEST_PASSWORD
     - "JAVA_OPTS=-Xms64m -Xmx170m -XX:+UseSerialGC"
+    - JWT_SECRET=testtesttest
 
   ### MDWS to VIA adapter
   mdws-via-adapter:
