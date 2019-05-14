@@ -703,7 +703,7 @@ services:
   iamssoe-proxy-mock:
     # Image is built from MSE Jenkins:
     # https://mse-demo.vaftl.us:8080/job/var-idp-mock/
-    image: mobileapps.vaftl.us:9250/md/map/idp-proxy-mock-shared:201811220217_460c98
+    image: mobileapps.vaftl.us:9250/md/map/idp-proxy-mock-shared:cc-1.0.0
     container_name: iamssoe-proxy-mock
     ports:
       - 9000:80
@@ -719,7 +719,7 @@ services:
   iamssoe-db-mock:
     # Image is built from MSE Jenkins:
     # https://mse-demo.vaftl.us:8080/job/var-idp-mock/
-    image: mobileapps.vaftl.us:9250/md/map/idp-db-mock-shared:201812031800_52b365
+    image: mobileapps.vaftl.us:9250/md/map/idp-db-mock-shared:cc-1.0.0
     container_name: iamssoe-db-mock
     ports:
       - 3306:3306
