@@ -595,7 +595,7 @@ services:
   # Administrative Data Repository (ADR) Service and Mock (SOAP) data source. ADR serves as a enterprise data service
   # that allows VA apps to retrieve patient demographic and next-of-kin information
   mock-adr:
-    image: mobileapps.vaftl.us:9250/ckm/docker-adr-mock:1.1.1
+    image: mobileapps.vaftl.us:9250/md/map/docker-adr-mock:1.2.1
     container_name: mock-adr
     volumes:
       - ./healthchecks:/opt/healthchecks
@@ -610,8 +610,7 @@ services:
       retries: 3
 
   adr-service:
- #  image: mobileapps.vaftl.us:9250/ckm/adr-service:2.0.0
-    image: mobileapps.vaftl.us:9250/md/map/adr-services:1.2.0
+    image: mobileapps.vaftl.us:9250/ckm/adr-service:2.1.2
     container_name: adr-service
     ports:
     - "8083:8080"
