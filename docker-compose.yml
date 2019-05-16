@@ -86,7 +86,7 @@ services:
   mock-mvi:
     # Image is built from MSE Jenkins:
     # https://mse-demo.vaftl.us:8080/job/var-mock-mvi/
-    image: mobileapps.vaftl.us:9250/md/map/var-mock-mvi:201812202020_680472
+    image: mobileapps.vaftl.us:9250/md/map/var-mock-mvi:cc-1.0.0
     container_name: mock-mvi
     volumes:
       - ./healthchecks:/opt/healthchecks
@@ -595,7 +595,7 @@ services:
   # Administrative Data Repository (ADR) Service and Mock (SOAP) data source. ADR serves as a enterprise data service
   # that allows VA apps to retrieve patient demographic and next-of-kin information
   mock-adr:
-    image: mobileapps.vaftl.us:9250/ckm/docker-adr-mock:1.1.1
+    image: mobileapps.vaftl.us:9250/md/map/docker-adr-mock:1.2.1
     container_name: mock-adr
     volumes:
       - ./healthchecks:/opt/healthchecks
@@ -610,8 +610,7 @@ services:
       retries: 3
 
   adr-service:
- #  image: mobileapps.vaftl.us:9250/ckm/adr-service:2.0.0
-    image: mobileapps.vaftl.us:9250/md/map/adr-services:1.2.0
+    image: mobileapps.vaftl.us:9250/ckm/adr-service:2.1.2
     container_name: adr-service
     ports:
     - "8083:8080"
@@ -703,7 +702,7 @@ services:
   iamssoe-proxy-mock:
     # Image is built from MSE Jenkins:
     # https://mse-demo.vaftl.us:8080/job/var-idp-mock/
-    image: mobileapps.vaftl.us:9250/md/map/idp-proxy-mock-shared:201811220217_460c98
+    image: mobileapps.vaftl.us:9250/md/map/idp-proxy-mock-shared:cc-1.0.0
     container_name: iamssoe-proxy-mock
     ports:
       - 9000:80
@@ -719,7 +718,7 @@ services:
   iamssoe-db-mock:
     # Image is built from MSE Jenkins:
     # https://mse-demo.vaftl.us:8080/job/var-idp-mock/
-    image: mobileapps.vaftl.us:9250/md/map/idp-db-mock-shared:201812031800_52b365
+    image: mobileapps.vaftl.us:9250/md/map/idp-db-mock-shared:cc-1.0.0
     container_name: iamssoe-db-mock
     ports:
       - 3306:3306
@@ -931,7 +930,7 @@ services:
      - "JAVA_OPTS=-Xms64m -Xmx170m -XX:+UseSerialGC"
 
   vista-emr-service:
-    image: mobileapps.vaftl.us:9250/md/map/vista-emr-service:2.2.0
+    image: mobileapps.vaftl.us:9250/ckm/vista-emr-service:2.5.4
     container_name: vista-emr-service
     ports:
     - 9899:8080
@@ -950,6 +949,7 @@ services:
     - CONSUMING_APP_TOKEN=TEST_TOKEN
     - CONSUMING_APP_PASSWORD=TEST_PASSWORD
     - "JAVA_OPTS=-Xms64m -Xmx170m -XX:+UseSerialGC"
+    - JWT_SECRET=testtesttest
 
   ### MDWS to VIA adapter
   mdws-via-adapter:
