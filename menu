@@ -517,6 +517,22 @@ build_all(){
     build_vmm
 }
 
+build_cdw_mock() {
+    if [ ! -d ../var-cdw-mock/ ] ; then
+        echo "Could not find directory ../var-cdw-mock/"
+        echo "Clone the repository to a folder next to var-nextgen-local-environment"
+        return
+    fi
+
+    pushd ../var-cdw-mock/ || return
+
+    printf "\n\nBuilding branch: $(git -C . status | head -n 1 | awk '{print $3}')\n\n\n" 
+    sleep 2
+
+    docker build --no-cache --force-rm -t dev/var-cdw-mock .
+    popd || return
+}
+
 menu_build() {
 PS3='Please enter your choice: '
 options=("Setup Base Images"
@@ -524,7 +540,7 @@ options=("Setup Base Images"
 "Build SM Web" "Build SM Resources" 
 "Build Vats Web" "Build Vats Resources"
 "Build Facility Resources" "Build VMM"
-"Build All" "Quit")
+"Build CDW MOCK" "Build All" "Quit")
 select opt in "${options[@]}"
 do
     case $opt in
@@ -564,7 +580,11 @@ do
             echo "Manually building vmm"
             build_vmm
             ;;
-        "Build All")
+        "Build CDW MOCK")
+			echo "Manually building CDW"
+			build_cdw_mock
+			;;
+       "Build All")
             echo "Building All"
             build_all
             ;;
