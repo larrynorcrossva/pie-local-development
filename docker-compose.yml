@@ -1,4 +1,4 @@
-version: '2.1'
+version: '2.2'
 services:
 
 ###########################
@@ -389,6 +389,7 @@ services:
   vaos-vista:
     container_name: vaos-vista
     image: mobileapps.vaftl.us:9250/md/map/vista:vaos-1.0.3
+    cpus: 0.25
     ports:
       - "8000:8000"
       - "9210:9210"
@@ -566,6 +567,14 @@ services:
       - "MONGODB_TASK_RESOURCES_URI=mongodb://testuser:testpass@mongo:27017/taskresourcesdb?ssl=false&connectTimeoutMS=20000&maxPoolSize=100"
       - "JAVA_OPTS=-Xms64m -Xmx170m -XX:+UseSerialGC"
 
+  var-cdw-mock:
+    image: mobileapps.vaftl.us:9250/md/map/var-cdw-mock:1.0.0
+    container_name: var-cdw-mock
+    ports:
+      - "1433:1433"
+    environment:
+      - SA_PASSWORD=tk1ZXVsKmafZFt8p
+      - ACCEPT_EULA=Y
 
   cdw-service:
     image: mobileapps.vaftl.us:9250/md/map/cdw-services:2.0.1
@@ -573,8 +582,8 @@ services:
     ports:
       - 8072:8080
     environment:
-      - "DB_MOBILEHEALTH_URL=jdbc:jtds:sqlserver://${CDW_HOST}:1433;databaseName=OIA_MOBILEHEALTH" ## new name
-      - DB_MOBILEHEALTH_USERNAME=ciadmin
+      - "DB_MOBILEHEALTH_URL=jdbc:jtds:sqlserver://var-cdw-mock:1433;databaseName=OIA_MOBILEHEALTH" ## new name
+      - DB_MOBILEHEALTH_USERNAME=sa
       - DB_MOBILEHEALTH_PASSWORD=tk1ZXVsKmafZFt8p
 #       Settings for using utilize ckm mock for testing:
 #     - DB_MOBILEHEALTH_URL=jdbc:jtds:sqlserver://mock-cdw:1433;databaseName=OIA_MOBILEHEALTH ##

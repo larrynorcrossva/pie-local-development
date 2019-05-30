@@ -35,7 +35,7 @@ $
 
 ***NOTE: Be sure that you've pulled the latest commits from the Bitbucket (Stash) repositories for the [var-web (release 4.17)](https://coderepo.mobilehealth.va.gov/projects/VAR/repos/var-web/browse?at=refs%2Fheads%2Frelease%2F4.17 "VAOS Web"), [var-resources (release 4.17)](https://coderepo.mobilehealth.va.gov/projects/VAR/repos/var-resources/browse "VAOS Resources"), [scheduling-manager-web (release 3.0)](https://coderepo.mobilehealth.va.gov/projects/VAR/repos/scheduling-manager-web/browse?at=refs%2Fheads%2Frelease%2F3.0 "SM Web"), [scheduling-manager-resources (release 3.0)](https://coderepo.mobilehealth.va.gov/projects/VAR/repos/scheduling-manager-resources/browse "SM Resources"), [var-utility-web (release 3.1)](https://coderepo.mobilehealth.va.gov/projects/VAR/repos/var-utility-web/browse?at=refs%2Fheads%2Frelease%2F3.1 "VATS Web"), [var-utility-resources (release 3.1)](https://coderepo.mobilehealth.va.gov/projects/VAR/repos/var-utility-resources/browse "VATS Resources").***
 
-And finally, replace the <base 64 cache.key> tag at line 397 in the docker-compose.yml file with the key that you've been provided by encrypted email.
+And finally, be sure that you've exported the VA_NEXUS_USER, VA_NEXUS_PWD, and VISTA_CACHE_KEY environment variables, set to the values that you were provided by encrypted email.
 
 The stack is broken down into seven main components:
 
@@ -50,7 +50,7 @@ The stack is broken down into seven main components:
 ### Menu Script ###
 Prior to starting the stack, you may find it helpful to use the `./menu` script to log-in to the DTR, pull the images, and build the current project source. The locally built images will be tagged as `dev/` images, and will be brought up when you run the stack in `dev` mode, using the `--dev` command line argument for the `./run` script. The following options should prepare you to get up and running:
 
-1. Run the menu script and log-in to the DTR (1) (note that you no longer need the AWS credentials for the AV ECR, and that the prerequisite check and hostlocal.io initialization will be automatic). Then choose the Setup menu (2) and pull the Docker images (3):
+1. Run the menu script and log-in to the DTR (1) (note that you no longer need the AWS credentials for the AV ECR, and that the prerequisite check and hostlocal.io initialization will be automatic). Then choose the Setup menu (2) and Pull and Build All Images (4):
 
 ```
 ./menu
@@ -71,12 +71,16 @@ Please enter your choice: 1
 Authenticating with existing credentials...
 Login Succeeded
 Please enter your choice: 2
-1) Stop Stack		 6) Check Database	11) Start var (DEV)
-2) Reset Docker		 7) Start data core ss	12) Start sm (DEV)
-3) Docker Pull Images	 8) Start vet		13) Start vats (DEV)
-4) Build Menu		 9) Start staff		14) Quit
-5) Start fixtures	10) Features Flags
-Please enter your choice: 3
+1) Stop Stack				10) Start staff
+2) Reset Docker				11) Features Flags
+3) Docker Pull Images			12) Start vista
+4) Pull and Build All Images		13) Start via (after vista is healthy)
+5) Build Menu				14) Start var (DEV)
+6) Start fixtures			15) Start sm (DEV)
+7) Check Database			16) Start vats (DEV)
+8) Start data core ss			17) Start All (DEV)
+9) Start vet				18) Quit
+Please enter your choice: 4
 Pulling latest images of the stack
 Pulling consul                            ... 
 Pulling registrator                       ... 
@@ -84,14 +88,9 @@ Pulling mock-mvi                          ...
 .
 .
 .
-Pulling var-utility-resources-beta        ... done
-Pulling var-utility-web                   ... done
-Pulling var-utility-web-beta              ... done
 Please enter your choice:
 ```
-2. Next choose the Build Menu (4) and Setup Base Images (1). Then Build each of the projects for Var Web, Var Resources, SM Web, SM Resources, Vats Web, Vats Resources, Facility Resources, and VMM. The resulting images will be tagged with the /dev prefix and spun up when you run the stack in --dev mode (as shown below). Monitor the console output to be sure that you don't encounter any build errors.
-
-3. When all of the builds have successfully completed, you're ready to run the stack. Exit the menu and invoke the run script as shown below. A variety of other menu options are offered as alternatives to the command line invocations of the scripts. The Validation menu may be particularly helpful if you need to troubleshoot a problem.
+2. When all of the builds have successfully completed, you're ready to run the stack. Exit the menu and invoke the run script as shown below. A variety of other menu options are offered as alternatives to the command line invocations of the scripts. The Validation menu may be particularly helpful if you need to troubleshoot a problem.
 
 ### Run Script ###
 

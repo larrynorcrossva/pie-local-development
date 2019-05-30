@@ -14,15 +14,6 @@ function set_pull(){
     export PULL=true
 }
 
-# URLs for CDW, MDWS, and VIA will reference internal URLs based on this setting.  Note that VPN use is required when
-#   working outside of AbleVets HQ
-function use_vpn(){
-    echo -e "\nSetting VPN configuration...\n"
-    export CDW_HOST=${CDW_HOST_AV_VPN}
-    export MDWS_HOST=${MDWS_HOST_AV_VPN}
-    export SMTP_HOST=${SMTP_HOST_AV_VPN}
-}
-
 # In dev mode, all applications will pull from "dev" as the DTR PREFIX/ORG and use the latest local build
 function set_stack_mode_dev(){
     echo -e "\nRunning in DEV mode\n"
@@ -47,8 +38,6 @@ function set_stack_mode_test(){
 while [[ "$#" > 0 ]]; do
     case $1 in
         --pull) set_pull; shift;;
-
-        --vpn) use_vpn; shift;;
 
         --test|--test-mode) set_stack_mode_test; shift;;
         --dev|--dev-mode) set_stack_mode_dev; shift;;
