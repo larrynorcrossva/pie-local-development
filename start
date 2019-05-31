@@ -7,57 +7,52 @@
 
 function start_all_shared(){
     start_fixtures
-    sleep 15
+    wait_for_cpu
     start_data_seed
     start_core
-    sleep 15
+    wait_for_cpu
     start_shared_services
 }
 
 function start_all(){
     start_all_shared
-    sleep 15
+    wait_for_cpu
     start_vet
+    wait_for_cpu
     start_staff
-    # added by VAOS Internal team
-    echo -e "\nWaiting 30s for Staff Services...\n"
-    sleep 30
+    wait_for_cpu
     start_vista
+    wait_for_cpu
     start_via
-    echo -e "\nWaiting 30s for VIA...\n"
-    sleep 30
+    wait_for_cpu
     start_var
-    sleep 15
+    wait_for_cpu
     start_sm
-    sleep 15
+    wait_for_cpu
     start_vats
 }
 
 function start_all_vet(){
     start_all_shared
-    sleep 15
+    wait_for_cpu
     start_vet
-    # added by VAOS Internal team
-    echo -e "\nWaiting 30s for Vet Services...\n"
-    sleep 30
+    wait_for_cpu
     start_vista
+    wait_for_cpu
     start_via
-    echo -e "\nWaiting 30s for VIA...\n"
-    sleep 30
+    wait_for_cpu
     start_var
 }
 
 function start_all_staff(){
     start_all_shared
-    sleep 15
+    wait_for_cpu
     start_staff
-    # added by VAOS Internal team
-    echo -e "\nWaiting 30s for Staff Services...\n"
-    sleep 30
+    wait_for_cpu
     start_vista
+    wait_for_cpu
     start_via
-    echo -e "\nWaiting 30s for VIA...\n"
-    sleep 30
+    wait_for_cpu
     start_sm
 }
 
@@ -68,6 +63,18 @@ function start_fixtures(){
         docker-compose pull --ignore-pull-failures "${fixtures[@]}"
     fi
     docker-compose up -d --force-recreate --no-deps "${fixtures[@]}"
+}
+
+function wait_for_cpu() {
+    echo -e "\nWaiting for cpu availability"
+    TH=80
+    CPU=$(ps -A -o %cpu | awk '{s+=$1} END {print int(s + 0.5)}')
+    while [[ "$CPU" -ge "$TH" ]]; do
+        CPU=$(ps -A -o %cpu | awk '{s+=$1} END {print int(s + 0.5)}')
+        printf "."
+        sleep 1s
+    done
+    echo
 }
 
 function wait_container_healthy() {

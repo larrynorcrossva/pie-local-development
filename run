@@ -8,7 +8,10 @@
 
 export PULL=false
 
-docker network create vaos_default
+if [ ! "$(docker network ls | grep vaos_default)" ] ; then
+    echo -e "\nCreating Docker Network vaos_default.\n"
+    docker network create vaos_default
+fi
 
 function set_pull(){
     export PULL=true
