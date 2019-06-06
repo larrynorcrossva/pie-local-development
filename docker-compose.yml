@@ -102,6 +102,24 @@ services:
       timeout: 5s
       retries: 3
 
+  mobile-mvi-service:
+    image: mobileapps.vaftl.us:9250/ckm/mobile-mvi-service:1.4.0
+    container_name: mobile-mvi-service
+    hostname: mobile-mvi-service
+    restart: on-failure:5
+    links:
+      - mock-mvi
+    ports: 
+      - "8080/tcp"
+    environment:
+      - "CONSUL_SERVER=consul:8500"
+      - "CONSUL_TOKEN=${CONSUL_MASTER_TOKEN}"
+      - "CONSUL_PATH=appconfig/${VAMF_ENVIRONMENT}/mobile-mvi-service/v1"
+      - "constraint:nodetype==*service*"
+      - "USE_ENVCONSUL=true"
+      - "SERVICE_NAME=mobile-mvi-service_v1"
+      - "CONSUL_APPDYNAMICS_PATH=appconfig/${VAMF_ENVIRONMENT}/appdynamics"
+
   user-services:
     image: mobileapps.vaftl.us:9250/md/map/docker-user-service:1.9.2
     container_name: user-services

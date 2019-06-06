@@ -57,17 +57,17 @@ curl  -H "Content-Type: application/json" -H "X-Consul-Token: ${CONSUL_MASTER_TO
 curl  -H "Content-Type: application/json" -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -X PUT -d "http://personal-preference-service:8080/personal-preferences/v2/" http://${HOST_DOMAIN}:8500/v1/kv/appconfig/${VAMF_ENVIRONMENT}/messaging-publisher/APP_PPS_RESOURCES_SERVICE_URL > /dev/null
 
 echo "********************* Register NextGen consul variables for facility-service *********************"
-curl -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -s -X PUT localhost:8500/v1/kv/appconfig/local/facility-resources/APPDYNAMICS_MONITORING_ENABLED -d 'true' > /dev/null
-curl -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -s -X PUT localhost:8500/v1/kv/appconfig/local/facility-resources/APPDYNAMICS_APPLICATION_NAME -d 'VAMF LOCAL FACILITY-SERVICE' > /dev/null
-curl -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -s -X PUT localhost:8500/v1/kv/appconfig/local/facility-resources/APPDYNAMICS_NODE_PREFIX -d 'FACILITY-SERVICE' > /dev/null
-curl -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -s -X PUT localhost:8500/v1/kv/appconfig/local/facility-resources/app.var.facility.mongo.host -d 'var-mongo-db-mock:27017' > /dev/null
+curl -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -s -X PUT http://${HOST_DOMAIN}:8500/v1/kv/appconfig/local/facility-resources/APPDYNAMICS_MONITORING_ENABLED -d 'true' > /dev/null
+curl -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -s -X PUT http://${HOST_DOMAIN}:8500/v1/kv/appconfig/local/facility-resources/APPDYNAMICS_APPLICATION_NAME -d 'VAMF LOCAL FACILITY-SERVICE' > /dev/null
+curl -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -s -X PUT http://${HOST_DOMAIN}:8500/v1/kv/appconfig/local/facility-resources/APPDYNAMICS_NODE_PREFIX -d 'FACILITY-SERVICE' > /dev/null
+curl -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -s -X PUT http://${HOST_DOMAIN}:8500/v1/kv/appconfig/local/facility-resources/app.var.facility.mongo.host -d 'var-mongo-db-mock:27017' > /dev/null
 
 
 echo "********************* Register NextGen consul variables for veteran-messaging-microservice *********************"
-curl -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -s -X PUT localhost:8500/v1/kv/appconfig/local/var-messaging-microservice/APPDYNAMICS_MONITORING_ENABLED -d 'true' > /dev/null
-curl -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -s -X PUT localhost:8500/v1/kv/appconfig/local/var-messaging-microservice/APPDYNAMICS_APPLICATION_NAME -d 'VAMF LOCAL VAR-MESSAGING-MICROSERVICE' > /dev/null
-curl -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -s -X PUT localhost:8500/v1/kv/appconfig/local/var-messaging-microservice/APPDYNAMICS_NODE_PREFIX -d 'VAR-MESSAGING-MICROSERVICE' > /dev/null
-curl -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -s -X PUT localhost:8500/v1/kv/appconfig/local/var-messaging-microservice/app.vmm.mongo.connection -d 'mongodb://vmm:vmm@var-mongo-db-mock:27017/vmm' > /dev/null
+curl -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -s -X PUT http://${HOST_DOMAIN}:8500/v1/kv/appconfig/local/var-messaging-microservice/APPDYNAMICS_MONITORING_ENABLED -d 'true' > /dev/null
+curl -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -s -X PUT http://${HOST_DOMAIN}:8500/v1/kv/appconfig/local/var-messaging-microservice/APPDYNAMICS_APPLICATION_NAME -d 'VAMF LOCAL VAR-MESSAGING-MICROSERVICE' > /dev/null
+curl -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -s -X PUT http://${HOST_DOMAIN}:8500/v1/kv/appconfig/local/var-messaging-microservice/APPDYNAMICS_NODE_PREFIX -d 'VAR-MESSAGING-MICROSERVICE' > /dev/null
+curl -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -s -X PUT http://${HOST_DOMAIN}:8500/v1/kv/appconfig/local/var-messaging-microservice/app.vmm.mongo.connection -d 'mongodb://vmm:vmm@var-mongo-db-mock:27017/vmm' > /dev/null
 
 curl -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -X PUT http://${HOST_DOMAIN}:8500/v1/kv/appconfig/${VAMF_ENVIRONMENT}/var-messaging-microservice/app.vmm.smtp.host -d ${SMTP_HOST}  > /dev/null
 curl -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -X PUT http://${HOST_DOMAIN}:8500/v1/kv/appconfig/${VAMF_ENVIRONMENT}/var-messaging-microservice/app.vmm.smtp.port -d "25"  > /dev/null
@@ -75,16 +75,16 @@ curl -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -X PUT http://${HOST_DOMAIN}:85
 curl -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -X PUT http://${HOST_DOMAIN}:8500/v1/kv/appconfig/${VAMF_ENVIRONMENT}/var-messaging-microservice/app.vmm.smtp.from.password -d ${SMTP_HOST_AV_PASS} > /dev/null
 
 echo "********************* Register NextGen consul variables for facility-service-beta *********************"
-curl -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -s -X PUT localhost:8500/v1/kv/appconfig/local/facility-resources-beta/APPDYNAMICS_MONITORING_ENABLED -d 'true' > /dev/null
-curl -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -s -X PUT localhost:8500/v1/kv/appconfig/local/facility-resources-beta/APPDYNAMICS_APPLICATION_NAME -d 'VAMF LOCAL FACILITY-SERVICE' > /dev/null
-curl -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -s -X PUT localhost:8500/v1/kv/appconfig/local/facility-resources-beta/APPDYNAMICS_NODE_PREFIX -d 'FACILITY-SERVICE' > /dev/null
-curl -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -s -X PUT localhost:8500/v1/kv/appconfig/local/facility-resources-beta/app.var.facility.mongo.host -d 'var-mongo-db-mock:27017' > /dev/null
+curl -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -s -X PUT http://${HOST_DOMAIN}:8500/v1/kv/appconfig/local/facility-resources-beta/APPDYNAMICS_MONITORING_ENABLED -d 'true' > /dev/null
+curl -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -s -X PUT http://${HOST_DOMAIN}:8500/v1/kv/appconfig/local/facility-resources-beta/APPDYNAMICS_APPLICATION_NAME -d 'VAMF LOCAL FACILITY-SERVICE' > /dev/null
+curl -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -s -X PUT http://${HOST_DOMAIN}:8500/v1/kv/appconfig/local/facility-resources-beta/APPDYNAMICS_NODE_PREFIX -d 'FACILITY-SERVICE' > /dev/null
+curl -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -s -X PUT http://${HOST_DOMAIN}:8500/v1/kv/appconfig/local/facility-resources-beta/app.var.facility.mongo.host -d 'var-mongo-db-mock:27017' > /dev/null
 
 echo "********************* Register NextGen consul variables for veteran-messaging-microservice-beta *********************"
-curl -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -s -X PUT localhost:8500/v1/kv/appconfig/local/var-messaging-microservice-beta/APPDYNAMICS_MONITORING_ENABLED -d 'true' > /dev/null
-curl -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -s -X PUT localhost:8500/v1/kv/appconfig/local/var-messaging-microservice-beta/APPDYNAMICS_APPLICATION_NAME -d 'VAMF LOCAL VAR-MESSAGING-MICROSERVICE' > /dev/null
-curl -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -s -X PUT localhost:8500/v1/kv/appconfig/local/var-messaging-microservice-beta/APPDYNAMICS_NODE_PREFIX -d 'VAR-MESSAGING-MICROSERVICE' > /dev/null
-curl -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -s -X PUT localhost:8500/v1/kv/appconfig/local/var-messaging-microservice-beta/app.vmm.mongo.connection -d 'mongodb://vmm:vmm@var-mongo-db-mock:27017/vmm' > /dev/null
+curl -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -s -X PUT http://${HOST_DOMAIN}:8500/v1/kv/appconfig/local/var-messaging-microservice-beta/APPDYNAMICS_MONITORING_ENABLED -d 'true' > /dev/null
+curl -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -s -X PUT http://${HOST_DOMAIN}:8500/v1/kv/appconfig/local/var-messaging-microservice-beta/APPDYNAMICS_APPLICATION_NAME -d 'VAMF LOCAL VAR-MESSAGING-MICROSERVICE' > /dev/null
+curl -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -s -X PUT http://${HOST_DOMAIN}:8500/v1/kv/appconfig/local/var-messaging-microservice-beta/APPDYNAMICS_NODE_PREFIX -d 'VAR-MESSAGING-MICROSERVICE' > /dev/null
+curl -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -s -X PUT http://${HOST_DOMAIN}:8500/v1/kv/appconfig/local/var-messaging-microservice-beta/app.vmm.mongo.connection -d 'mongodb://vmm:vmm@var-mongo-db-mock:27017/vmm' > /dev/null
 curl -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -s -X PUT http://${HOST_DOMAIN}:8500/v1/kv/appconfig/${VAMF_ENVIRONMENT}/var-messaging-microservice-beta/app.vmm.smtp.host -d ${SMTP_HOST}  > /dev/null
 curl -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -s -X PUT http://${HOST_DOMAIN}:8500/v1/kv/appconfig/${VAMF_ENVIRONMENT}/var-messaging-microservice-beta/app.vmm.smtp.port -d "25"  > /dev/null
 curl -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -s -X PUT http://${HOST_DOMAIN}:8500/v1/kv/appconfig/${VAMF_ENVIRONMENT}/var-messaging-microservice-beta/app.vmm.smtp.useSSL -d "false" > /dev/null
@@ -93,18 +93,18 @@ curl -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -s -X PUT http://${HOST_DOMAIN}
 
 
 echo "********************* Register NextGen consul variables for task-resources-service *********************"
-curl -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -s -X PUT localhost:8500/v1/kv/appconfig/local/trs/MONGODB_TASK_RESOURCES_COLLECTION -d 'taskresources' > /dev/null
-curl -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -s -X PUT localhost:8500/v1/kv/appconfig/local/trs/MONGODB_TASK_RESOURCES_DB -d 'taskresourcesdb' > /dev/null
-curl -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -s -X PUT localhost:8500/v1/kv/appconfig/local/trs/MONGODB_TASK_RESOURCES_URI -d 'mongodb://testuser:testpass@mongo:27017/taskresourcesdb?ssl=false&connectTimeoutMS=20000&maxPoolSize=100' > /dev/null
+curl -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -s -X PUT http://${HOST_DOMAIN}:8500/v1/kv/appconfig/local/trs/MONGODB_TASK_RESOURCES_COLLECTION -d 'taskresources' > /dev/null
+curl -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -s -X PUT http://${HOST_DOMAIN}:8500/v1/kv/appconfig/local/trs/MONGODB_TASK_RESOURCES_DB -d 'taskresourcesdb' > /dev/null
+curl -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -s -X PUT http://${HOST_DOMAIN}:8500/v1/kv/appconfig/local/trs/MONGODB_TASK_RESOURCES_URI -d 'mongodb://testuser:testpass@mongo:27017/taskresourcesdb?ssl=false&connectTimeoutMS=20000&maxPoolSize=100' > /dev/null
 
 
 
 
 
 echo "********************* Register NextGen consul variables for task-resources-service *********************"
-curl -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -s -X PUT localhost:8500/v1/kv/appconfig/local/trs/MONGODB_TASK_RESOURCES_COLLECTION -d 'taskresources' > /dev/null
-curl -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -s -X PUT localhost:8500/v1/kv/appconfig/local/trs/MONGODB_TASK_RESOURCES_DB -d 'taskresourcesdb' > /dev/null
-curl -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -s -X PUT localhost:8500/v1/kv/appconfig/local/trs/MONGODB_TASK_RESOURCES_URI -d 'mongodb://testuser:testpass@mongo:27017/taskresourcesdb?ssl=false&connectTimeoutMS=20000&maxPoolSize=100' > /dev/null
+curl -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -s -X PUT http://${HOST_DOMAIN}:8500/v1/kv/appconfig/local/trs/MONGODB_TASK_RESOURCES_COLLECTION -d 'taskresources' > /dev/null
+curl -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -s -X PUT http://${HOST_DOMAIN}:8500/v1/kv/appconfig/local/trs/MONGODB_TASK_RESOURCES_DB -d 'taskresourcesdb' > /dev/null
+curl -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -s -X PUT http://${HOST_DOMAIN}:8500/v1/kv/appconfig/local/trs/MONGODB_TASK_RESOURCES_URI -d 'mongodb://testuser:testpass@mongo:27017/taskresourcesdb?ssl=false&connectTimeoutMS=20000&maxPoolSize=100' > /dev/null
 
 ## user service app token public key adding telehealth.messaging.subscriber.v1  just for reference
 ## curl -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -X PUT http://${HOST_DOMAIN}:8500/v1/kv/appconfig/${VAMF_ENVIRONMENT}/user-services/JWTISSUER_CONFIG_JSON -d "[{\"rsaPublicKeyB64\":\"MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAtxwSTqAC49xXxWIX/kpb4EWXjnpN8ii5FbjAOmubKA32ZVHC+OSj14uRkKJp5EgU0aOO6cbm7jTnGjOFq+KC540qtBMP6/bd/rcXNCb7t8ajb2eWC1PdvYCrpXM/IAZvdrOGhc9sU+8DeZj2dJg+WIlWkrnXsHMbAd5ePt1mCx6NPADFBRVSJg9MAN04yzBAcgmAeOgcZGYqHcihov3hIi0UnAwi0wtBHIquGcRKhUAG5clOY3YxyNJZ2HWglrCHtz1sHe7OGFBfGGR18C+S6CK7GDB2zm3IkJ16uqf/F3s+tF7u88mE3t6gr/Y/1U6OH99xm1Ta0Yqzie351qEXSwIDAQAB\",\"iss\":\"gov.va.mhv.idp.v1\",\"userType\":\"VETERAN\"},{\"rsaPublicKeyB64\":\"MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAtxwSTqAC49xXxWIX/kpb4EWXjnpN8ii5FbjAOmubKA32ZVHC+OSj14uRkKJp5EgU0aOO6cbm7jTnGjOFq+KC540qtBMP6/bd/rcXNCb7t8ajb2eWC1PdvYCrpXM/IAZvdrOGhc9sU+8DeZj2dJg+WIlWkrnXsHMbAd5ePt1mCx6NPADFBRVSJg9MAN04yzBAcgmAeOgcZGYqHcihov3hIi0UnAwi0wtBHIquGcRKhUAG5clOY3YxyNJZ2HWglrCHtz1sHe7OGFBfGGR18C+S6CK7GDB2zm3IkJ16uqf/F3s+tF7u88mE3t6gr/Y/1U6OH99xm1Ta0Yqzie351qEXSwIDAQAB\",\"iss\":\"external.idp.test1\",\"userType\":\"VETERAN\"},{\"rsaPublicKeyB64\":\"MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQC/FshF558yJSPEGm11CZBPYP7D5+dPd2THXK82yJ4GeKGaHGUK0GzzGlPbls0SEPV24eS2EEoPJNqGD05hnogTzykvwO1wdNPZRNJil3qDx3xDXz7SXnxBrhwyyYrl+ehwPcPz3cyXqYIs4QRwoKGDhihRKZ+RHz8BcPdEM6mLnwIDAQAB\",\"iss\":\"telehealth.messaging.subscriber.v1\",\"userType\":\"VETERAN\"}]" > /dev/null
