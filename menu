@@ -360,7 +360,7 @@ build_base_images() {
     local DTR_PREFIX="mobileapps.vaftl.us:9250"
     docker pull ${DTR_PREFIX}/md/map/openjdk8-tomcat-appdynamics:1.0.1
     docker tag ${DTR_PREFIX}/md/map/openjdk8-tomcat-appdynamics:1.0.1 dev/openjdk8-tomcat-appdynamics:1.0.1
-     
+
     docker pull ${DTR_PREFIX}/md/map/centos7-nginx
     docker tag ${DTR_PREFIX}/md/map/centos7-nginx dev/centos7-nginx
 
@@ -369,7 +369,9 @@ build_base_images() {
 
     docker pull ${DTR_PREFIX}/images/oraclejdk8-tomcat-appdynamics:2.0.0
     docker tag ${DTR_PREFIX}/images/oraclejdk8-tomcat-appdynamics:2.0.0 dev/oraclejdk8-tomcat-appdynamics:2.0.0
-  
+
+    docker pull ${DTR_PREFIX}/images/oraclejdk8-tomcat-appd:2.1.0
+    docker tag ${DTR_PREFIX}/images/oraclejdk8-tomcat-appd:2.1.0 dev/oraclejdk8-tomcat-appd:2.1.0
 }
 
 build_var_web() {
