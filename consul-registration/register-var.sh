@@ -28,6 +28,7 @@ curl  -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -X PUT http://${HOST_DOMAIN}:8
 curl  -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -X PUT http://${HOST_DOMAIN}:8500/v1/kv/appconfig/${VAMF_ENVIRONMENT}/var-resources/vmm.post.recall.reminder.uri -d "http://var-messaging-microservice:8080/VarMessaging/v2/rest/api/message" > /dev/null
 curl  -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -X PUT http://${HOST_DOMAIN}:8500/v1/kv/appconfig/${VAMF_ENVIRONMENT}/var-resources/facility.timezone.fetch.all.uri -d "http://facility-service:8080/FacilityService/v2/rest/public/facility/timezone" > /dev/null
 curl  -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -X PUT http://${HOST_DOMAIN}:8500/v1/kv/appconfig/${VAMF_ENVIRONMENT}/var-resources/facility.timezone.fetch.by.id.uri -d "http://facility-service:8080/FacilityService/v2/rest/public/facility/{facility-id}/timezone" > /dev/null
+curl  -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -X PUT http://${HOST_DOMAIN}:8500/v1/kv/appconfig/${VAMF_ENVIRONMENT}/var-resources/adr.cceligibility.uri -d "http://adr-service:8080/adr/v2/patients/{pt-id}/eligibility/communityCare" > /dev/null
 
 printf "\n\n\nSetting var-resources FEATURE FLAG to ${VAR_DISABLED_FEATURES_SET}\n\n\n"
 
