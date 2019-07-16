@@ -987,7 +987,7 @@ services:
 
   # VistA Scheduling Service (VSS) - exposes vista data by using the mdws to via adapter
   vista-scheduling-service:
-    image: mobileapps.vaftl.us:9250/md/map/vista-scheduling-service:2.1.9
+    image: mobileapps.vaftl.us:9250/ckm/vista-scheduling-service:2.5.0
     container_name: vista-scheduling-service
     ports:
      - 8185:8080
@@ -997,7 +997,7 @@ services:
      #- "VAULT_ADDR=http://vault:8200"
      #- "SECRET_PATH=secret/local/vista-data-services"
      # Use Consul
-     - "USE_ENVCONSUL=true"
+     - "USE_ENVCONSUL=false"
      - REDIS_HOST=redis
      - "CONSUL_SERVER=consul:8500"
      - "SERVICE_8080_NAME=vista-scheduling-service"
