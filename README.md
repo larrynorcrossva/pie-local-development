@@ -2,7 +2,7 @@
 ## NOTE: This is a stripped down version of the [Docker Local Development](https://coderepo.mobilehealth.va.gov/projects/DEV/repos/docker-local-development/browse) code that ONLY stands up the services required for VAR-related development ##
 
 ### VAR Development Environment Setup ###
-For best performance, it is recommended you allocate at least 10GB to Docker in a machine of a minimum 16GB available RAM (I've allocated 14GB, and increased swap size to 2GB). Also, check the Disk tab in your Docker Preferences dialog. You'll need to allocate at least 50GB of disk for your local Docker image repository.
+For best performance, it is recommended you allocate at least 10GB to Docker in a machine of a minimum 16GB available RAM (I've allocated 14GB, and increased swap size to 2GB). Also, check the Disk tab in your Docker Preferences dialog. You'll need to allocate _at least_ 150GB of disk for your local Docker image repository or you'll see things getting removed.
 
 Before you begin, if you currently have Docker images that were pulled from the AbleVets ECR, you'll want to start fresh, by doing a Docker system prune as follows:
 
@@ -33,7 +33,7 @@ Total reclaimed space: 45.74GB
 $
  ```
 
-***NOTE: Be sure that you've pulled the latest commits from the Bitbucket (Stash) repositories for the [var-web (release 4.17)](https://coderepo.mobilehealth.va.gov/projects/VAR/repos/var-web/browse?at=refs%2Fheads%2Frelease%2F4.17 "VAOS Web"), [var-resources (release 4.17)](https://coderepo.mobilehealth.va.gov/projects/VAR/repos/var-resources/browse "VAOS Resources"), [scheduling-manager-web (release 3.0)](https://coderepo.mobilehealth.va.gov/projects/VAR/repos/scheduling-manager-web/browse?at=refs%2Fheads%2Frelease%2F3.0 "SM Web"), [scheduling-manager-resources (release 3.0)](https://coderepo.mobilehealth.va.gov/projects/VAR/repos/scheduling-manager-resources/browse "SM Resources"), [var-utility-web (release 3.1)](https://coderepo.mobilehealth.va.gov/projects/VAR/repos/var-utility-web/browse?at=refs%2Fheads%2Frelease%2F3.1 "VATS Web"), [var-utility-resources (release 3.1)](https://coderepo.mobilehealth.va.gov/projects/VAR/repos/var-utility-resources/browse "VATS Resources").***
+***NOTE: Be sure that you've pulled the latest commits from the Bitbucket (Stash) repositories for this branch, along with [var-web (release 4.17)](https://coderepo.mobilehealth.va.gov/projects/VAR/repos/var-web/browse?at=refs%2Fheads%2Frelease%2F4.17 "VAOS Web"), [var-resources (release 4.17)](https://coderepo.mobilehealth.va.gov/projects/VAR/repos/var-resources/browse "VAOS Resources"), [scheduling-manager-web (release 3.0)](https://coderepo.mobilehealth.va.gov/projects/VAR/repos/scheduling-manager-web/browse?at=refs%2Fheads%2Frelease%2F3.0 "SM Web"), [scheduling-manager-resources (release 3.0)](https://coderepo.mobilehealth.va.gov/projects/VAR/repos/scheduling-manager-resources/browse "SM Resources"), [var-utility-web (release 3.1)](https://coderepo.mobilehealth.va.gov/projects/VAR/repos/var-utility-web/browse?at=refs%2Fheads%2Frelease%2F3.1 "VATS Web"), [var-utility-resources (release 3.1)](https://coderepo.mobilehealth.va.gov/projects/VAR/repos/var-utility-resources/browse "VATS Resources").***
 
 And finally, be sure that you've exported the VA_NEXUS_USER, VA_NEXUS_PWD, and VISTA_CACHE_KEY environment variables, set to the values that you were provided by encrypted email.
 
