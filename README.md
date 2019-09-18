@@ -231,7 +231,7 @@ Run from Project Directory:
 The script will check for the latest version of each docker image on https://mobileapps.vaftl.us. It will then stand up Consul, API GW a Mock IDP and the following:
 
 ### Micro Services (official Stash Repos):
-- Clinical Data Warehouse (CDW) - https://coderepo.mobilehealth.va.gov/projects/CDWMS/repos/docker-cdw-service/browse
+- Clinical Data Warehouse (CDW) - https://coderepo.mobilehealth.va.gov/projects/CDWMS/repos/cdw-service/browse
 - Administrative Data Repository (ADR) - https://coderepo.mobilehealth.va.gov/projects/VAMFC/repos/docker-adr-services/browse
 - Right of Access (ROA) - https://coderepo.mobilehealth.va.gov/projects/VDMS/repos/docker-roa-service/browse
 - User service and Mobile Veteran (Patient) Index - https://coderepo.mobilehealth.va.gov/projects/IUMS/repos/docker-mvi-user-service/browse
