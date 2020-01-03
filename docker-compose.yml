@@ -108,7 +108,6 @@ services:
     image: mobileapps.vaftl.us:9250/ckm/mobile-mvi-service:1.4.0
     container_name: mobile-mvi-service
     hostname: mobile-mvi-service
-    restart: on-failure:5
     links:
       - mock-mvi
     ports: 
@@ -152,8 +151,8 @@ services:
       - "18081:5005"
     environment:
       # 1.7.0 configuration
-      #- VAULT_ADDR=http://vault:8200
-      #- SECRET_PATH=secret/local/user-services
+      - VAULT_ADDR=http://vault:8200
+      - SECRET_PATH=secret/local/user-services
       - USE_ENVCONSUL=false
       - SERVER_USE_FORWARD_HEADERS=true
       - TRACE_URL=http://zipkin:9411/api/v1/spans
@@ -194,7 +193,7 @@ services:
       - "8481:8080"
       - "18481:5005"
     environment:
-      - JAVA_OPTS=-Xms64m -Xmx256m -XX:+UseSerialGC -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005
+      - "JAVA_OPTS=-Xms64m -Xmx256m -XX:+UseSerialGC -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005"
       - USE_ENVCONSUL=true
       - SERVER_USE_FORWARD_HEADERS=true
       - SERVICE_TAGS=local
@@ -430,8 +429,7 @@ services:
 
   vaos-vista:
     container_name: vaos-vista
-    image: mobileapps.vaftl.us:9250/md/map/vista:vaos-1.0.3
-    cpus: 0.25
+    image: mobileapps.vaftl.us:9250/md/map/vista:vaos-1.0.1
     ports:
       - "8000:8000"
       - "9210:9210"
@@ -460,7 +458,6 @@ services:
   var-mongo-data-seed:
     container_name: var-mongo-data-seed
     image: mobileapps.vaftl.us:9250/md/map/var-mongo-data-seed:1.0.3
-    container_name: var-mongo-data-seed
     volumes:
       - ./var-mongo-db-mock/data:/docker-entrypoint-initdb.d/
     depends_on:
@@ -476,7 +473,6 @@ services:
   var-messaging-microservice:
     container_name: var-messaging-microservice
     image: ${ENV_IMAGE_ROOT}/var-messaging-microservice:${VMM_VERSION}
-    container_name: var-messaging-microservice
     ports:
       - "7502:8080"
       - "39293:5005"
@@ -491,7 +487,6 @@ services:
   facility-service:
     container_name: facility-service
     image: ${ENV_IMAGE_ROOT}/facility-resources:${FACILITY_RESOURCES_VERSION}
-    container_name: facility-service
     ports:
       - "7501:8080"
     environment:
@@ -653,7 +648,7 @@ services:
       - CONSUL_PATH=appconfig/${VAMF_ENVIRONMENT}/cdw-service
       - TRACE_URL=http://zipkin:9411/api/v1/spans
       - "JAVA_OPTS=-Xms64m -Xmx170m -XX:+UseSerialGC"
-    restart: on-failure:5
+
 
   # Administrative Data Repository (ADR) Service and Mock (SOAP) data source. ADR serves as a enterprise data service
   # that allows VA apps to retrieve patient demographic and next-of-kin information
@@ -713,7 +708,7 @@ services:
 # access to their medical information. Veteran users must complete ROA before they can use any other mobile app.
 #
   roa-services:
-    image: mobileapps.vaftl.us:9250/ckm/docker-roa-service:1.0.11
+    image: mobileapps.vaftl.us:9250/md/docker-roa-service:1.0.11
     container_name: roa-services
     restart: on-failure
     links:
@@ -743,7 +738,7 @@ services:
 ## ROA WEB
   roa-web:
     container_name: roa-web
-    image: mobileapps.vaftl.us:9250/ckm/docker-roa-web
+    image: mobileapps.vaftl.us:9250/md/map/docker-roa-web
     ports:
      - "8087:80"
     environment:
@@ -753,8 +748,7 @@ services:
   veteran-video-connect-service:
     image: mobileapps.vaftl.us:9250/md/map/veteran-video-connect-service:3.0.0
     container_name: veteran-video-connect-service
-    ports:
-      - "8280:8080"
+      - 8280:8080
     environment:
       - constraint:nodetype==*service*
       - SERVICE_NAME=veteran-video-connect-service
@@ -769,6 +763,7 @@ services:
       - CONSUL_PATH=appconfig/${VAMF_ENVIRONMENT}/veteran-video-connect-service
       - "TRACE_URL=http://localhost:9411/api/v1/spans"
       - "JAVA_OPTS=-Xms64m -Xmx170m -XX:+UseSerialGC"
+
 
 # IAM SSOe Mock - Injects HTTP headers to simulate SSOe token header injection. Allows log in/out.
   iamssoe-proxy-mock:
@@ -889,7 +884,7 @@ services:
       - APP_LOGGING_LEVEL=INFO
       - ROOT_LOGGING_LEVEL=INFO
       - VAMF_ENVIRONMENT=local
-      - "JAVA_OPTS=-Xms64m -Xmx170m -XX:+UseSerialGC"
+
     ports:
       - 8095:8080
 
@@ -981,7 +976,7 @@ services:
      - "IDP_CONFIG_JSON=[{\"idpId\": \"gov.va.iam.ssoe.v1\",\"friendlyName\": \"VAAFI SSOe\",\"description\": \"Veteran login supporting DSLogon, Symantec, and other CSPs.\",\"versionId\": \"v1\",\"scope\": \"VETERAN\",\"logoUrl\": \"img/dslogon-logo.png\",\"loginUrl\": \"http://${HOST_DOMAIN}:9000/users/v1/landing\",\"logoutUrl\": \"http://iamssoe-proxy-mock/ssoeproxy/logout\",\"landingPage\": \"http://${HOST_DOMAIN}:9000/ssoeproxy/logout\"},{\"idpId\": \"gov.va.iam.ssoi.v1\",\"friendlyName\": \"VAAFI SSOi\",\"description\": \"Staff login supporting PIV authentication.\",\"versionId\": \"v1\",\"scope\": \"STAFF\",\"logoUrl\": \"img/logo_navbar_ipad.png\",\"loginUrl\": \"http://localhost:9001/users/v1/landing\",\"logoutUrl\": \"http://${HOST_DOMAIN}:9001/ssoiproxy/logout\",\"landingPage\": \"http://${HOST_DOMAIN}/users/v1/landing\"},{\"idpId\": \"gov.va.mhv.v1\",\"friendlyName\": \"My HealtheVet\",\"description\": \"Staff login supporting PIV authentication.\",\"versionId\": \"v1\",\"scope\": \"VETERAN\",\"logoUrl\": \"img/mhv-logo.png\",\"loginUrl\": \"http://${HOST_DOMAIN}:8080/ssoiproxy/login\",\"logoutUrl\": \"http://${HOST_DOMAIN}:8080/ssoiproxy/logout\",\"landingPage\": \"http://${HOST_DOMAIN}:8080/users/v1/landing\"}]"
      - "SERVER_USE_FORWARD_HEADERS=true"
      # Debug configuration (Ensure port ignored below is exposed for debugging in ports section)
-     - SERVICE_8080_NAME=vista-data-services_v1
+     - SERVICE_8080_NAME=vista-data-servicesv1
      - SERVICE_64085_IGNORE=true
      - "JAVA_OPTS=-Xms64m -Xmx170m -XX:+UseSerialGC"
 
