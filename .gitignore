@@ -2,3 +2,6 @@ local.json
 .DS_STORE
 var-oracle-db-mock/.cache
 .idea
+app.env
+cache.key
+crank*

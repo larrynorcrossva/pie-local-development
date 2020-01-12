@@ -858,7 +858,7 @@ do
             ./run --dev var
             ;;
         "Start sm (DEV)")
-            ./run --dev sm
+
             ;;
         "Start vats (DEV)")
             ./run --dev vats
