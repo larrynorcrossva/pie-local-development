@@ -23,7 +23,8 @@ function check_hostlocal() {
 check_hostlocal
 
 if [ $? -ne 0 ]; then
-	echo -e "\nThe hostname 'hostlocal.io' is not set up properly and is required to support local development environments. \nInitializing hostlocal.io now...\n" >&2
+	echo -e "\nThe hostname 'hostlocal.io' is not set up properly and is required to support local development\
+ environments. \nInitializing hostlocal.io now...\n" >&2
 	. add-hostlocal.sh
     check_hostlocal
     if [ $? -ne 0 ]; then
