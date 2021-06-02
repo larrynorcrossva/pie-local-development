@@ -156,7 +156,7 @@ function start_vet(){
         docker-compose pull "${vet[@]}"
     fi
     docker-compose up -d --force-recreate --no-deps "${vet[@]}"
-    docker-compose up -d --force-recreate --no-deps patient-context pgd-ccda fit-heart-web database pgd-fhir-services rbac-api  || (echo "*** FAILED: Could not start containers using docker-compose." && exit -1)
+    #docker-compose up -d --force-recreate --no-deps vamf-quartz-scheduler vamf-notification-services patient-context pgd-ccda fit-heart-web database pgd-fhir-services rbac-api  || (echo "*** FAILED: Could not start containers using docker-compose." && exit -1)
 
 }
 

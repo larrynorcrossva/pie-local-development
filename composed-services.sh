@@ -12,7 +12,7 @@ utilities=(swagger-ui zipkin)
 
 ss=(var-messaging-microservice facility-service vmr-mock-service video-visits-service messaging-publisher vista-scheduling-service appointment-service cdw-service task-resources adr-service)
 
-vet=(roa-services roa-web eula-service eula-web veteran-video-connect-service iamssoe-proxy-mock iamssoe-db-mock)
+vet=(vamf-quartz-scheduler vamf-notification-services patient-context pgd-ccda fit-heart-web database pgd-fhir-services rbac-api roa-services roa-web eula-service eula-web veteran-video-connect-service iamssoe-proxy-mock iamssoe-db-mock)
 
 staff=(patient-context mock-wstrust ssoi-mock sud-service sud-web pcs-service pcs-web personal-preference-service vista-data-services mdws-via-adapter staff-video-connect-service vista-emr-service)
 

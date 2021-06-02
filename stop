@@ -80,7 +80,7 @@ function stop_all(){
     stop_var;
     stop_sm;
     stop_vats;
-    docker-compose rm  -v -s -f pgd-ccda fit-heart-web database pgd-fhir-services rbac-api  || (echo "*** FAILED: Could not start containers using docker-compose." && exit -1)
+    #docker-compose rm  -v -s -f mock-smtp-server qss-mock vamf-notification-services vamf-quartz-scheduler pgd-ccda fit-heart-web database pgd-fhir-services rbac-api  || (echo "*** FAILED: Could not start containers using docker-compose." && exit -1)
 
 }
 

@@ -4,9 +4,10 @@
 export REGISTER_PATH=vamf/local/apigateway/1.0/services
 echo "********************* Register FITHEART with API Gateway *********************"
 export JWT_PUBLIC_KEY=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAwRs7d+tRAuK4soDInuKp51lTTTXWN8okXR3/gSHiIB+q7vZeAGWA8ULjCYuECLde8tS6OxzZwSj/oM0kZBXuHKYq2ukWKjTEmOwlpQW4vBpX60bcx5rXwoEjbcWghK9oVWwY4OwbAJ4TYklkUHZC5buQ+8RU59u6FIWSv2N3D9VBkfYsHvp3O4aXVaE8dZ0dxldUdv/WePoLkCeUYgLsGyDg/zsZvDrX1+yvNsjNNmB/ksJSoptMv9CfyUpSXsfov+8GhBCtgzDvgn32kw79wPsrTkgnC0DRtuv+y3qCXX+ZJ6cbJ31tVus9AadUn2CrWJur6/KRYsniQaEnfA43hwIDAQAB
-
+export APP_CONFIG_PATH=appconfig/local
 export CONSUL_SERVER="http://localhost:8500"
-
+export CONSUL_ADDR=http://localhost:8500/v1/kv
+export REGISTER_PATH=vamf/local/apigateway/1.0/services
 export CONSUL_PATH=/v1/kv/appconfig/local/pgd-fhir-services
 export CONSUL_TOKEN=7BE784A4-7498-4469-BE2F-9C3B9444DFEF
 export CONSUL_PATH_RBAC=/v1/kv/appconfig/local/pgd-rbac-services
@@ -60,3 +61,7 @@ curl -H "X-Consul-Token : $CONSUL_TOKEN" -X PUT -d false $CONSUL_SERVER$CONSUL_P
 curl -H "X-Consul-Token : $CONSUL_TOKEN" -X PUT -d "@./jwtRSA512.key.pub" $CONSUL_SERVER$CONSUL_PATH_RBAC/JWT_KEY > /dev/null
 curl -H "X-Consul-Token : $CONSUL_TOKEN" -X PUT -d $JWT_PUBLIC_KEY $CONSUL_SERVER$CONSUL_PATH_RBAC/JWT_PUBLIC_KEY > /dev/null
 curl -H "X-Consul-Token : $CONSUL_TOKEN" -X PUT -d $JWT_PUBLIC_KEY $CONSUL_SERVER$CONSUL_PATH/JWT_PUBLIC_KEY > /dev/null
+
+curl -H "X-Consul-Token: $CONSUL_TOKEN" -s -X PUT $CONSUL_ADDR/$APP_CONFIG_PATH/quartz-scheduler/JWT_PUBLIC_KEY -d $JWT_PUBLIC_KEY > /dev/null && \
+curl -H "X-Consul-Token: $CONSUL_TOKEN" -s -X PUT $CONSUL_ADDR/$REGISTER_PATH/pns -d '{"location":"/pns","service":"vamf-notification-services","redirect":"off","headers":{"X-Real-IP":"$remote_addr", "X-Forwarded-Host" : "$http_host", "X-Forwarded-proto" : "$scheme" }}' > /dev/null && \
+curl -H "X-Consul-Token: $CONSUL_TOKEN" -s -X PUT $CONSUL_ADDR/$APP_CONFIG_PATH/pns/JWT_PUBLIC_KEY -d $JWT_PUBLIC_KEY > /dev/null && \
