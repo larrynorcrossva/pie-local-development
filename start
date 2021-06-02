@@ -40,8 +40,7 @@ function start_all_vet(){
     start_vista
     wait_for_cpu
     start_via
-    wait_for_cpu
-    start_var
+
 }
 
 function start_all_staff(){
@@ -157,6 +156,8 @@ function start_vet(){
         docker-compose pull "${vet[@]}"
     fi
     docker-compose up -d --force-recreate --no-deps "${vet[@]}"
+    docker-compose up -d --force-recreate --no-deps patient-context pgd-ccda fit-heart-web database pgd-fhir-services rbac-api  || (echo "*** FAILED: Could not start containers using docker-compose." && exit -1)
+
 }
 
 function start_staff(){
@@ -172,6 +173,7 @@ function start_staff(){
 function start_var(){
     echo -e "\nStarting VAOS\n"
     ./consul-registration/register-var.sh
+    ./consul-registration/register-fitheart.sh
     docker-compose stop "${var[@]}"
     if [ "$PULL" = true ] ; then
         docker-compose pull "${var[@]}"

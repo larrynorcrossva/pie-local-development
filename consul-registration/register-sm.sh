@@ -5,10 +5,13 @@
 echo "********************* Register SM with API Gateway *********************"
 curl -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -s -X PUT http://${HOST_DOMAIN}:8500/v1/kv/vamf/${VAMF_ENVIRONMENT}/apigateway/1.0/services/scheduling-manager-resources -d '{"location":"/SchedulingManagerService","service":"scheduling-manager-resources-8080","redirect":"off","headers":{"X-Real-IP":"$remote_addr","host":"$http_host"}}' > /dev/null && \
 curl -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -s -X PUT http://${HOST_DOMAIN}:8500/v1/kv/vamf/${VAMF_ENVIRONMENT}/apigateway/1.0/services/scheduling-manager -d '{"location":"/scheduling-manager","service":"scheduling-manager-web","redirect":"off","headers":{"X-Real-IP":"$remote_addr"}}' > /dev/null
+#curl -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -s -X PUT http://${HOST_DOMAIN}:8500/v1/kv/vamf/${VAMF_ENVIRONMENT}/apigateway/1.0/services/scheduling-manager -d '{"headers": {"X-Real-IP": "$remote_addr","X-Forwarded-Proto": "https","X-Forwarded-Host": "$http_host"},"location": "/SchedulingManagerService/v3/rest/","redirect": "off","service": "scheduling-manager-resources-8080.local","rewrite": "^/SchedulingManagerService/v3/rest(/.*) /var/VeteranAppointmentRequestService/v4/rest/sm$1 last"}' > /dev/null
+
 
 curl -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -s -X PUT http://${HOST_DOMAIN}:8500/v1/kv/vamf/${VAMF_ENVIRONMENT}/apigateway/1.0/services/scheduling-manager-resources-beta -d '{"location":"/SchedulingManagerServiceBeta","service":"scheduling-manager-resources-beta","redirect":"off","headers":{"X-Real-IP":"$remote_addr","host":"$http_host"}}' > /dev/null
 curl -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -s -X PUT http://${HOST_DOMAIN}:8500/v1/kv/vamf/${VAMF_ENVIRONMENT}/apigateway/1.0/services/scheduling-manager-beta -d '{"location":"/scheduling-manager-beta","service":"scheduling-manager-web-beta","redirect":"off","headers":{"X-Real-IP":"$remote_addr"}}' > /dev/null
 
+curl -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -s -X PUT http://${HOST_DOMAIN}:8500/v1/kv/vamf/${VAMF_ENVIRONMENT}/apigateway/1.0/services/var-resources -d '{"location":"/var/VeteranAppointmentRequestService","service":"var-resources","redirect":"off","headers":{"X-Real-IP":"$remote_addr"}}' > /dev/null
 
 
 
@@ -24,6 +27,11 @@ curl -H "Content-Type: application/json" -H "X-Consul-Token: ${CONSUL_MASTER_TOK
 curl -H "Content-Type: application/json" -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -X PUT -d "http://facility-service:8080/FacilityService/v2/rest/public/facility/{facility-id}/timezone" http://${HOST_DOMAIN}:8500/v1/kv/appconfig/${VAMF_ENVIRONMENT}/scheduling-manager-resources/facility.timezone.fetch.by.id.uri > /dev/null
 curl -H "Content-Type: application/json" -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -X PUT -d "http://vista-scheduling-service:8080/VistaSchedulingService/v2" http://${HOST_DOMAIN}:8500/v1/kv/appconfig/${VAMF_ENVIRONMENT}/scheduling-manager-resources/vss.scheduling.endPointUrl > /dev/null
 curl -H "Content-Type: application/json" -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -X PUT -d "true" http://${HOST_DOMAIN}:8500/v1/kv/appconfig/${VAMF_ENVIRONMENT}/scheduling-manager-resources/vssCall > /dev/null
+curl -H "Content-Type: application/json" -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -s -X PUT ${HOST_DOMAIN}:8500/v1/kv/appconfig/${VAMF_ENVIRONMENT}/scheduling-manager-resources/ENABLE_APPDYNAMICS -d 'true' > /dev/null
+curl -H "Content-Type: application/json" -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -X PUT -d "12-08-2020" http://${HOST_DOMAIN}:8500/v1/kv/appconfig/${VAMF_ENVIRONMENT}/scheduling-manager-web/utc_conversion_date > /dev/null
+
+
+
 
 
 # Passwords -- WHen Vault is enabled, these should be moved to Vault
@@ -35,4 +43,5 @@ curl -H "Content-Type: application/json" -H "X-Consul-Token: ${CONSUL_MASTER_TOK
 echo "********************* Register NextGen consul variables for scheduling-manager-web*********************"
 curl  -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -X PUT -d "https://staff.mobilehealth.va.gov/launchpad" http://${HOST_DOMAIN}:8500/v1/kv/appconfig/${VAMF_ENVIRONMENT}/staff/scheduling-manager-web/LAUNCHPAD_URL > /dev/null
 curl  -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -X PUT -d "https://staff.mobilehealth.va.gov/launchpad" http://${HOST_DOMAIN}:8500/v1/kv/appconfig/${VAMF_ENVIRONMENT}/staff/scheduling-manager-web-beta/LAUNCHPAD_URL > /dev/null
+curl  -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -X PUT -d "true" http://${HOST_DOMAIN}:8500/v1/kv/appconfig/${VAMF_ENVIRONMENT}/staff/scheduling-manager-web/ENABLE_COVID_EXPRESSCARE > /dev/null
 

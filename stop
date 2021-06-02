@@ -12,6 +12,20 @@ function stop_vista(){
     docker-compose rm -v -s -f "${vista[@]}"
 }
 
+function stop_pgdfhir(){
+    docker-compose rm -v -s -f "pgd-fhir-services"
+    docker-compose rm -v -s -f "database"
+    docker-compose rm -v -s -f "rbac-api"
+}
+
+function vaos_export_service(){
+    docker-compose rm -v -s -f "vaos_export_service"
+}
+function stop_fitheart(){
+    docker-compose rm -v -s -f "fit-heart-web"
+}
+
+
 function stop_via(){
     docker-compose rm -v -s -f "${via[@]}"
 }
@@ -49,6 +63,10 @@ function stop_vats(){
     docker-compose rm -v -s -f "${vats[@]}"
 }
 
+function stop_vaos_export_service(){
+    docker-compose rm -v -s -f "vaos-export-service"
+}
+
 function stop_all(){
     stop_core;
     stop_fixtures;
@@ -62,6 +80,8 @@ function stop_all(){
     stop_var;
     stop_sm;
     stop_vats;
+    docker-compose rm  -v -s -f pgd-ccda fit-heart-web database pgd-fhir-services rbac-api  || (echo "*** FAILED: Could not start containers using docker-compose." && exit -1)
+
 }
 
 while [[ "$#" > 0 ]]; do case $1 in

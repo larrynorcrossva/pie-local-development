@@ -9,4 +9,4 @@ RUN chown mongodb /var/lib/mongodb
 USER mongodb
 
 CMD ["mongod", "-f", "/etc/mongod.conf"]
-#, "--sslMode", "requireSSL", "--sslPEMKeyFile", "/etc/ssl/certs/mongodb.pem", "--sslCAFile", "/etc/ssl/certs/mongodb-cert.crt", "--sslAllowInvalidCertificates", "--sslAllowInvalidHostnames",  "--sslAllowConnectionsWithoutCertificates", "--auth"]
+#, "--sslMode", "requireSSL", "--sslPEMKeyFile", "/etc/ssl/certs/mongodb.pem", "--sslCAFile", "/etc/ssl/certs/mongodb-cert.crt", "--sslAllowInvalidCertificates", "--sslAllowInvalidHostnames",  "--sslAllowConnectionsWithoutCertificates", "-

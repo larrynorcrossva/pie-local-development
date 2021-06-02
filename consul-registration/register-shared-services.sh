@@ -103,3 +103,9 @@ curl -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -X PUT http://${HOST_DOMAIN}:85
 curl -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -X PUT http://${HOST_DOMAIN}:8500/v1/kv/appconfig/${VAMF_ENVIRONMENT}/adr-service/ENDPOINT_URL -d "http://mock-adr:8080/adr/mockeeSummaryPortSoap11"  > /dev/null
 curl -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -X PUT http://${HOST_DOMAIN}:8500/v1/kv/appconfig/${VAMF_ENVIRONMENT}/adr-service/TRACE_URL    -d "http://zipkin:9411/api/v1/spans"  > /dev/null
 curl -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -X PUT http://${HOST_DOMAIN}:8500/v1/kv/appconfig/${VAMF_ENVIRONMENT}/adr-service/JWT_SECRET   -d "testtesttest"  > /dev/null
+
+echo "********************* Register NextGen consul variables for SBA *********************"
+curl -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -X PUT http://${HOST_DOMAIN}:8500/v1/kv/appconfig/${VAMF_ENVIRONMENT}/sba-service/v1/APPDYNAMICS_NODE_NAME_PREFIX     -d "Local sba-service"  > /dev/null
+curl -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -X PUT http://${HOST_DOMAIN}:8500/v1/kv/appconfig/${VAMF_ENVIRONMENT}/sba-service/v1/ENABLE_APPDYNAMICS -d "false"  > /dev/null
+curl -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -X PUT http://${HOST_DOMAIN}:8500/v1/kv/appconfig/${VAMF_ENVIRONMENT}/sba-service/v1/ADMIN_IDP_URL    -d "http://admin-idp-v2.sqa:8080/admin/v2"  > /dev/null
+curl -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -X PUT http://${HOST_DOMAIN}:8500/v1/kv/appconfig/${VAMF_ENVIRONMENT}/sba-service/v1/JWT_PUBLIC_KEY   -d "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAxsKBDBTi1TybLYgpym6hUaxee4hpjehsKf4VQO96XktXfUL3+JjafSOkg3siYcQydqNimo+83UiyoNOkcZir5QjDUaIWSBBFf7r/8nHmcsZysRtzeutBeNkdF5cO/87GUdSiFaGbweDSTqpQ0/yUCsPOfFOsulIUWeKb9rArntQP1UGmm2EotqwMS3aDN2JhZ1BuvYfB8UYeTn1zf3zoCBvkSTHSMWScnRZ1HFogbJhldsiijdzcTc91VWaV5kgX6lO32jYchYZPJZYBYH82tWFzG2F01kyHSHZ6BJ4ki1KwkXq37wG3wYCf+i2NIjqgLjuqP+1sHjXbN77GNnh4HQIDAQAB"  > /dev/null

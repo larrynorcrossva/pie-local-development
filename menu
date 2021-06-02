@@ -372,6 +372,19 @@ build_base_images() {
 
     docker pull ${DTR_PREFIX}/images/oraclejdk8-tomcat-appd:2.1.0
     docker tag ${DTR_PREFIX}/images/oraclejdk8-tomcat-appd:2.1.0 dev/oraclejdk8-tomcat-appd:2.1.0
+
+    docker login dtr.mapsandbox.net
+    local DTR_SANDBOX_PREFIX="dtr.mapsandbox.net"
+
+    docker pull ${DTR_SANDBOX_PREFIX}/images/oraclejdk8-tomcat-appd:2.2.0
+    docker tag ${DTR_SANDBOX_PREFIX}/images/oraclejdk8-tomcat-appd:2.2.0 dev/oraclejdk8-tomcat-appd:2.2.0
+
+    docker pull ${DTR_SANDBOX_PREFIX}/images/oraclejdk8-tomcat-appd:2.2.1
+    docker tag ${DTR_SANDBOX_PREFIX}/images/oraclejdk8-tomcat-appd:2.2.1 dev/oraclejdk8-tomcat-appd:2.2.1
+
+    docker pull ${DTR_SANDBOX_PREFIX}/images/oraclejdk8-tomcat-appd:3.0.0
+    docker tag ${DTR_SANDBOX_PREFIX}/images/oraclejdk8-tomcat-appd:3.0.0 dev/oraclejdk8-tomcat-appd:3.0.0
+
 }
 
 build_var_web() {
@@ -662,7 +675,7 @@ done
 menu_quickstart() {
 PS3='Please enter your choice: '
 options=(
-"All vet" "All staff" "Build Menu"
+"All vet (VAFH)" "All staff" "Build Menu"
 "Start var (DEV)" "Start sm (DEV)" "Start vats (DEV)"
 "Validate Menu"
 "Quit")
@@ -672,7 +685,7 @@ do
         "All staff")
             ./run --dev all-staff
             ;;
-        "All vet")
+        "All vet (VAFH)")
             ./run --dev all-vet
             ;;
         "Build Menu")
@@ -858,7 +871,7 @@ do
             ./run --dev var
             ;;
         "Start sm (DEV)")
-
+            ./run --dev sm
             ;;
         "Start vats (DEV)")
             ./run --dev vats
@@ -896,6 +909,7 @@ do
     case $opt in
         "Login DTR")
             docker login mobileapps.vaftl.us:9250
+            docker login dtr.mapsandbox.net
             ;;
         "Status Menu")
             main_status

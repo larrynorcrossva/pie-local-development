@@ -15,7 +15,7 @@ curl -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -s -X PUT ${HOST_DOMAIN}:8500/v
 curl -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -s -X PUT ${HOST_DOMAIN}:8500/v1/kv/vamf/${VAMF_ENVIRONMENT}/apigateway/1.0/services/sud -d '{"location":"/sud","service":"docker-sud-service","redirect":"off","headers":{"X-Real-IP":"$remote_addr"}}' > /dev/null && \
 curl -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -s -X PUT ${HOST_DOMAIN}:8500/v1/kv/vamf/${VAMF_ENVIRONMENT}/apigateway/1.0/services/sud-web -d '{"location":"/sud-web","service":"docker-sud-web-80","redirect":"off","headers":{"X-Real-IP":"$remote_addr"}}' > /dev/null && \
 curl -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -s -X PUT ${HOST_DOMAIN}:8500/v1/kv/vamf/${VAMF_ENVIRONMENT}/apigateway/1.0/services/vistadataservices -d '{  "location":"/VistaDataServices",  "service":"vista-data-services_v1",  "redirect":"off",  "request_headers":"on",  "headers": { "X-Real-IP":"$remote_addr", "X-Forwarded-Host" : "$host" }}' > /dev/null && \
-curl -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -s -X PUT ${HOST_DOMAIN}:8500/v1/kv/vamf/${VAMF_ENVIRONMENT}/apigateway/1.0/services/vista-scheduling-service -d '{ "location":"/VistaSchedulingService", "service":"vista-scheduling-service", "redirect":"off",  "request_headers":"on", "headers": { "X-Real-IP":"$remote_addr","X-Forwarded-Proto": "https", "X-Forwarded-Host" : "$http_host" }}'  > /dev/null && \
+curl -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -s -X PUT ${HOST_DOMAIN}:8500/v1/kv/vamf/${VAMF_ENVIRONMENT}/apigateway/1.0/services/vista-scheduling-service -d '{ "location":"/VistaSchedulingService", "service":"vista-scheduling-service_v2", "redirect":"off",  "request_headers":"on", "headers": { "X-Real-IP":"$remote_addr","X-Forwarded-Proto": "https", "X-Forwarded-Host" : "$http_host" }}'  > /dev/null && \
 curl -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -s -X PUT ${HOST_DOMAIN}:8500/v1/kv/vamf/${VAMF_ENVIRONMENT}/apigateway/1.0/services/pns -d '{"location":"/pns","service":"vamf-notification-services","redirect":"off","headers":{"X-Real-IP":"$remote_addr"}}' > /dev/null
 curl -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -s -X PUT ${HOST_DOMAIN}:8500/v1/kv/vamf/${VAMF_ENVIRONMENT}/apigateway/1.0/services/mobile-mvi-service -d '{"location":"/mobile-mvi-service/v1","service":"mobile-mvi-service-v1.ckm","redirect":"off","request_headers":"on","headers":{"X-Real-IP":"$remote_addr","X-Forwarded-For":"$proxy_add_x_forwarded_for","X-Forwarded-Server":"$http_host","X-Forwarded-Host":"$http_host"}}' > /dev/null
 
@@ -26,10 +26,6 @@ curl -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -s -X PUT ${HOST_DOMAIN}:8500/v
 curl -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -s -X PUT ${HOST_DOMAIN}:8500/v1/kv/appconfig/${VAMF_ENVIRONMENT}/mobile-mvi-service/v1/JWT_PUBLIC_KEY -d 'MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAwRs7d+tRAuK4soDInuKp51lTTTXWN8okXR3/gSHiIB+q7vZeAGWA8ULjCYuECLde8tS6OxzZwSj/oM0kZBXuHKYq2ukWKjTEmOwlpQW4vBpX60bcx5rXwoEjbcWghK9oVWwY4OwbAJ4TYklkUHZC5buQ+8RU59u6FIWSv2N3D9VBkfYsHvp3O4aXVaE8dZ0dxldUdv/WePoLkCeUYgLsGyDg/zsZvDrX1+yvNsjNNmB/ksJSoptMv9CfyUpSXsfov+8GhBCtgzDvgn32kw79wPsrTkgnC0DRtuv+y3qCXX+ZJ6cbJ31tVus9AadUn2CrWJur6/KRYsniQaEnfA43hwIDAQAB' > /dev/null
 # curl -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -s -X PUT ${HOST_DOMAIN}:8500/v1/kv/appconfig/${VAMF_ENVIRONMENT}/mobile-mvi-service/v1/JWT_SECRET -d 'testtesttest' > /dev/null
 curl -H "X-Consul-Token: ${CONSUL_MASTER_TOKEN}" -s -X PUT ${HOST_DOMAIN}:8500/v1/kv/appconfig/${VAMF_ENVIRONMENT}/mobile-mvi-service/v1/MVI_URL -d 'http://mock-mvi:8080/mvi/mockVAIdMPort' > /dev/null
-
-
-
-
 
 
 # echo '{"rules":"{\"path\": {\"secret/'${VAMF_ENVIRONMENT}'/*\":{\"policy\":\"read\"}}}"}' > ${VAMF_ENVIRONMENT}.json

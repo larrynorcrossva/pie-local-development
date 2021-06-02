@@ -41,7 +41,6 @@ function set_stack_mode_test(){
 while [[ "$#" > 0 ]]; do
     case $1 in
         --pull) set_pull; shift;;
-
         --test|--test-mode) set_stack_mode_test; shift;;
         --dev|--dev-mode) set_stack_mode_dev; shift;;
 

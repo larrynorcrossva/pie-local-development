@@ -1,0 +1,57 @@
+# Note: 
+# Comments are allowed in yml files; however,
+# you can remove all comments from this file with the following command:
+#
+# mv app.yml template.yml;grep -v "#" template.yml > app.yml;rm template.yml
+#
+- project:
+###### VALIDATE VERSION TO USE ######
+   automationVersion: 3.0.0
+   # Match Stash Repo Name, Lower Case
+   name: vaos-export-service
+   #
+   # Match Stash Project Name, Lower Case
+   nexusRepository: cms
+   environmentFile: nextgen/app.env
+
+# BEGIN DO NOT CHANGE 
+   nexusGroupId: $NEXUS_GROUP_ID
+   nexusArtifactId: $JOB_NAME
+   nexusFile: $JOB_NAME.BUILD-$BUILD_NUMBER.tar.gz
+   nexusURL: $NEXUS_URL
+   nexusProtocol: http
+   nexusPackaging: tar.gz
+   startingpath: $STARTING_PATH
+   ucp-host: $UCP_HOST
+   dtrhost: $DTR_HOST
+   dtrorganization: $DTR_ORG
+   APP_VERSION: $APP_VERSION
+  
+   jobs:
+      - '{name}-app-build':
+# END DO NOT CHANGE
+          gitrepo: '$STASH_URL/maps/vaos-export-service.git'
+          gitbranch: release/1.0
+      # BEGIN ADVANCED CHANGES
+          gitsubmodules: false
+          compileline: chmod 755 nextgen/build.sh; ./nextgen/build.sh 
+          scanline: if [ -f fortify/fortify.sh ]; then chmod 755  fortify/fortify.sh; ./fortify/fortify.sh; fi
+          packageline: if [ -f nextgen/package.sh ]; then chmod 755 nextgen/package.sh; ./nextgen/package.sh; fi
+      # END ADVANCED CHANGES
+
+      # BEGIN DO NOT CHANGE           
+          jenkinsnode: image-build
+          gitcreds: STASH_USER
+      - '{name}-docker-image-build':
+          jenkinsnode: image-build
+          nexusPath: "/service/local/repositories/{nexusRepository}/content/{nexusGroupId}/"
+          tags: 
+            - "{APP_VERSION}"
+      - '{name}-docker-image-deploy':
+          jenkinsnode: image-deploy      
+      # END DO NOT CHANGE
+      #
+      # BEGIN ADVANCED CHANGES
+          predeployline: if [ -f nextgen/pre-deploy.sh ]; then chmod 755 nextgen/pre-deploy.sh; ./nextgen/pre-deploy.sh; fi         
+          postdeployline: if [ -f nextgen/post-deploy.sh ]; then chmod 755 nextgen/post-deploy.sh; ./nextgen/post-deploy.sh; fi
+      # END ADVANCED CHANGES      
