@@ -1,0 +1,164 @@
+public class VistaPharmacyResponse
+    {
+        [Key]
+        public string Status { get; set; }
+
+        public int TotalResults { get; set; }
+
+        public int ReturnedResults { get; set; }
+
+        public int PageNumber { get; set; }
+
+        public int TotalPages { get; set; }
+
+        public int MaxResultsPerPage { get; set; }
+
+        public virtual IQueryable<VistaPharmacyProvider> Providers { get; set; }
+
+        public virtual IQueryable<VistaPharmacyProviderService> ProviderServices { get; set; }
+
+        public virtual IQueryable<VistaPharmacyProviderIdentifier> ProviderIdentifiers { get; set; }
+
+        public virtual IQueryable<VistaPharmacyDEA> DEAs { get; set; }
+
+        public virtual IQueryable<VistaPharmacyMedicalEducation> MedicalEducations { get; set; }
+
+    }
+
+
+public class VistaPharmacyProvider
+    {
+        [Key]
+        public long NPI { get; set; }
+
+        public string FirstName { get; set; }
+
+        public string MiddleName { get; set; }
+
+        public string LastName { get; set; }
+
+        public string MainPhone { get; set; }
+
+        public string Fax { get; set; }
+
+        public ProviderGender? Gender { get; set; }
+
+        public ProviderType? ProviderType { get; set; }
+
+        public Status? ProviderStatus { get; set; }
+
+        public ProviderStatusReason? ProviderStatusReason { get; set; }
+
+        public DateTime? ModifiedOnDate { get; set; }
+
+    }
+
+
+ public class VistaPharmacyProviderService
+    {
+        [Key]
+        public Guid? CareSiteId { get; set; }
+
+        public string ProviderNPI { get; set; }
+
+        public string CareSitename { get; set; }
+
+        public CareSiteType? CareSiteType { get; set; }
+
+        public string AddressStreet1 { get; set; }
+
+        public string AddressStreet2 { get; set; }
+
+        public string AddressCity { get; set; }
+
+        public string AddressState { get; set; }
+
+        public string AddressZip { get; set; }
+
+        public string SpecialtyCode { get; set; }
+
+        public decimal Latitude { get; set; }
+
+        public decimal Longitude { get; set; }
+
+        public string OfficePhone { get; set; }
+
+        public Status? ProviderServiceStatus { get; set; }
+
+        public ProviderServiceStatusReason? ProviderServiceStatusReason { get; set; }
+
+        public DateTime? ModifiedOnDate { get; set; }
+
+    }
+
+
+public class VistaPharmacyProviderIdentifier
+    {
+        [Key]
+        public string ProviderIdentifier { get; set; }
+
+        public ProviderIdentifierType? ProviderIdentifierType { get; set; }
+
+        public string PrimaryProviderNPI { get; set; }
+
+        public Status? ProviderIdentifierStatus { get; set; }
+
+        public ProviderIdentifierStatusReason? ProviderIdentifierStatusReason { get; set; }
+
+        public DateTime? ModifiedOnDate { get; set; }
+    }
+
+
+public class VistaPharmacyMedicalEducation
+    {
+        [Key]
+        public string EducationName { get; set; }
+
+        public string ProviderNPI { get; set; }
+
+        public Status? MedicalEducationStatus { get; set; }
+
+        public MedicalEducationStatusReason? MedicalEducationStatusReason { get; set; }
+
+        public DateTime? ModifiedOnDate { get; set; }
+
+    }
+
+
+public class VistaPharmacyDEA
+    {
+        [Key]
+        public string DeaNumber { get; set; }
+
+        public string Verifier { get; set; }
+
+        public DateTime? VerificationDate { get; set; }
+
+        public DateTime? ExpirationDate { get; set; }
+
+        public string AssociatedLocationName { get; set; }
+
+        public bool? HasSchedule2 { get; set; }
+
+        public bool? HasSchedule2NonNarcotic { get; set; }
+
+        public bool? HasSchedule3 { get; set; }
+
+        public bool? HasSchedule3NonNarcotic { get; set; }
+
+        public bool? HasSchedule4 { get; set; }
+
+        public bool? HasSchedule5 { get; set; }
+
+        public string ProviderNPI { get; set; }
+
+        public Status? DEAStatus { get; set; }
+
+        public DEAStatusReason? DEAStatusReason { get; set; }
+
+        public DateTime? ModifiedOnDate { get; set; }
+    }
+
+
+
+

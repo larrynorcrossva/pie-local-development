@@ -1,0 +1,10 @@
+Use the following arguments to perform this deployment from the command line:
+Command line: /Silent /ModelType:Project /SourcePath:"E:\ETLDevelopment\CC_PIE\Raj\InitialLoadProviders\bin\Development\Extract Providers.ispac" /DestinationServer:"VHACDWDWHETL12" /DestinationPath:"/SSISDB/CC_PIE/Extract Providers"
+
+Source
+Path: E:\ETLDevelopment\CC_PIE\Raj\InitialLoadProviders\bin\Development\Extract Providers.ispac
+
+Destination
+Server name: VHACDWDWHETL12
+Path: /SSISDB/CC_PIE/Extract Providers
+

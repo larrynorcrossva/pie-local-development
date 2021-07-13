@@ -1,0 +1,560 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema version="2.0"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           targetNamespace="https://ppms.va.gov/exchange/ccn/2.0"
+           xmlns:p="https://ppms.va.gov/exchange/ccn/2.0">
+  <!-- VERSION 2.0.3 -->
+  <xs:complexType name="Provider">
+    <xs:sequence>
+      <!-- Identifier in PPMS system; used for updates and deactivations. Value was provided when supplying activity results from previous transactions -->
+      <xs:element name="CorrelationId" type="xs:string" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="TransactionType" type="p:TransactionTypeList" minOccurs="1" maxOccurs="1"/>
+      <!-- Identifier from source system, used as a reference when supplying activity results -->
+      <xs:element name="ProviderId" type="xs:string" minOccurs="1" maxOccurs="1"/>
+
+      <!-- Contact Information -->
+      <xs:element name="Email" type="xs:string" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="Phone" type="xs:string" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="Fax" type="xs:string" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="Address" type="p:Address" minOccurs="0" maxOccurs="1"/>
+      <!-- Provider properties -->
+      <xs:element name="HealthProviderType" type="p:HealthProviderType" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="InternalType" type="xs:string" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="DateOfBirth" type="xs:date" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="PrimaryDM" type="xs:string" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="SecondaryDM" type="xs:string" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="EmrSystem" type="p:EmrSystemType" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="EmrSystemOther" type="xs:string" minOccurs="0" maxOccurs="1"/>
+
+      <xs:element name="Npis" type="p:Npis" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="Tins" type="p:Tins" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="StationNumber" type="xs:string" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="Licensures" type="p:Licensures" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="Specialties" type="p:Specialties" minOccurs="0" maxOccurs="1"/>
+
+      <xs:element name="OtherIdentifiers" type="p:OtherIdentifiers" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="PreferredReferralMeans" type="p:PreferredReferralMeans" minOccurs="0" maxOccurs="1"/>
+      
+      <xs:element name="Type" minOccurs="0" maxOccurs="1">
+        <xs:complexType>
+          <xs:choice minOccurs="1" maxOccurs="1">
+            <xs:element name="Individual" type="p:Individual" />
+            <xs:element name="Organization" type="p:Organization" />
+          </xs:choice>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="Individual">
+    <xs:sequence>
+      <!-- 1-Individual -->
+      <xs:element name="FirstName" type="xs:string" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="MiddleName" type="xs:string" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="LastName" type="xs:string" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="Ethnicity" type="p:Ethnicity" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="Gender" type="p:GenderType" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="Religion" type="xs:string" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="IsAcceptingNewPatients" type="xs:boolean" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="IsPrimaryCareProvider" type="xs:boolean" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="IsPrimaryCareProviderAcceptingVa" type="xs:boolean" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="ProviderServices" type="p:ProviderServices" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="BoardCertifications" type="p:BoardCertifications" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="DeaNumbers" type="p:DeaSchedulePrivileges" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="IndividualProviderPrivileges" type="p:IndividualProviderPrivileges" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="MedicalEducations" type="p:MedicalEducations" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="ProviderCredentials" type="p:ProviderCredentials" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="ProviderOtherNames" type="p:ProviderOtherNames" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="Contacts" type="p:Contacts" minOccurs="0" maxOccurs="1"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="Organization">
+    <!-- 2-Organization -->
+    <xs:sequence>
+      <xs:element name="ProviderName" type="xs:string" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="Locations" type="p:Locations" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="ProviderServices" type="p:ProviderServices" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="AuthorizedOfficials" type="p:OrganizationAuthorizedOfficials" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="OrganizationalContacts" type="p:OrganizationContacts" minOccurs="0" maxOccurs="1"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <!-- remaining complex types, etc. go here -->
+  <!-- Entity References -->
+  <xs:complexType name="Npis">
+    <xs:sequence minOccurs="1" maxOccurs="50">
+      <xs:element name="Item" type="p:Npi"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="Npi">
+    <xs:all>
+      <xs:element name="Number" type="xs:string" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="EntityTypeCode" type="p:NpiType" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="SoleProprieter" type="p:SoleProprieter" minOccurs="0" maxOccurs="1"/>
+      <!-- For 2-Organization entity types -->
+      <xs:element name="OrganizationSubpart" type="xs:string" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="SubpartLegalBusinessName" type="xs:string" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="SubpartTaxId" type="xs:string" minOccurs="0" maxOccurs="1"/>
+    </xs:all>
+  </xs:complexType>
+  <xs:complexType name="Tins">
+    <xs:sequence minOccurs="0" maxOccurs="50">
+      <xs:element name="Item" type="p:Tin"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="Tin">
+    <xs:sequence>
+      <xs:element name="Number" type="xs:string" minOccurs="1" maxOccurs="1"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="ProviderCredentials">
+    <xs:sequence minOccurs="0" maxOccurs="50">
+      <xs:element name="Item" type="p:ProviderCredential"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="ProviderCredential">
+    <xs:sequence>
+      <xs:element name="Name" type="xs:string" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="CredentialNumber" type="xs:string" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="CredentialType" type="xs:string" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="CredentialingStatus" type="p:CredentialingStatus" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="CredentialedDate" type="xs:date" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="NextCredentialingDate" type="xs:date" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="Description" type="xs:string" minOccurs="0" maxOccurs="1"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="OtherIdentifiers">
+    <xs:sequence minOccurs="0" maxOccurs="50">
+      <xs:element name="Item" type="p:OtherIdentifier"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="OtherIdentifier">
+    <xs:sequence>
+      <xs:element name="Name" type="xs:string" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="IdentifierTypeCode" type="p:IdentifierTypeCodeList" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="IdentifierState" type="xs:string" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="IdentifierIssuer" type="xs:string" minOccurs="0" maxOccurs="1"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="Licensures">
+    <xs:sequence minOccurs="0" maxOccurs="50">
+      <xs:element name="Item" type="p:Licensure"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="Licensure">
+    <xs:sequence>
+      <xs:element name="LicenseNumber" type="xs:string" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="LicensingState" type="xs:string" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="ExpirationDate" type="xs:date" minOccurs="0" maxOccurs="1"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="ProviderServices">
+    <xs:sequence minOccurs="1" maxOccurs="100">
+      <xs:element name="Item" type="p:ProviderService"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="ProviderService">
+    <xs:all>
+      <!-- Identifier in PPMS system; used for updates and deactivations. Value will be provided when supplying activity results -->
+      <xs:element name="CorrelationId" type="xs:string" minOccurs="0" maxOccurs="1"/>
+      <!-- Specialty -->
+      <xs:element name="CodedSpecialty" type="xs:string" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="Relationship" type="p:RelationshipType" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="StationNumber" type="xs:string" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="Location" type="p:CareSite" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="HighPerformingProvider" type="p:YesNoType" minOccurs="0" maxOccurs="1"/>
+      <!-- Group -->
+      <xs:element name="OrganizationNpi" type="xs:string" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="ServiceAvailability" type="p:ServiceAvailabilities" minOccurs="0" maxOccurs="1"/>
+    </xs:all>
+  </xs:complexType>
+  <xs:complexType name="Contacts">
+    <xs:sequence minOccurs="0" maxOccurs="50">
+      <xs:element name="Item" type="p:PersonContact"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="PersonContact">
+    <xs:sequence>
+      <!-- Identifier in PPMS system; used for updates and deactivations. Value will be provided when supplying activity results -->
+      <xs:element name="CorrelationId" type="xs:string" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="FirstName" type="xs:string" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="MiddleName" type="xs:string" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="LastName" type="xs:string" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="IsVeteran" type="xs:boolean" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="EffectiveDate" type="xs:date" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="Role" type="p:ContactRoleType" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="Emails" type="p:Emails" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="Addresses" type="p:Addresses" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="Phones" type="p:Phones" minOccurs="0" maxOccurs="1"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="Emails">
+    <xs:sequence minOccurs="0" maxOccurs="3">
+      <xs:element name="Item" type="p:Email"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="Email">
+    <xs:sequence>
+      <xs:element name="EmailAddress" type="xs:string" minOccurs="1" maxOccurs="1"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="Addresses">
+    <xs:sequence minOccurs="0" maxOccurs="3">
+      <xs:element name="Item" type="p:Address"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="Address">
+    <xs:sequence>
+      <xs:element name="Address1" type="xs:string" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="Address2" type="xs:string" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="Address3" type="xs:string" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="City" type="xs:string" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="State" type="xs:string" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="PostalCode" type="xs:string" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="County" type="xs:string" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="CountryCode" type="xs:string" minOccurs="0" maxOccurs="1"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="Phones">
+    <xs:sequence minOccurs="0" maxOccurs="3">
+      <xs:element name="Item" type="p:Phone"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="Phone">
+    <xs:sequence>
+      <xs:element name="PhoneNumber" type="xs:string" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="IsTextingAcceptable" type="xs:boolean" minOccurs="0" maxOccurs="1"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="OrganizationAuthorizedOfficials">
+    <xs:sequence minOccurs="0" maxOccurs="50">
+      <xs:element name="Item" type="p:OrganizationAuthorizedOfficial"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="OrganizationAuthorizedOfficial">
+    <xs:sequence>
+      <xs:element name="OfficialName" type="xs:string" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="OfficialCredential" type="xs:string" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="TitleOrPosition" type="xs:string" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="PhoneNumber" type="xs:string" minOccurs="0" maxOccurs="1"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="MedicalEducations">
+    <xs:sequence minOccurs="0" maxOccurs="50">
+      <xs:element name="Item" type="p:MedicalEducation"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="MedicalEducation">
+    <xs:sequence>
+      <xs:element name="Name" type="xs:string" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="GraduationDate" type="xs:date" minOccurs="0" maxOccurs="1"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="BoardCertifications">
+    <xs:sequence minOccurs="0" maxOccurs="50">
+      <xs:element name="Item" type="p:BoardCertification"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="BoardCertification">
+    <xs:sequence>
+      <xs:element name="Name" type="xs:string" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="IsBoardCertified" type="xs:boolean" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="BoardId" type="xs:string" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="CertificationDate" type="xs:date" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="RecertificationDate" type="xs:date" minOccurs="0" maxOccurs="1"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="IndividualProviderPrivileges">
+    <xs:sequence minOccurs="0" maxOccurs="50">
+      <xs:element name="Item" type="p:IndividualProviderPrivilege"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="IndividualProviderPrivilege">
+    <xs:sequence>
+      <xs:element name="Privilege" type="xs:string" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="ExpirationDate" type="xs:date" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="Comment" type="xs:string" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="CareSite" type="p:CareSite" minOccurs="0" maxOccurs="1"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="ProviderOtherNames">
+    <xs:sequence minOccurs="0" maxOccurs="50">
+      <xs:element name="Item" type="p:ProviderOtherName"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="ProviderOtherName">
+    <xs:sequence>
+      <xs:element name="Name" type="xs:string" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="OtherNameType" type="p:OtherNameType" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="OtherCredential" type="xs:string" minOccurs="0" maxOccurs="1"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="DeaSchedulePrivileges">
+    <xs:sequence minOccurs="0" maxOccurs="50">
+      <xs:element name="Item" type="p:DeaSchedulePrivilege"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="DeaSchedulePrivilege">
+    <xs:sequence>
+      <xs:element name="DeaNumber" type="xs:string" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="ExpirationDate" type="xs:date" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="VerificationDate" type="xs:date" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="Verifier" type="xs:string" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="HasScheduleIi" type="xs:boolean" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="HasScheduleIiNonNarcotic" type="xs:boolean" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="HasScheduleIii" type="xs:boolean" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="HasScheduleIiiNonNarcotic" type="xs:boolean" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="HasScheduleIv" type="xs:boolean" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="HasScheduleV" type="xs:boolean" minOccurs="0" maxOccurs="1"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="OrganizationContacts">
+    <xs:sequence minOccurs="0" maxOccurs="50">
+      <xs:element name="Item" type="p:RelatedContact"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="RelatedContact">
+    <xs:sequence>
+      <xs:element name="ContactInformation" type="xs:string" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="IsPrimaryPoc" type="xs:boolean" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="ContactInfoType" type="p:ContactInfoType" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="IsActive" type="xs:boolean" minOccurs="0" maxOccurs="1"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="Specialties">
+    <xs:sequence minOccurs="0" maxOccurs="50">
+      <xs:element name="Item" type="p:Taxonomy"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="Taxonomy">
+    <xs:sequence>
+      <xs:element name="CodedSpecialty" type="xs:string" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="IsPrimaryTaxonomy" type="xs:boolean" minOccurs="1" maxOccurs="1"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="ServiceAvailabilities">
+    <xs:sequence minOccurs="0" maxOccurs="50">
+      <xs:element name="Item" type="p:ServiceAvailability"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="ServiceAvailability">
+    <xs:sequence>
+      <xs:element name="DayOfTheWeek" type="p:DayOfWeekList" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="StartTime" type="xs:string" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="EndTime" type="xs:string" minOccurs="0" maxOccurs="1"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="Locations">
+    <xs:sequence minOccurs="0" maxOccurs="50">
+      <xs:element name="Item" type="p:CareSite"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="CareSite">
+    <xs:all>
+      <!-- Identifier in PPMS system; used for updates and deactivations. Value will be provided when supplying activity results -->
+      <xs:element name="CorrelationId" type="xs:string" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="Name" type="xs:string" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="SiteAddress" type="p:Address" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="SiteType" type="p:CareSiteType" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="SiteId" type="xs:string" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="OtherName" type="xs:string" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="IsHandicapAccessible" type="xs:boolean" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="Visn" type="xs:integer" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="Phone" type="xs:string" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="Fax" type="xs:string" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="Email" type="xs:string" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="CenterOfExcellence" type="p:YesNoType" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="PlaceOfServiceCodes" type="p:PlaceOfServiceCodes" minOccurs="0" maxOccurs="1"/>
+    </xs:all>
+  </xs:complexType>
+  <xs:complexType name="PlaceOfServiceCodes">
+    <xs:sequence minOccurs="0" maxOccurs="100">
+      <xs:element name="Item" type="p:PlaceOfService"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="PlaceOfService">
+    <xs:all>
+      <xs:element name="Code" type="xs:string" minOccurs="0" maxOccurs="1"/>
+    </xs:all>
+  </xs:complexType>
+  <xs:complexType name="PreferredReferralMeans">
+    <xs:all>
+      <xs:element name="Hsrm" type="xs:boolean" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="SecuredEmail" type="xs:boolean" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="DirectMessaging" type="xs:boolean" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="Fax" type="xs:boolean" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="Mail" type="xs:boolean" minOccurs="0" maxOccurs="1"/>
+    </xs:all>
+  </xs:complexType>
+
+  <!-- Enumerations -->
+  <xs:simpleType name="TransactionTypeList">
+    <xs:restriction base="xs:string">
+      <!-- New or updated provider information, including related entities-->
+      <xs:enumeration value="Update"/>
+      <!-- Deactivate Provider record and all related entities -->
+      <xs:enumeration value="Deactivate Provider"/>
+      <!-- Deactivate only specified related entities for the provider (the provider will remain active) -->
+      <xs:enumeration value="Deactivate Relationship"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="NpiType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="1-Individual"/>
+      <xs:enumeration value="2-Organization"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="SoleProprieter">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Y"/>
+      <xs:enumeration value="N"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="Ethnicity">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Unknown"/>
+      <xs:enumeration value="American Indian or Alaska Native"/>
+      <xs:enumeration value="Asian"/>
+      <xs:enumeration value="Black or African American"/>
+      <xs:enumeration value="Decline to Answer"/>
+      <xs:enumeration value="Hispanic or Latino"/>
+      <xs:enumeration value="Native Hawaiian or Other Pacific Islander"/>
+      <xs:enumeration value="No Preference"/>
+      <xs:enumeration value="Not Hispanic or Latino"/>
+      <xs:enumeration value="Other"/>
+      <xs:enumeration value="White"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="HealthProviderType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="None"/>
+      <xs:enumeration value="Community Hospital"/>
+      <xs:enumeration value="External Laboratory"/>
+      <xs:enumeration value="Community Service"/>
+      <xs:enumeration value="Home Health Care"/>
+      <xs:enumeration value="Radiology"/>
+      <xs:enumeration value="Services"/>
+      <xs:enumeration value="External Support Group"/>
+      <xs:enumeration value="Rehabilitation"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="CredentialingStatus">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Active"/>
+      <xs:enumeration value="Inactive"/>
+      <xs:enumeration value="Revoked"/>
+      <xs:enumeration value="Suspended"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="OtherNameType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Other"/>
+      <xs:enumeration value="Former Name"/>
+      <xs:enumeration value="Professional Name"/>
+      <xs:enumeration value="Doing Business As"/>
+      <xs:enumeration value="Former Legal Business Name"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="DayOfWeekList">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Sunday"/>
+      <xs:enumeration value="Monday"/>
+      <xs:enumeration value="Tuesday"/>
+      <xs:enumeration value="Wednesday"/>
+      <xs:enumeration value="Thursday"/>
+      <xs:enumeration value="Friday"/>
+      <xs:enumeration value="Saturday"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="CareSiteType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Facility"/>
+      <xs:enumeration value="Pharmacy"/>
+      <xs:enumeration value="Clinic"/>
+      <xs:enumeration value="Ward"/>
+      <xs:enumeration value="Unit Dose Cart"/>
+      <xs:enumeration value="Community Living Center"/>
+      <xs:enumeration value="Spinal Cord Injury Unit"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="ContactInfoType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Email"/>
+      <xs:enumeration value="Telecom"/>
+      <xs:enumeration value="Pager"/>
+      <xs:enumeration value="Web Address"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="IdentifierTypeCodeList">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Other"/>
+      <xs:enumeration value="Employer Identification Number"/>
+      <xs:enumeration value="Medicaid"/>
+      <xs:enumeration value="Medicare Number"/>
+      <xs:enumeration value="Staff SID"/>
+      <xs:enumeration value="Staff IEN"/>
+      <xs:enumeration value="PAID IEN"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="GenderType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Not Specified"/>
+      <xs:enumeration value="Female"/>
+      <xs:enumeration value="Male"/>
+      <xs:enumeration value="Other"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="RelationshipType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Choice"/>
+      <xs:enumeration value="PC3"/>
+      <xs:enumeration value="Individual Authorization"/>
+      <xs:enumeration value="Local Contract"/>
+      <xs:enumeration value="Provider Agreement"/>
+      <xs:enumeration value="VA Provider"/>
+      <xs:enumeration value="CCN"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="EmrSystemType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="None"/>
+      <xs:enumeration value="Allscripts"/>
+      <xs:enumeration value="AthenaHealth"/>
+      <xs:enumeration value="Cerner"/>
+      <xs:enumeration value="eClinicalWorks"/>
+      <xs:enumeration value="Epic"/>
+      <xs:enumeration value="Fusion"/>
+      <xs:enumeration value="GE Healthcare"/>
+      <xs:enumeration value="Greenway"/>
+      <xs:enumeration value="Netsmart"/>
+      <xs:enumeration value="Practice"/>
+      <xs:enumeration value="Not Sure"/>
+      <xs:enumeration value="Other"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="ContactRoleType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="None"/>
+      <xs:enumeration value="CMIO"/>
+      <xs:enumeration value="CIO"/>
+      <xs:enumeration value="COO"/>
+      <xs:enumeration value="General"/>
+      <xs:enumeration value="Other"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="YesNoType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Unknown"/>
+      <xs:enumeration value="Yes"/>
+      <xs:enumeration value="No"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:element name="Providers">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="Provider" type="p:Provider" minOccurs="1" maxOccurs="5000"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

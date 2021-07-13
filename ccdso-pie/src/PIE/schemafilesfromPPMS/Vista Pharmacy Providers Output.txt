@@ -1,0 +1,49 @@
+
+Vista Pharmacy Providers
+
+Request URL
+https://dev.dws.ppms.va.gov/v1.0/GetVistaPharmacyProviders?modifiedOnOrAfterDate=2019-4-26&providersPage=1&$expand=providers
+
+Output:
+
+{
+  "@odata.context": "https://dev.dws.ppms.va.gov/v1.0/$metadata#VistaPharmacyResponse(Providers())",
+  "value": [
+    {
+      "Status": "Success",
+      "TotalResults": 2,
+      "ReturnedResults": 2,
+      "PageNumber": 1,
+      "TotalPages": 1,
+      "MaxResultsPerPage": 10000,
+      "Providers": [
+        {
+          "NPI": 1427215672,
+          "FirstName": null,
+          "MiddleName": null,
+          "LastName": null,
+          "MainPhone": null,
+          "Fax": null,
+          "Gender": "NotSpecified",
+          "ProviderType": "GroupPracticeOrAgency",
+          "ProviderStatus": "Active",
+          "ProviderStatusReason": "PendingReview",
+          "ModifiedOnDate": "2019-05-01T12:40:42Z"
+        },
+        {
+          "NPI": 1104894468,
+          "FirstName": "Stephen",
+          "MiddleName": null,
+          "LastName": "Vreekee",
+          "MainPhone": null,
+          "Fax": null,
+          "Gender": "Male",
+          "ProviderType": "Individual",
+          "ProviderStatus": "Active",
+          "ProviderStatusReason": "Active",
+          "ModifiedOnDate": "2019-05-01T14:55:09Z"
+        }
+      ]
+    }
+  ]
+}

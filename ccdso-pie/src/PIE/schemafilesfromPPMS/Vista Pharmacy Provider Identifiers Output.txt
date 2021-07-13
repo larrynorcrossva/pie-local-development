@@ -1,0 +1,39 @@
+
+Vista Pharmacy Provider Identifiers
+
+Request URL
+https://dev.dws.ppms.va.gov/v1.0/GetVistaPharmacyProviderIdentifiers?modifiedOnOrAfterDate=2019-4-20&providerIdentifiersPage=1&$expand=provideridentifiers
+
+Output:
+
+{
+  "@odata.context": "https://dev.dws.ppms.va.gov/v1.0/$metadata#VistaPharmacyResponse(ProviderIdentifiers())",
+  "value": [
+    {
+      "Status": "Success",
+      "TotalResults": 2,
+      "ReturnedResults": 2,
+      "PageNumber": 1,
+      "TotalPages": 1,
+      "MaxResultsPerPage": 10000,
+      "ProviderIdentifiers": [
+        {
+          "ProviderIdentifier": "1104894468",
+          "ProviderIdentifierType": "Npi",
+          "PrimaryProviderNPI": "1104894468",
+          "ProviderIdentifierStatus": "Active",
+          "ProviderIdentifierStatusReason": "Active",
+          "ModifiedOnDate": "2019-05-01T14:55:03Z"
+        },
+        {
+          "ProviderIdentifier": "101010102",
+          "ProviderIdentifierType": "TaxIdentificationNumber",
+          "PrimaryProviderNPI": "1104894468",
+          "ProviderIdentifierStatus": "Active",
+          "ProviderIdentifierStatusReason": "Active",
+          "ModifiedOnDate": "2019-05-01T14:54:46Z"
+        }
+      ]
+    }
+  ]
+}

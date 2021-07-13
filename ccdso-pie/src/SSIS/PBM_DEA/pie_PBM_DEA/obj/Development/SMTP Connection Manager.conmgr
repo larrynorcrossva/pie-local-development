@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<DTS:ConnectionManager xmlns:DTS="www.microsoft.com/SqlServer/Dts"
+  DTS:ObjectName="SMTP Connection Manager"
+  DTS:DTSID="{EBE59598-5A92-4FE2-83A2-0BCCA993408B}"
+  DTS:CreationName="SMTP">
+  <DTS:ObjectData>
+    <SmtpConnectionManager
+      ConnectionString="SmtpServer=smtp.va.gov;UseWindowsAuthentication=False;EnableSsl=False;Timeout=5000;" />
+  </DTS:ObjectData>
+</DTS:ConnectionManager>

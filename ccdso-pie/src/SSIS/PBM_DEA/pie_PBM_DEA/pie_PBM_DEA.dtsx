@@ -1,0 +1,1045 @@
+﻿<?xml version="1.0"?>
+<DTS:Executable xmlns:DTS="www.microsoft.com/SqlServer/Dts"
+  DTS:refId="Package"
+  DTS:CreationDate="10/31/2019 4:20:37 PM"
+  DTS:CreationName="Microsoft.Package"
+  DTS:CreatorComputerName="ORL-LTLN1807476"
+  DTS:CreatorName="VHAMASTER\VHAPBMLeonaR"
+  DTS:DTSID="{3C1884C1-AE90-4CB9-AE25-36A9A69600C6}"
+  DTS:ExecutableType="Microsoft.Package"
+  DTS:LastModifiedProductVersion="15.0.1301.433"
+  DTS:LocaleID="1033"
+  DTS:ObjectName="pie_PBM_DEA"
+  DTS:PackageType="5"
+  DTS:ProtectionLevel="0"
+  DTS:VersionBuild="7"
+  DTS:VersionGUID="{9D0EF83A-DE18-4B9A-A334-294936177CD7}">
+  <DTS:Property
+    DTS:Name="PackageFormatVersion">8</DTS:Property>
+  <DTS:Variables />
+  <DTS:Executables>
+    <DTS:Executable
+      DTS:refId="Package\Import Data from PBM_DEA to CC_PIE"
+      DTS:CreationName="Microsoft.Pipeline"
+      DTS:Description="Data Flow Task"
+      DTS:DTSID="{c9aea8c2-a4dd-4fb3-a4f7-e8f7583a8a4b}"
+      DTS:ExecutableType="Microsoft.Pipeline"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="Import Data from PBM_DEA to CC_PIE"
+      DTS:TaskContact="Performs high-performance data extraction, transformation and loading;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <pipeline
+          version="1">
+          <components>
+            <component
+              refId="Package\Import Data from PBM_DEA to CC_PIE\CC_PIE_pie_PBM_DEA Destination"
+              componentClassID="Microsoft.OLEDBDestination"
+              contactInfo="OLE DB Destination;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;4"
+              description="OLE DB Destination"
+              name="CC_PIE_pie_PBM_DEA Destination"
+              usesDispositions="true"
+              version="4">
+              <properties>
+                <property
+                  dataType="System.Int32"
+                  description="The number of seconds before a command times out.  A value of 0 indicates an infinite time-out."
+                  name="CommandTimeout">0</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies the name of the database object used to open a rowset."
+                  name="OpenRowset">[pie].[PBM_DEA]</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies the variable that contains the name of the database object used to open a rowset."
+                  name="OpenRowsetVariable"></property>
+                <property
+                  dataType="System.String"
+                  description="The SQL command to be executed."
+                  name="SqlCommand"
+                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor, Microsoft.DataTransformationServices.Controls, Version=15.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91"></property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the column code page to use when code page information is unavailable from the data source."
+                  name="DefaultCodePage">1252</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Forces the use of the DefaultCodePage property value when describing character data."
+                  name="AlwaysUseDefaultCodePage">false</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the mode used to access the database."
+                  name="AccessMode"
+                  typeConverter="AccessMode">3</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Indicates whether the values supplied for identity columns will be copied to the destination. If false, values for identity columns will be auto-generated at the destination. Applies only if fast load is turned on."
+                  name="FastLoadKeepIdentity">false</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Indicates whether the columns containing null will have null inserted in the destination. If false, columns containing null will have their default values inserted at the destination. Applies only if fast load is turned on."
+                  name="FastLoadKeepNulls">false</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies options to be used with fast load.  Applies only if fast load is turned on."
+                  name="FastLoadOptions">TABLOCK,CHECK_CONSTRAINTS</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies when commits are issued during data insertion.  A value of 0 specifies that one commit will be issued at the end of data insertion.  Applies only if fast load is turned on."
+                  name="FastLoadMaxInsertCommitSize">2147483647</property>
+              </properties>
+              <connections>
+                <connection
+                  refId="Package\Import Data from PBM_DEA to CC_PIE\CC_PIE_pie_PBM_DEA Destination.Connections[OleDbConnection]"
+                  connectionManagerID="{0A0A2980-E06D-472A-9375-36EA03EF4AF2}:external"
+                  connectionManagerRefId="Project.ConnectionManagers[vhacdwdwhsql52.vha.med.va.gov.CC_PIE]"
+                  description="The OLE DB runtime connection used to access the database."
+                  name="OleDbConnection" />
+              </connections>
+              <inputs>
+                <input
+                  refId="Package\Import Data from PBM_DEA to CC_PIE\CC_PIE_pie_PBM_DEA Destination.Inputs[OLE DB Destination Input]"
+                  errorOrTruncationOperation="Insert"
+                  errorRowDisposition="FailComponent"
+                  hasSideEffects="true"
+                  name="OLE DB Destination Input">
+                  <inputColumns>
+                    <inputColumn
+                      refId="Package\Import Data from PBM_DEA to CC_PIE\CC_PIE_pie_PBM_DEA Destination.Inputs[OLE DB Destination Input].Columns[BusinessType]"
+                      cachedCodepage="1252"
+                      cachedDataType="str"
+                      cachedLength="62"
+                      cachedName="BusinessType"
+                      externalMetadataColumnId="Package\Import Data from PBM_DEA to CC_PIE\CC_PIE_pie_PBM_DEA Destination.Inputs[OLE DB Destination Input].ExternalColumns[BusinessType]"
+                      lineageId="Package\Import Data from PBM_DEA to CC_PIE\PBM_DEA_DOEx_DEAVistADataLoad Source.Outputs[OLE DB Source Output].Columns[BusinessType]" />
+                    <inputColumn
+                      refId="Package\Import Data from PBM_DEA to CC_PIE\CC_PIE_pie_PBM_DEA Destination.Inputs[OLE DB Destination Input].Columns[BusinessTypeSubType]"
+                      cachedCodepage="1252"
+                      cachedDataType="str"
+                      cachedLength="55"
+                      cachedName="BusinessTypeSubType"
+                      externalMetadataColumnId="Package\Import Data from PBM_DEA to CC_PIE\CC_PIE_pie_PBM_DEA Destination.Inputs[OLE DB Destination Input].ExternalColumns[BusinessTypeSubType]"
+                      lineageId="Package\Import Data from PBM_DEA to CC_PIE\PBM_DEA_DOEx_DEAVistADataLoad Source.Outputs[OLE DB Source Output].Columns[BusinessTypeSubType]" />
+                    <inputColumn
+                      refId="Package\Import Data from PBM_DEA to CC_PIE\CC_PIE_pie_PBM_DEA Destination.Inputs[OLE DB Destination Input].Columns[DEA_Registrant_Name]"
+                      cachedCodepage="1252"
+                      cachedDataType="str"
+                      cachedLength="8000"
+                      cachedName="DEA_Registrant_Name"
+                      externalMetadataColumnId="Package\Import Data from PBM_DEA to CC_PIE\CC_PIE_pie_PBM_DEA Destination.Inputs[OLE DB Destination Input].ExternalColumns[DEA_Registrant_Name]"
+                      lineageId="Package\Import Data from PBM_DEA to CC_PIE\PBM_DEA_DOEx_DEAVistADataLoad Source.Outputs[OLE DB Source Output].Columns[DEA_Registrant_Name]" />
+                    <inputColumn
+                      refId="Package\Import Data from PBM_DEA to CC_PIE\CC_PIE_pie_PBM_DEA Destination.Inputs[OLE DB Destination Input].Columns[DEA_Number]"
+                      cachedCodepage="1252"
+                      cachedDataType="str"
+                      cachedLength="9"
+                      cachedName="DEA_Number"
+                      externalMetadataColumnId="Package\Import Data from PBM_DEA to CC_PIE\CC_PIE_pie_PBM_DEA Destination.Inputs[OLE DB Destination Input].ExternalColumns[DEA_Number]"
+                      lineageId="Package\Import Data from PBM_DEA to CC_PIE\PBM_DEA_DOEx_DEAVistADataLoad Source.Outputs[OLE DB Source Output].Columns[DEA_Number]" />
+                    <inputColumn
+                      refId="Package\Import Data from PBM_DEA to CC_PIE\CC_PIE_pie_PBM_DEA Destination.Inputs[OLE DB Destination Input].Columns[DEA_Expiration_Date]"
+                      cachedDataType="dbDate"
+                      cachedName="DEA_Expiration_Date"
+                      externalMetadataColumnId="Package\Import Data from PBM_DEA to CC_PIE\CC_PIE_pie_PBM_DEA Destination.Inputs[OLE DB Destination Input].ExternalColumns[DEA_Expiration_Date]"
+                      lineageId="Package\Import Data from PBM_DEA to CC_PIE\PBM_DEA_DOEx_DEAVistADataLoad Source.Outputs[OLE DB Source Output].Columns[DEA_Expiration_Date]" />
+                    <inputColumn
+                      refId="Package\Import Data from PBM_DEA to CC_PIE\CC_PIE_pie_PBM_DEA Destination.Inputs[OLE DB Destination Input].Columns[Detox_Number]"
+                      cachedCodepage="1252"
+                      cachedDataType="str"
+                      cachedLength="9"
+                      cachedName="Detox_Number"
+                      externalMetadataColumnId="Package\Import Data from PBM_DEA to CC_PIE\CC_PIE_pie_PBM_DEA Destination.Inputs[OLE DB Destination Input].ExternalColumns[Detox_Number]"
+                      lineageId="Package\Import Data from PBM_DEA to CC_PIE\PBM_DEA_DOEx_DEAVistADataLoad Source.Outputs[OLE DB Source Output].Columns[Detox_Number]" />
+                    <inputColumn
+                      refId="Package\Import Data from PBM_DEA to CC_PIE\CC_PIE_pie_PBM_DEA Destination.Inputs[OLE DB Destination Input].Columns[Schedule2]"
+                      cachedCodepage="1252"
+                      cachedDataType="str"
+                      cachedLength="1"
+                      cachedName="Schedule2"
+                      externalMetadataColumnId="Package\Import Data from PBM_DEA to CC_PIE\CC_PIE_pie_PBM_DEA Destination.Inputs[OLE DB Destination Input].ExternalColumns[Schedule2]"
+                      lineageId="Package\Import Data from PBM_DEA to CC_PIE\PBM_DEA_DOEx_DEAVistADataLoad Source.Outputs[OLE DB Source Output].Columns[Schedule2]" />
+                    <inputColumn
+                      refId="Package\Import Data from PBM_DEA to CC_PIE\CC_PIE_pie_PBM_DEA Destination.Inputs[OLE DB Destination Input].Columns[Schedule2N]"
+                      cachedCodepage="1252"
+                      cachedDataType="str"
+                      cachedLength="1"
+                      cachedName="Schedule2N"
+                      externalMetadataColumnId="Package\Import Data from PBM_DEA to CC_PIE\CC_PIE_pie_PBM_DEA Destination.Inputs[OLE DB Destination Input].ExternalColumns[Schedule2N]"
+                      lineageId="Package\Import Data from PBM_DEA to CC_PIE\PBM_DEA_DOEx_DEAVistADataLoad Source.Outputs[OLE DB Source Output].Columns[Schedule2N]" />
+                    <inputColumn
+                      refId="Package\Import Data from PBM_DEA to CC_PIE\CC_PIE_pie_PBM_DEA Destination.Inputs[OLE DB Destination Input].Columns[Schedule3]"
+                      cachedCodepage="1252"
+                      cachedDataType="str"
+                      cachedLength="1"
+                      cachedName="Schedule3"
+                      externalMetadataColumnId="Package\Import Data from PBM_DEA to CC_PIE\CC_PIE_pie_PBM_DEA Destination.Inputs[OLE DB Destination Input].ExternalColumns[Schedule3]"
+                      lineageId="Package\Import Data from PBM_DEA to CC_PIE\PBM_DEA_DOEx_DEAVistADataLoad Source.Outputs[OLE DB Source Output].Columns[Schedule3]" />
+                    <inputColumn
+                      refId="Package\Import Data from PBM_DEA to CC_PIE\CC_PIE_pie_PBM_DEA Destination.Inputs[OLE DB Destination Input].Columns[Schedule3N]"
+                      cachedCodepage="1252"
+                      cachedDataType="str"
+                      cachedLength="1"
+                      cachedName="Schedule3N"
+                      externalMetadataColumnId="Package\Import Data from PBM_DEA to CC_PIE\CC_PIE_pie_PBM_DEA Destination.Inputs[OLE DB Destination Input].ExternalColumns[Schedule3N]"
+                      lineageId="Package\Import Data from PBM_DEA to CC_PIE\PBM_DEA_DOEx_DEAVistADataLoad Source.Outputs[OLE DB Source Output].Columns[Schedule3N]" />
+                    <inputColumn
+                      refId="Package\Import Data from PBM_DEA to CC_PIE\CC_PIE_pie_PBM_DEA Destination.Inputs[OLE DB Destination Input].Columns[Schedule4]"
+                      cachedCodepage="1252"
+                      cachedDataType="str"
+                      cachedLength="1"
+                      cachedName="Schedule4"
+                      externalMetadataColumnId="Package\Import Data from PBM_DEA to CC_PIE\CC_PIE_pie_PBM_DEA Destination.Inputs[OLE DB Destination Input].ExternalColumns[Schedule4]"
+                      lineageId="Package\Import Data from PBM_DEA to CC_PIE\PBM_DEA_DOEx_DEAVistADataLoad Source.Outputs[OLE DB Source Output].Columns[Schedule4]" />
+                    <inputColumn
+                      refId="Package\Import Data from PBM_DEA to CC_PIE\CC_PIE_pie_PBM_DEA Destination.Inputs[OLE DB Destination Input].Columns[Schedule5]"
+                      cachedCodepage="1252"
+                      cachedDataType="str"
+                      cachedLength="1"
+                      cachedName="Schedule5"
+                      externalMetadataColumnId="Package\Import Data from PBM_DEA to CC_PIE\CC_PIE_pie_PBM_DEA Destination.Inputs[OLE DB Destination Input].ExternalColumns[Schedule5]"
+                      lineageId="Package\Import Data from PBM_DEA to CC_PIE\PBM_DEA_DOEx_DEAVistADataLoad Source.Outputs[OLE DB Source Output].Columns[Schedule5]" />
+                    <inputColumn
+                      refId="Package\Import Data from PBM_DEA to CC_PIE\CC_PIE_pie_PBM_DEA Destination.Inputs[OLE DB Destination Input].Columns[Authorized_Schedules]"
+                      cachedCodepage="1252"
+                      cachedDataType="str"
+                      cachedLength="12"
+                      cachedName="Authorized_Schedules"
+                      externalMetadataColumnId="Package\Import Data from PBM_DEA to CC_PIE\CC_PIE_pie_PBM_DEA Destination.Inputs[OLE DB Destination Input].ExternalColumns[Authorized_Schedules]"
+                      lineageId="Package\Import Data from PBM_DEA to CC_PIE\PBM_DEA_DOEx_DEAVistADataLoad Source.Outputs[OLE DB Source Output].Columns[Authorized_Schedules]" />
+                    <inputColumn
+                      refId="Package\Import Data from PBM_DEA to CC_PIE\CC_PIE_pie_PBM_DEA Destination.Inputs[OLE DB Destination Input].Columns[State]"
+                      cachedCodepage="1252"
+                      cachedDataType="str"
+                      cachedLength="2"
+                      cachedName="State"
+                      externalMetadataColumnId="Package\Import Data from PBM_DEA to CC_PIE\CC_PIE_pie_PBM_DEA Destination.Inputs[OLE DB Destination Input].ExternalColumns[State]"
+                      lineageId="Package\Import Data from PBM_DEA to CC_PIE\PBM_DEA_DOEx_DEAVistADataLoad Source.Outputs[OLE DB Source Output].Columns[State]" />
+                    <inputColumn
+                      refId="Package\Import Data from PBM_DEA to CC_PIE\CC_PIE_pie_PBM_DEA Destination.Inputs[OLE DB Destination Input].Columns[StateLicNo]"
+                      cachedCodepage="1252"
+                      cachedDataType="str"
+                      cachedLength="15"
+                      cachedName="StateLicNo"
+                      externalMetadataColumnId="Package\Import Data from PBM_DEA to CC_PIE\CC_PIE_pie_PBM_DEA Destination.Inputs[OLE DB Destination Input].ExternalColumns[StateLicNo]"
+                      lineageId="Package\Import Data from PBM_DEA to CC_PIE\PBM_DEA_DOEx_DEAVistADataLoad Source.Outputs[OLE DB Source Output].Columns[StateLicNo]" />
+                  </inputColumns>
+                  <externalMetadataColumns
+                    isUsed="True">
+                    <externalMetadataColumn
+                      refId="Package\Import Data from PBM_DEA to CC_PIE\CC_PIE_pie_PBM_DEA Destination.Inputs[OLE DB Destination Input].ExternalColumns[BusinessType]"
+                      codePage="1252"
+                      dataType="str"
+                      length="62"
+                      name="BusinessType" />
+                    <externalMetadataColumn
+                      refId="Package\Import Data from PBM_DEA to CC_PIE\CC_PIE_pie_PBM_DEA Destination.Inputs[OLE DB Destination Input].ExternalColumns[BusinessTypeSubType]"
+                      codePage="1252"
+                      dataType="str"
+                      length="55"
+                      name="BusinessTypeSubType" />
+                    <externalMetadataColumn
+                      refId="Package\Import Data from PBM_DEA to CC_PIE\CC_PIE_pie_PBM_DEA Destination.Inputs[OLE DB Destination Input].ExternalColumns[DEA_Registrant_Name]"
+                      codePage="1252"
+                      dataType="str"
+                      length="8000"
+                      name="DEA_Registrant_Name" />
+                    <externalMetadataColumn
+                      refId="Package\Import Data from PBM_DEA to CC_PIE\CC_PIE_pie_PBM_DEA Destination.Inputs[OLE DB Destination Input].ExternalColumns[DEA_Number]"
+                      codePage="1252"
+                      dataType="str"
+                      length="9"
+                      name="DEA_Number" />
+                    <externalMetadataColumn
+                      refId="Package\Import Data from PBM_DEA to CC_PIE\CC_PIE_pie_PBM_DEA Destination.Inputs[OLE DB Destination Input].ExternalColumns[DEA_Expiration_Date]"
+                      dataType="dbDate"
+                      name="DEA_Expiration_Date" />
+                    <externalMetadataColumn
+                      refId="Package\Import Data from PBM_DEA to CC_PIE\CC_PIE_pie_PBM_DEA Destination.Inputs[OLE DB Destination Input].ExternalColumns[Detox_Number]"
+                      codePage="1252"
+                      dataType="str"
+                      length="9"
+                      name="Detox_Number" />
+                    <externalMetadataColumn
+                      refId="Package\Import Data from PBM_DEA to CC_PIE\CC_PIE_pie_PBM_DEA Destination.Inputs[OLE DB Destination Input].ExternalColumns[Schedule2]"
+                      codePage="1252"
+                      dataType="str"
+                      length="1"
+                      name="Schedule2" />
+                    <externalMetadataColumn
+                      refId="Package\Import Data from PBM_DEA to CC_PIE\CC_PIE_pie_PBM_DEA Destination.Inputs[OLE DB Destination Input].ExternalColumns[Schedule2N]"
+                      codePage="1252"
+                      dataType="str"
+                      length="1"
+                      name="Schedule2N" />
+                    <externalMetadataColumn
+                      refId="Package\Import Data from PBM_DEA to CC_PIE\CC_PIE_pie_PBM_DEA Destination.Inputs[OLE DB Destination Input].ExternalColumns[Schedule3]"
+                      codePage="1252"
+                      dataType="str"
+                      length="1"
+                      name="Schedule3" />
+                    <externalMetadataColumn
+                      refId="Package\Import Data from PBM_DEA to CC_PIE\CC_PIE_pie_PBM_DEA Destination.Inputs[OLE DB Destination Input].ExternalColumns[Schedule3N]"
+                      codePage="1252"
+                      dataType="str"
+                      length="1"
+                      name="Schedule3N" />
+                    <externalMetadataColumn
+                      refId="Package\Import Data from PBM_DEA to CC_PIE\CC_PIE_pie_PBM_DEA Destination.Inputs[OLE DB Destination Input].ExternalColumns[Schedule4]"
+                      codePage="1252"
+                      dataType="str"
+                      length="1"
+                      name="Schedule4" />
+                    <externalMetadataColumn
+                      refId="Package\Import Data from PBM_DEA to CC_PIE\CC_PIE_pie_PBM_DEA Destination.Inputs[OLE DB Destination Input].ExternalColumns[Schedule5]"
+                      codePage="1252"
+                      dataType="str"
+                      length="1"
+                      name="Schedule5" />
+                    <externalMetadataColumn
+                      refId="Package\Import Data from PBM_DEA to CC_PIE\CC_PIE_pie_PBM_DEA Destination.Inputs[OLE DB Destination Input].ExternalColumns[Authorized_Schedules]"
+                      codePage="1252"
+                      dataType="str"
+                      length="12"
+                      name="Authorized_Schedules" />
+                    <externalMetadataColumn
+                      refId="Package\Import Data from PBM_DEA to CC_PIE\CC_PIE_pie_PBM_DEA Destination.Inputs[OLE DB Destination Input].ExternalColumns[State]"
+                      codePage="1252"
+                      dataType="str"
+                      length="2"
+                      name="State" />
+                    <externalMetadataColumn
+                      refId="Package\Import Data from PBM_DEA to CC_PIE\CC_PIE_pie_PBM_DEA Destination.Inputs[OLE DB Destination Input].ExternalColumns[StateLicNo]"
+                      codePage="1252"
+                      dataType="str"
+                      length="15"
+                      name="StateLicNo" />
+                  </externalMetadataColumns>
+                </input>
+              </inputs>
+              <outputs>
+                <output
+                  refId="Package\Import Data from PBM_DEA to CC_PIE\CC_PIE_pie_PBM_DEA Destination.Outputs[OLE DB Destination Error Output]"
+                  exclusionGroup="1"
+                  isErrorOut="true"
+                  name="OLE DB Destination Error Output"
+                  synchronousInputId="Package\Import Data from PBM_DEA to CC_PIE\CC_PIE_pie_PBM_DEA Destination.Inputs[OLE DB Destination Input]">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Import Data from PBM_DEA to CC_PIE\CC_PIE_pie_PBM_DEA Destination.Outputs[OLE DB Destination Error Output].Columns[ErrorCode]"
+                      dataType="i4"
+                      lineageId="Package\Import Data from PBM_DEA to CC_PIE\CC_PIE_pie_PBM_DEA Destination.Outputs[OLE DB Destination Error Output].Columns[ErrorCode]"
+                      name="ErrorCode"
+                      specialFlags="1" />
+                    <outputColumn
+                      refId="Package\Import Data from PBM_DEA to CC_PIE\CC_PIE_pie_PBM_DEA Destination.Outputs[OLE DB Destination Error Output].Columns[ErrorColumn]"
+                      dataType="i4"
+                      lineageId="Package\Import Data from PBM_DEA to CC_PIE\CC_PIE_pie_PBM_DEA Destination.Outputs[OLE DB Destination Error Output].Columns[ErrorColumn]"
+                      name="ErrorColumn"
+                      specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+            <component
+              refId="Package\Import Data from PBM_DEA to CC_PIE\PBM_DEA_DOEx_DEAVistADataLoad Source"
+              componentClassID="Microsoft.OLEDBSource"
+              contactInfo="OLE DB Source;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;7"
+              description="OLE DB Source"
+              name="PBM_DEA_DOEx_DEAVistADataLoad Source"
+              usesDispositions="true"
+              version="7">
+              <properties>
+                <property
+                  dataType="System.Int32"
+                  description="The number of seconds before a command times out.  A value of 0 indicates an infinite time-out."
+                  name="CommandTimeout">0</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies the name of the database object used to open a rowset."
+                  name="OpenRowset">[DOEx].[DEAVistADataLoad]</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies the variable that contains the name of the database object used to open a rowset."
+                  name="OpenRowsetVariable"></property>
+                <property
+                  dataType="System.String"
+                  description="The SQL command to be executed."
+                  name="SqlCommand"
+                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor, Microsoft.DataTransformationServices.Controls, Version=15.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91">SELECT 1 AS ID</property>
+                <property
+                  dataType="System.String"
+                  description="The variable that contains the SQL command to be executed."
+                  name="SqlCommandVariable"></property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the column code page to use when code page information is unavailable from the data source."
+                  name="DefaultCodePage">1252</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Forces the use of the DefaultCodePage property value when describing character data."
+                  name="AlwaysUseDefaultCodePage">false</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the mode used to access the database."
+                  name="AccessMode"
+                  typeConverter="AccessMode">0</property>
+                <property
+                  dataType="System.String"
+                  description="The mappings between the parameters in the SQL command and variables."
+                  name="ParameterMapping"></property>
+              </properties>
+              <connections>
+                <connection
+                  refId="Package\Import Data from PBM_DEA to CC_PIE\PBM_DEA_DOEx_DEAVistADataLoad Source.Connections[OleDbConnection]"
+                  connectionManagerID="{2BD5A5D9-4411-4DBA-BD4F-9438987E5AE7}:external"
+                  connectionManagerRefId="Project.ConnectionManagers[vhacdwa01.vha.med.va.gov.PBM_DEA]"
+                  description="The OLE DB runtime connection used to access the database."
+                  name="OleDbConnection" />
+              </connections>
+              <outputs>
+                <output
+                  refId="Package\Import Data from PBM_DEA to CC_PIE\PBM_DEA_DOEx_DEAVistADataLoad Source.Outputs[OLE DB Source Output]"
+                  name="OLE DB Source Output">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Import Data from PBM_DEA to CC_PIE\PBM_DEA_DOEx_DEAVistADataLoad Source.Outputs[OLE DB Source Output].Columns[BusinessType]"
+                      codePage="1252"
+                      dataType="str"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Import Data from PBM_DEA to CC_PIE\PBM_DEA_DOEx_DEAVistADataLoad Source.Outputs[OLE DB Source Output].ExternalColumns[BusinessType]"
+                      length="62"
+                      lineageId="Package\Import Data from PBM_DEA to CC_PIE\PBM_DEA_DOEx_DEAVistADataLoad Source.Outputs[OLE DB Source Output].Columns[BusinessType]"
+                      name="BusinessType"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Import Data from PBM_DEA to CC_PIE\PBM_DEA_DOEx_DEAVistADataLoad Source.Outputs[OLE DB Source Output].Columns[BusinessTypeSubType]"
+                      codePage="1252"
+                      dataType="str"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Import Data from PBM_DEA to CC_PIE\PBM_DEA_DOEx_DEAVistADataLoad Source.Outputs[OLE DB Source Output].ExternalColumns[BusinessTypeSubType]"
+                      length="55"
+                      lineageId="Package\Import Data from PBM_DEA to CC_PIE\PBM_DEA_DOEx_DEAVistADataLoad Source.Outputs[OLE DB Source Output].Columns[BusinessTypeSubType]"
+                      name="BusinessTypeSubType"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Import Data from PBM_DEA to CC_PIE\PBM_DEA_DOEx_DEAVistADataLoad Source.Outputs[OLE DB Source Output].Columns[DEA_Registrant_Name]"
+                      codePage="1252"
+                      dataType="str"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Import Data from PBM_DEA to CC_PIE\PBM_DEA_DOEx_DEAVistADataLoad Source.Outputs[OLE DB Source Output].ExternalColumns[DEA_Registrant_Name]"
+                      length="8000"
+                      lineageId="Package\Import Data from PBM_DEA to CC_PIE\PBM_DEA_DOEx_DEAVistADataLoad Source.Outputs[OLE DB Source Output].Columns[DEA_Registrant_Name]"
+                      name="DEA_Registrant_Name"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Import Data from PBM_DEA to CC_PIE\PBM_DEA_DOEx_DEAVistADataLoad Source.Outputs[OLE DB Source Output].Columns[DEA_Number]"
+                      codePage="1252"
+                      dataType="str"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Import Data from PBM_DEA to CC_PIE\PBM_DEA_DOEx_DEAVistADataLoad Source.Outputs[OLE DB Source Output].ExternalColumns[DEA_Number]"
+                      length="9"
+                      lineageId="Package\Import Data from PBM_DEA to CC_PIE\PBM_DEA_DOEx_DEAVistADataLoad Source.Outputs[OLE DB Source Output].Columns[DEA_Number]"
+                      name="DEA_Number"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Import Data from PBM_DEA to CC_PIE\PBM_DEA_DOEx_DEAVistADataLoad Source.Outputs[OLE DB Source Output].Columns[DEA_Expiration_Date]"
+                      dataType="dbDate"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Import Data from PBM_DEA to CC_PIE\PBM_DEA_DOEx_DEAVistADataLoad Source.Outputs[OLE DB Source Output].ExternalColumns[DEA_Expiration_Date]"
+                      lineageId="Package\Import Data from PBM_DEA to CC_PIE\PBM_DEA_DOEx_DEAVistADataLoad Source.Outputs[OLE DB Source Output].Columns[DEA_Expiration_Date]"
+                      name="DEA_Expiration_Date"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Import Data from PBM_DEA to CC_PIE\PBM_DEA_DOEx_DEAVistADataLoad Source.Outputs[OLE DB Source Output].Columns[Detox_Number]"
+                      codePage="1252"
+                      dataType="str"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Import Data from PBM_DEA to CC_PIE\PBM_DEA_DOEx_DEAVistADataLoad Source.Outputs[OLE DB Source Output].ExternalColumns[Detox_Number]"
+                      length="9"
+                      lineageId="Package\Import Data from PBM_DEA to CC_PIE\PBM_DEA_DOEx_DEAVistADataLoad Source.Outputs[OLE DB Source Output].Columns[Detox_Number]"
+                      name="Detox_Number"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Import Data from PBM_DEA to CC_PIE\PBM_DEA_DOEx_DEAVistADataLoad Source.Outputs[OLE DB Source Output].Columns[Schedule2]"
+                      codePage="1252"
+                      dataType="str"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Import Data from PBM_DEA to CC_PIE\PBM_DEA_DOEx_DEAVistADataLoad Source.Outputs[OLE DB Source Output].ExternalColumns[Schedule2]"
+                      length="1"
+                      lineageId="Package\Import Data from PBM_DEA to CC_PIE\PBM_DEA_DOEx_DEAVistADataLoad Source.Outputs[OLE DB Source Output].Columns[Schedule2]"
+                      name="Schedule2"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Import Data from PBM_DEA to CC_PIE\PBM_DEA_DOEx_DEAVistADataLoad Source.Outputs[OLE DB Source Output].Columns[Schedule2N]"
+                      codePage="1252"
+                      dataType="str"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Import Data from PBM_DEA to CC_PIE\PBM_DEA_DOEx_DEAVistADataLoad Source.Outputs[OLE DB Source Output].ExternalColumns[Schedule2N]"
+                      length="1"
+                      lineageId="Package\Import Data from PBM_DEA to CC_PIE\PBM_DEA_DOEx_DEAVistADataLoad Source.Outputs[OLE DB Source Output].Columns[Schedule2N]"
+                      name="Schedule2N"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Import Data from PBM_DEA to CC_PIE\PBM_DEA_DOEx_DEAVistADataLoad Source.Outputs[OLE DB Source Output].Columns[Schedule3]"
+                      codePage="1252"
+                      dataType="str"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Import Data from PBM_DEA to CC_PIE\PBM_DEA_DOEx_DEAVistADataLoad Source.Outputs[OLE DB Source Output].ExternalColumns[Schedule3]"
+                      length="1"
+                      lineageId="Package\Import Data from PBM_DEA to CC_PIE\PBM_DEA_DOEx_DEAVistADataLoad Source.Outputs[OLE DB Source Output].Columns[Schedule3]"
+                      name="Schedule3"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Import Data from PBM_DEA to CC_PIE\PBM_DEA_DOEx_DEAVistADataLoad Source.Outputs[OLE DB Source Output].Columns[Schedule3N]"
+                      codePage="1252"
+                      dataType="str"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Import Data from PBM_DEA to CC_PIE\PBM_DEA_DOEx_DEAVistADataLoad Source.Outputs[OLE DB Source Output].ExternalColumns[Schedule3N]"
+                      length="1"
+                      lineageId="Package\Import Data from PBM_DEA to CC_PIE\PBM_DEA_DOEx_DEAVistADataLoad Source.Outputs[OLE DB Source Output].Columns[Schedule3N]"
+                      name="Schedule3N"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Import Data from PBM_DEA to CC_PIE\PBM_DEA_DOEx_DEAVistADataLoad Source.Outputs[OLE DB Source Output].Columns[Schedule4]"
+                      codePage="1252"
+                      dataType="str"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Import Data from PBM_DEA to CC_PIE\PBM_DEA_DOEx_DEAVistADataLoad Source.Outputs[OLE DB Source Output].ExternalColumns[Schedule4]"
+                      length="1"
+                      lineageId="Package\Import Data from PBM_DEA to CC_PIE\PBM_DEA_DOEx_DEAVistADataLoad Source.Outputs[OLE DB Source Output].Columns[Schedule4]"
+                      name="Schedule4"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Import Data from PBM_DEA to CC_PIE\PBM_DEA_DOEx_DEAVistADataLoad Source.Outputs[OLE DB Source Output].Columns[Schedule5]"
+                      codePage="1252"
+                      dataType="str"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Import Data from PBM_DEA to CC_PIE\PBM_DEA_DOEx_DEAVistADataLoad Source.Outputs[OLE DB Source Output].ExternalColumns[Schedule5]"
+                      length="1"
+                      lineageId="Package\Import Data from PBM_DEA to CC_PIE\PBM_DEA_DOEx_DEAVistADataLoad Source.Outputs[OLE DB Source Output].Columns[Schedule5]"
+                      name="Schedule5"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Import Data from PBM_DEA to CC_PIE\PBM_DEA_DOEx_DEAVistADataLoad Source.Outputs[OLE DB Source Output].Columns[Authorized_Schedules]"
+                      codePage="1252"
+                      dataType="str"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Import Data from PBM_DEA to CC_PIE\PBM_DEA_DOEx_DEAVistADataLoad Source.Outputs[OLE DB Source Output].ExternalColumns[Authorized_Schedules]"
+                      length="12"
+                      lineageId="Package\Import Data from PBM_DEA to CC_PIE\PBM_DEA_DOEx_DEAVistADataLoad Source.Outputs[OLE DB Source Output].Columns[Authorized_Schedules]"
+                      name="Authorized_Schedules"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Import Data from PBM_DEA to CC_PIE\PBM_DEA_DOEx_DEAVistADataLoad Source.Outputs[OLE DB Source Output].Columns[State]"
+                      codePage="1252"
+                      dataType="str"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Import Data from PBM_DEA to CC_PIE\PBM_DEA_DOEx_DEAVistADataLoad Source.Outputs[OLE DB Source Output].ExternalColumns[State]"
+                      length="2"
+                      lineageId="Package\Import Data from PBM_DEA to CC_PIE\PBM_DEA_DOEx_DEAVistADataLoad Source.Outputs[OLE DB Source Output].Columns[State]"
+                      name="State"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Import Data from PBM_DEA to CC_PIE\PBM_DEA_DOEx_DEAVistADataLoad Source.Outputs[OLE DB Source Output].Columns[StateLicNo]"
+                      codePage="1252"
+                      dataType="str"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Import Data from PBM_DEA to CC_PIE\PBM_DEA_DOEx_DEAVistADataLoad Source.Outputs[OLE DB Source Output].ExternalColumns[StateLicNo]"
+                      length="15"
+                      lineageId="Package\Import Data from PBM_DEA to CC_PIE\PBM_DEA_DOEx_DEAVistADataLoad Source.Outputs[OLE DB Source Output].Columns[StateLicNo]"
+                      name="StateLicNo"
+                      truncationRowDisposition="FailComponent" />
+                  </outputColumns>
+                  <externalMetadataColumns
+                    isUsed="True">
+                    <externalMetadataColumn
+                      refId="Package\Import Data from PBM_DEA to CC_PIE\PBM_DEA_DOEx_DEAVistADataLoad Source.Outputs[OLE DB Source Output].ExternalColumns[BusinessType]"
+                      codePage="1252"
+                      dataType="str"
+                      length="62"
+                      name="BusinessType" />
+                    <externalMetadataColumn
+                      refId="Package\Import Data from PBM_DEA to CC_PIE\PBM_DEA_DOEx_DEAVistADataLoad Source.Outputs[OLE DB Source Output].ExternalColumns[BusinessTypeSubType]"
+                      codePage="1252"
+                      dataType="str"
+                      length="55"
+                      name="BusinessTypeSubType" />
+                    <externalMetadataColumn
+                      refId="Package\Import Data from PBM_DEA to CC_PIE\PBM_DEA_DOEx_DEAVistADataLoad Source.Outputs[OLE DB Source Output].ExternalColumns[DEA_Registrant_Name]"
+                      codePage="1252"
+                      dataType="str"
+                      length="8000"
+                      name="DEA_Registrant_Name" />
+                    <externalMetadataColumn
+                      refId="Package\Import Data from PBM_DEA to CC_PIE\PBM_DEA_DOEx_DEAVistADataLoad Source.Outputs[OLE DB Source Output].ExternalColumns[DEA_Number]"
+                      codePage="1252"
+                      dataType="str"
+                      length="9"
+                      name="DEA_Number" />
+                    <externalMetadataColumn
+                      refId="Package\Import Data from PBM_DEA to CC_PIE\PBM_DEA_DOEx_DEAVistADataLoad Source.Outputs[OLE DB Source Output].ExternalColumns[DEA_Expiration_Date]"
+                      dataType="dbDate"
+                      name="DEA_Expiration_Date" />
+                    <externalMetadataColumn
+                      refId="Package\Import Data from PBM_DEA to CC_PIE\PBM_DEA_DOEx_DEAVistADataLoad Source.Outputs[OLE DB Source Output].ExternalColumns[Detox_Number]"
+                      codePage="1252"
+                      dataType="str"
+                      length="9"
+                      name="Detox_Number" />
+                    <externalMetadataColumn
+                      refId="Package\Import Data from PBM_DEA to CC_PIE\PBM_DEA_DOEx_DEAVistADataLoad Source.Outputs[OLE DB Source Output].ExternalColumns[Schedule2]"
+                      codePage="1252"
+                      dataType="str"
+                      length="1"
+                      name="Schedule2" />
+                    <externalMetadataColumn
+                      refId="Package\Import Data from PBM_DEA to CC_PIE\PBM_DEA_DOEx_DEAVistADataLoad Source.Outputs[OLE DB Source Output].ExternalColumns[Schedule2N]"
+                      codePage="1252"
+                      dataType="str"
+                      length="1"
+                      name="Schedule2N" />
+                    <externalMetadataColumn
+                      refId="Package\Import Data from PBM_DEA to CC_PIE\PBM_DEA_DOEx_DEAVistADataLoad Source.Outputs[OLE DB Source Output].ExternalColumns[Schedule3]"
+                      codePage="1252"
+                      dataType="str"
+                      length="1"
+                      name="Schedule3" />
+                    <externalMetadataColumn
+                      refId="Package\Import Data from PBM_DEA to CC_PIE\PBM_DEA_DOEx_DEAVistADataLoad Source.Outputs[OLE DB Source Output].ExternalColumns[Schedule3N]"
+                      codePage="1252"
+                      dataType="str"
+                      length="1"
+                      name="Schedule3N" />
+                    <externalMetadataColumn
+                      refId="Package\Import Data from PBM_DEA to CC_PIE\PBM_DEA_DOEx_DEAVistADataLoad Source.Outputs[OLE DB Source Output].ExternalColumns[Schedule4]"
+                      codePage="1252"
+                      dataType="str"
+                      length="1"
+                      name="Schedule4" />
+                    <externalMetadataColumn
+                      refId="Package\Import Data from PBM_DEA to CC_PIE\PBM_DEA_DOEx_DEAVistADataLoad Source.Outputs[OLE DB Source Output].ExternalColumns[Schedule5]"
+                      codePage="1252"
+                      dataType="str"
+                      length="1"
+                      name="Schedule5" />
+                    <externalMetadataColumn
+                      refId="Package\Import Data from PBM_DEA to CC_PIE\PBM_DEA_DOEx_DEAVistADataLoad Source.Outputs[OLE DB Source Output].ExternalColumns[Authorized_Schedules]"
+                      codePage="1252"
+                      dataType="str"
+                      length="12"
+                      name="Authorized_Schedules" />
+                    <externalMetadataColumn
+                      refId="Package\Import Data from PBM_DEA to CC_PIE\PBM_DEA_DOEx_DEAVistADataLoad Source.Outputs[OLE DB Source Output].ExternalColumns[State]"
+                      codePage="1252"
+                      dataType="str"
+                      length="2"
+                      name="State" />
+                    <externalMetadataColumn
+                      refId="Package\Import Data from PBM_DEA to CC_PIE\PBM_DEA_DOEx_DEAVistADataLoad Source.Outputs[OLE DB Source Output].ExternalColumns[StateLicNo]"
+                      codePage="1252"
+                      dataType="str"
+                      length="15"
+                      name="StateLicNo" />
+                  </externalMetadataColumns>
+                </output>
+                <output
+                  refId="Package\Import Data from PBM_DEA to CC_PIE\PBM_DEA_DOEx_DEAVistADataLoad Source.Outputs[OLE DB Source Error Output]"
+                  isErrorOut="true"
+                  name="OLE DB Source Error Output">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Import Data from PBM_DEA to CC_PIE\PBM_DEA_DOEx_DEAVistADataLoad Source.Outputs[OLE DB Source Error Output].Columns[BusinessType]"
+                      codePage="1252"
+                      dataType="str"
+                      length="62"
+                      lineageId="Package\Import Data from PBM_DEA to CC_PIE\PBM_DEA_DOEx_DEAVistADataLoad Source.Outputs[OLE DB Source Error Output].Columns[BusinessType]"
+                      name="BusinessType" />
+                    <outputColumn
+                      refId="Package\Import Data from PBM_DEA to CC_PIE\PBM_DEA_DOEx_DEAVistADataLoad Source.Outputs[OLE DB Source Error Output].Columns[BusinessTypeSubType]"
+                      codePage="1252"
+                      dataType="str"
+                      length="55"
+                      lineageId="Package\Import Data from PBM_DEA to CC_PIE\PBM_DEA_DOEx_DEAVistADataLoad Source.Outputs[OLE DB Source Error Output].Columns[BusinessTypeSubType]"
+                      name="BusinessTypeSubType" />
+                    <outputColumn
+                      refId="Package\Import Data from PBM_DEA to CC_PIE\PBM_DEA_DOEx_DEAVistADataLoad Source.Outputs[OLE DB Source Error Output].Columns[DEA_Registrant_Name]"
+                      codePage="1252"
+                      dataType="str"
+                      length="8000"
+                      lineageId="Package\Import Data from PBM_DEA to CC_PIE\PBM_DEA_DOEx_DEAVistADataLoad Source.Outputs[OLE DB Source Error Output].Columns[DEA_Registrant_Name]"
+                      name="DEA_Registrant_Name" />
+                    <outputColumn
+                      refId="Package\Import Data from PBM_DEA to CC_PIE\PBM_DEA_DOEx_DEAVistADataLoad Source.Outputs[OLE DB Source Error Output].Columns[DEA_Number]"
+                      codePage="1252"
+                      dataType="str"
+                      length="9"
+                      lineageId="Package\Import Data from PBM_DEA to CC_PIE\PBM_DEA_DOEx_DEAVistADataLoad Source.Outputs[OLE DB Source Error Output].Columns[DEA_Number]"
+                      name="DEA_Number" />
+                    <outputColumn
+                      refId="Package\Import Data from PBM_DEA to CC_PIE\PBM_DEA_DOEx_DEAVistADataLoad Source.Outputs[OLE DB Source Error Output].Columns[DEA_Expiration_Date]"
+                      dataType="dbDate"
+                      lineageId="Package\Import Data from PBM_DEA to CC_PIE\PBM_DEA_DOEx_DEAVistADataLoad Source.Outputs[OLE DB Source Error Output].Columns[DEA_Expiration_Date]"
+                      name="DEA_Expiration_Date" />
+                    <outputColumn
+                      refId="Package\Import Data from PBM_DEA to CC_PIE\PBM_DEA_DOEx_DEAVistADataLoad Source.Outputs[OLE DB Source Error Output].Columns[Detox_Number]"
+                      codePage="1252"
+                      dataType="str"
+                      length="9"
+                      lineageId="Package\Import Data from PBM_DEA to CC_PIE\PBM_DEA_DOEx_DEAVistADataLoad Source.Outputs[OLE DB Source Error Output].Columns[Detox_Number]"
+                      name="Detox_Number" />
+                    <outputColumn
+                      refId="Package\Import Data from PBM_DEA to CC_PIE\PBM_DEA_DOEx_DEAVistADataLoad Source.Outputs[OLE DB Source Error Output].Columns[Schedule2]"
+                      codePage="1252"
+                      dataType="str"
+                      length="1"
+                      lineageId="Package\Import Data from PBM_DEA to CC_PIE\PBM_DEA_DOEx_DEAVistADataLoad Source.Outputs[OLE DB Source Error Output].Columns[Schedule2]"
+                      name="Schedule2" />
+                    <outputColumn
+                      refId="Package\Import Data from PBM_DEA to CC_PIE\PBM_DEA_DOEx_DEAVistADataLoad Source.Outputs[OLE DB Source Error Output].Columns[Schedule2N]"
+                      codePage="1252"
+                      dataType="str"
+                      length="1"
+                      lineageId="Package\Import Data from PBM_DEA to CC_PIE\PBM_DEA_DOEx_DEAVistADataLoad Source.Outputs[OLE DB Source Error Output].Columns[Schedule2N]"
+                      name="Schedule2N" />
+                    <outputColumn
+                      refId="Package\Import Data from PBM_DEA to CC_PIE\PBM_DEA_DOEx_DEAVistADataLoad Source.Outputs[OLE DB Source Error Output].Columns[Schedule3]"
+                      codePage="1252"
+                      dataType="str"
+                      length="1"
+                      lineageId="Package\Import Data from PBM_DEA to CC_PIE\PBM_DEA_DOEx_DEAVistADataLoad Source.Outputs[OLE DB Source Error Output].Columns[Schedule3]"
+                      name="Schedule3" />
+                    <outputColumn
+                      refId="Package\Import Data from PBM_DEA to CC_PIE\PBM_DEA_DOEx_DEAVistADataLoad Source.Outputs[OLE DB Source Error Output].Columns[Schedule3N]"
+                      codePage="1252"
+                      dataType="str"
+                      length="1"
+                      lineageId="Package\Import Data from PBM_DEA to CC_PIE\PBM_DEA_DOEx_DEAVistADataLoad Source.Outputs[OLE DB Source Error Output].Columns[Schedule3N]"
+                      name="Schedule3N" />
+                    <outputColumn
+                      refId="Package\Import Data from PBM_DEA to CC_PIE\PBM_DEA_DOEx_DEAVistADataLoad Source.Outputs[OLE DB Source Error Output].Columns[Schedule4]"
+                      codePage="1252"
+                      dataType="str"
+                      length="1"
+                      lineageId="Package\Import Data from PBM_DEA to CC_PIE\PBM_DEA_DOEx_DEAVistADataLoad Source.Outputs[OLE DB Source Error Output].Columns[Schedule4]"
+                      name="Schedule4" />
+                    <outputColumn
+                      refId="Package\Import Data from PBM_DEA to CC_PIE\PBM_DEA_DOEx_DEAVistADataLoad Source.Outputs[OLE DB Source Error Output].Columns[Schedule5]"
+                      codePage="1252"
+                      dataType="str"
+                      length="1"
+                      lineageId="Package\Import Data from PBM_DEA to CC_PIE\PBM_DEA_DOEx_DEAVistADataLoad Source.Outputs[OLE DB Source Error Output].Columns[Schedule5]"
+                      name="Schedule5" />
+                    <outputColumn
+                      refId="Package\Import Data from PBM_DEA to CC_PIE\PBM_DEA_DOEx_DEAVistADataLoad Source.Outputs[OLE DB Source Error Output].Columns[Authorized_Schedules]"
+                      codePage="1252"
+                      dataType="str"
+                      length="12"
+                      lineageId="Package\Import Data from PBM_DEA to CC_PIE\PBM_DEA_DOEx_DEAVistADataLoad Source.Outputs[OLE DB Source Error Output].Columns[Authorized_Schedules]"
+                      name="Authorized_Schedules" />
+                    <outputColumn
+                      refId="Package\Import Data from PBM_DEA to CC_PIE\PBM_DEA_DOEx_DEAVistADataLoad Source.Outputs[OLE DB Source Error Output].Columns[State]"
+                      codePage="1252"
+                      dataType="str"
+                      length="2"
+                      lineageId="Package\Import Data from PBM_DEA to CC_PIE\PBM_DEA_DOEx_DEAVistADataLoad Source.Outputs[OLE DB Source Error Output].Columns[State]"
+                      name="State" />
+                    <outputColumn
+                      refId="Package\Import Data from PBM_DEA to CC_PIE\PBM_DEA_DOEx_DEAVistADataLoad Source.Outputs[OLE DB Source Error Output].Columns[StateLicNo]"
+                      codePage="1252"
+                      dataType="str"
+                      length="15"
+                      lineageId="Package\Import Data from PBM_DEA to CC_PIE\PBM_DEA_DOEx_DEAVistADataLoad Source.Outputs[OLE DB Source Error Output].Columns[StateLicNo]"
+                      name="StateLicNo" />
+                    <outputColumn
+                      refId="Package\Import Data from PBM_DEA to CC_PIE\PBM_DEA_DOEx_DEAVistADataLoad Source.Outputs[OLE DB Source Error Output].Columns[ErrorCode]"
+                      dataType="i4"
+                      lineageId="Package\Import Data from PBM_DEA to CC_PIE\PBM_DEA_DOEx_DEAVistADataLoad Source.Outputs[OLE DB Source Error Output].Columns[ErrorCode]"
+                      name="ErrorCode"
+                      specialFlags="1" />
+                    <outputColumn
+                      refId="Package\Import Data from PBM_DEA to CC_PIE\PBM_DEA_DOEx_DEAVistADataLoad Source.Outputs[OLE DB Source Error Output].Columns[ErrorColumn]"
+                      dataType="i4"
+                      lineageId="Package\Import Data from PBM_DEA to CC_PIE\PBM_DEA_DOEx_DEAVistADataLoad Source.Outputs[OLE DB Source Error Output].Columns[ErrorColumn]"
+                      name="ErrorColumn"
+                      specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+          </components>
+          <paths>
+            <path
+              refId="Package\Import Data from PBM_DEA to CC_PIE.Paths[OLE DB Source Output]"
+              endId="Package\Import Data from PBM_DEA to CC_PIE\CC_PIE_pie_PBM_DEA Destination.Inputs[OLE DB Destination Input]"
+              name="OLE DB Source Output"
+              startId="Package\Import Data from PBM_DEA to CC_PIE\PBM_DEA_DOEx_DEAVistADataLoad Source.Outputs[OLE DB Source Output]" />
+          </paths>
+        </pipeline>
+      </DTS:ObjectData>
+    </DTS:Executable>
+    <DTS:Executable
+      DTS:refId="Package\Refresh Update DateTime Extended Property on CC_PIE_pie_PBM_DEA"
+      DTS:CreationName="Microsoft.ExecuteSQLTask"
+      DTS:Description="Execute SQL Task"
+      DTS:DTSID="{46fd48fd-50e0-4903-b017-34013f31f15c}"
+      DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="Refresh Update DateTime Extended Property on CC_PIE_pie_PBM_DEA"
+      DTS:ThreadHint="0">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <SQLTask:SqlTaskData
+          SQLTask:Connection="{0A0A2980-E06D-472A-9375-36EA03EF4AF2}"
+          SQLTask:SqlStatementSource="DECLARE  @name AS SYSNAME = 'Update DateTime'&#xA;   ,@value AS SQL_VARIANT = FORMAT(CURRENT_TIMESTAMP, 'M/d/yyyy h:mm:ss tt', 'en-US')&#xA;   ,@level0type AS VARCHAR(128) = 'Schema'&#xA;   ,@level0name AS SYSNAME = 'pie'&#xA;   ,@level1type AS VARCHAR(128) = 'Table'&#xA;   ,@level1name AS SYSNAME = 'PBM_DEA';&#xA;&#xA;EXEC sys.sp_updateextendedproperty @name, @value, @level0type, @level0name, @level1type, @level1name;" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+      </DTS:ObjectData>
+    </DTS:Executable>
+    <DTS:Executable
+      DTS:refId="Package\Truncate Table pie_PBM_DEA"
+      DTS:CreationName="Microsoft.ExecuteSQLTask"
+      DTS:Description="Execute SQL Task"
+      DTS:DTSID="{99fbe3c6-4b45-44d8-9f35-0dfdf84c05da}"
+      DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="Truncate Table pie_PBM_DEA"
+      DTS:ThreadHint="0">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <SQLTask:SqlTaskData
+          SQLTask:Connection="{0A0A2980-E06D-472A-9375-36EA03EF4AF2}"
+          SQLTask:SqlStatementSource="TRUNCATE TABLE pie.PBM_DEA;" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+      </DTS:ObjectData>
+    </DTS:Executable>
+  </DTS:Executables>
+  <DTS:PrecedenceConstraints>
+    <DTS:PrecedenceConstraint
+      DTS:refId="Package.PrecedenceConstraints[Constraint]"
+      DTS:CreationName=""
+      DTS:DTSID="{6c66e350-754a-4a91-bb36-72918d23422d}"
+      DTS:From="Package\Truncate Table pie_PBM_DEA"
+      DTS:LogicalAnd="True"
+      DTS:ObjectName="Constraint"
+      DTS:To="Package\Import Data from PBM_DEA to CC_PIE" />
+    <DTS:PrecedenceConstraint
+      DTS:refId="Package.PrecedenceConstraints[Constraint 1]"
+      DTS:CreationName=""
+      DTS:DTSID="{bab9f442-54ec-4049-8ea4-47d010d64946}"
+      DTS:From="Package\Import Data from PBM_DEA to CC_PIE"
+      DTS:LogicalAnd="True"
+      DTS:ObjectName="Constraint 1"
+      DTS:To="Package\Refresh Update DateTime Extended Property on CC_PIE_pie_PBM_DEA" />
+  </DTS:PrecedenceConstraints>
+  <DTS:EventHandlers>
+    <DTS:EventHandler
+      DTS:refId="Package.EventHandlers[OnError]"
+      DTS:CreationName="OnError"
+      DTS:DTSID="{D91DEE86-39D0-4C33-A5D0-C70EAA1F4DF9}"
+      DTS:EventID="231027012"
+      DTS:EventName="OnError"
+      DTS:LocaleID="-1">
+      <DTS:Variables>
+        <DTS:Variable
+          DTS:CreationName=""
+          DTS:Description="The propagate property of the event"
+          DTS:DTSID="{80AC188F-3F36-4CA8-A84F-074B90678436}"
+          DTS:IncludeInDebugDump="6789"
+          DTS:Namespace="System"
+          DTS:ObjectName="Propagate">
+          <DTS:VariableValue
+            DTS:DataType="11">-1</DTS:VariableValue>
+        </DTS:Variable>
+      </DTS:Variables>
+      <DTS:Executables>
+        <DTS:Executable
+          DTS:refId="Package.EventHandlers[OnError]\Send Mail Task"
+          DTS:CreationName="Microsoft.SendMailTask"
+          DTS:Description="Send Mail Task"
+          DTS:DTSID="{c24ab69f-ebe3-4834-9edf-f877c7831f73}"
+          DTS:ExecutableType="Microsoft.SendMailTask"
+          DTS:LocaleID="-1"
+          DTS:ObjectName="Send Mail Task">
+          <DTS:Variables />
+          <DTS:PropertyExpression
+            DTS:Name="MessageSource">"Error Source: " +  @[System::SourceName]  + "\n\n" + "Error Message: " +  @[System::ErrorDescription]</DTS:PropertyExpression>
+          <DTS:PropertyExpression
+            DTS:Name="Subject">@[System::PackageName] + " on " + @[System::MachineName] + " has Encountered an Error"</DTS:PropertyExpression>
+          <DTS:PropertyExpression
+            DTS:Name="ToLine">@[$Project::strEmailNotificationToLine]</DTS:PropertyExpression>
+          <DTS:ObjectData>
+            <SendMailTask:SendMailTaskData
+              SendMailTask:SMTPServer="{EBE59598-5A92-4FE2-83A2-0BCCA993408B}"
+              SendMailTask:From="DoNotReply@va.gov"
+              SendMailTask:To="Jun.Xu2@va.gov"
+              SendMailTask:Subject="pie_PBM_DEA on ORL-LTLN1807476 has Encountered an Error"
+              SendMailTask:Priority="High"
+              SendMailTask:MessageSource="Error Source: &#xA;&#xA;Error Message: " xmlns:SendMailTask="www.microsoft.com/sqlserver/dts/tasks/sendmailtask" />
+          </DTS:ObjectData>
+        </DTS:Executable>
+      </DTS:Executables>
+    </DTS:EventHandler>
+  </DTS:EventHandlers>
+  <DTS:DesignTimeProperties><![CDATA[<?xml version="1.0"?>
+<!--This CDATA section contains the layout information of the package. The section includes information such as (x,y) coordinates, width, and height.-->
+<!--If you manually edit this section and make a mistake, you can delete it. -->
+<!--The package will still be able to load normally but the previous layout information will be lost and the designer will automatically re-arrange the elements on the design surface.-->
+<Objects
+  Version="8">
+  <!--Each node below will contain properties that do not affect runtime behavior.-->
+  <Package
+    design-time-name="Package">
+    <LayoutInfo>
+      <GraphLayout
+        Capacity="8" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml">
+        <NodeLayout
+          Size="261,42"
+          Id="Package\Import Data from PBM_DEA to CC_PIE"
+          TopLeft="142,150" />
+        <NodeLayout
+          Size="415,42"
+          Id="Package\Refresh Update DateTime Extended Property on CC_PIE_pie_PBM_DEA"
+          TopLeft="60,234" />
+        <NodeLayout
+          Size="219,42"
+          Id="Package\Truncate Table pie_PBM_DEA"
+          TopLeft="163,60" />
+        <EdgeLayout
+          Id="Package.PrecedenceConstraints[Constraint]"
+          TopLeft="272.5,102">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,48"
+              Start="0,0"
+              End="0,40.5">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,40.5" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package.PrecedenceConstraints[Constraint 1]"
+          TopLeft="270,192">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,42"
+              Start="0,0"
+              End="0,34.5">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,34.5" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+      </GraphLayout>
+    </LayoutInfo>
+  </Package>
+  <DtsEventHandler
+    design-time-name="Package.EventHandlers[OnError]">
+    <LayoutInfo>
+      <GraphLayout
+        Capacity="4" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph">
+        <NodeLayout
+          Size="150,42"
+          Id="Package.EventHandlers[OnError]\Send Mail Task"
+          TopLeft="60,60" />
+      </GraphLayout>
+    </LayoutInfo>
+  </DtsEventHandler>
+  <TaskHost
+    design-time-name="Package\Import Data from PBM_DEA to CC_PIE">
+    <LayoutInfo>
+      <GraphLayout
+        Capacity="4" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml">
+        <NodeLayout
+          Size="286,42"
+          Id="Package\Import Data from PBM_DEA to CC_PIE\PBM_DEA_DOEx_DEAVistADataLoad Source"
+          TopLeft="340,111" />
+        <NodeLayout
+          Size="241,42"
+          Id="Package\Import Data from PBM_DEA to CC_PIE\CC_PIE_pie_PBM_DEA Destination"
+          TopLeft="362,199" />
+        <EdgeLayout
+          Id="Package\Import Data from PBM_DEA to CC_PIE.Paths[OLE DB Source Output]"
+          TopLeft="482.75,153">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,46"
+              Start="0,0"
+              End="0,38.5">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,38.5" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+      </GraphLayout>
+    </LayoutInfo>
+  </TaskHost>
+  <PipelineComponentMetadata
+    design-time-name="Package\Import Data from PBM_DEA to CC_PIE\CC_PIE_pie_PBM_DEA Destination">
+    <Properties>
+      <Property>
+        <Name>DataSourceViewID</Name>
+      </Property>
+      <Property>
+        <Name>TableInfoObjectType</Name>
+        <Value
+          type="q2:string">Table</Value>
+      </Property>
+    </Properties>
+  </PipelineComponentMetadata>
+  <PipelineComponentMetadata
+    design-time-name="Package\Import Data from PBM_DEA to CC_PIE\PBM_DEA_DOEx_DEAVistADataLoad Source">
+    <Properties>
+      <Property>
+        <Name>DataSourceViewID</Name>
+      </Property>
+      <Property>
+        <Name>TableInfoObjectType</Name>
+        <Value
+          type="q2:string">View</Value>
+      </Property>
+    </Properties>
+  </PipelineComponentMetadata>
+</Objects>]]></DTS:DesignTimeProperties>
+</DTS:Executable>

@@ -1,1 +1,0 @@
-{"options":{},"indexes":[{"v":1,"key":{"_id":1},"name":"_id_","ns":"patientContext.contextCollection"},{"v":1,"key":{"userIdentifier.userId":1,"userIdentifier.userAssigningAuthority":1},"name":"userIdentifier.userId_1_userIdentifier.userAssigningAuthority_1","ns":"patientContext.contextCollection"}]}

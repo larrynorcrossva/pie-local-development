@@ -1,0 +1,273 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:int="http://www.springframework.org/schema/integration"
+	xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+	xmlns:int-jdbc="http://www.springframework.org/schema/integration/jdbc"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:int-xml="http://www.springframework.org/schema/integration/xml"
+	xmlns:int-file="http://www.springframework.org/schema/integration/file"
+	xmlns:int-http="http://www.springframework.org/schema/integration/http"
+	xmlns:jpa="http://www.springframework.org/schema/data/jpa"
+	xmlns:int-jpa="http://www.springframework.org/schema/integration/jpa"
+	xsi:schemaLocation="http://www.springframework.org/schema/integration/jdbc http://www.springframework.org/schema/integration/jdbc/spring-integration-jdbc.xsd
+             http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-3.0.xsd
+             http://www.springframework.org/schema/integration/xml http://www.springframework.org/schema/integration/xml/spring-integration-xml.xsd
+             http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+             http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd
+             http://www.springframework.org/schema/integration/file http://www.springframework.org/schema/integration/file/spring-integration-file.xsd
+             http://www.springframework.org/schema/data/jpa http://www.springframework.org/schema/data/jpa/spring-jpa-1.8.xsd
+             http://www.springframework.org/schema/integration/http http://www.springframework.org/schema/integration/http/spring-integration-http-5.0.xsd
+             http://www.springframework.org/schema/integration/jpa http://www.springframework.org/schema/integration/jpa/spring-integration-jpa.xsd
+             http://www.springframework.org/schema/integration http://www.springframework.org/schema/integration/spring-integration.xsd">
+
+	<int:publish-subscribe-channel
+		id="ppms-outbound-trigger" task-executor="inboutTaskExecutor" />
+
+	<bean id="inboutTaskExecutor"
+		class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
+		<property name="corePoolSize" value="1" />
+		<property name="maxPoolSize" value="1" />
+		<property name="queueCapacity" value="1" />
+	</bean>
+
+	<int-http:inbound-gateway
+		id="outbound-ppms-trigger" request-channel="ppms-outbound-trigger"
+		request-payload-type="java.lang.String" supported-methods='POST'
+		reply-timeout-status-code-expression="200"
+		reply-timeout='10000' path="/pie/ppms/triggers/outbound">
+		<int-http:request-mapping consumes="text/xml" />
+	</int-http:inbound-gateway>
+
+	<int-http:inbound-gateway
+		id="manual-outbound-ppms-trigger"
+		request-channel="manual-trigger-channel"
+		request-payload-type="java.lang.String" supported-methods='POST'
+		reply-timeout-status-code-expression="200"
+		reply-timeout='10000' path="/pie/ppms/triggers/manual/outbound">
+		<int-http:request-mapping consumes="text/xml" />
+	</int-http:inbound-gateway>
+
+	<int:channel id="manual-trigger-channel">
+	</int:channel>
+
+
+
+	<int:header-enricher
+		id="add-manualtrigger-to-header"
+		input-channel="manual-trigger-channel"
+		output-channel="ppms-outbound-trigger">
+		<int:header name="manual" value="yes" />
+	</int:header-enricher>
+
+
+	<int-jpa:retrieving-outbound-gateway
+		id="cdw-pie-jpa-adapter" request-channel="ppms-outbound-trigger"
+		requires-reply="false" entity-manager-factory="entityManagerFactory"
+		reply-channel="cdw-pie-inbound-channel"
+		jpa-query="Select P From FirstProviderRecord P where P.isProcessed=0">
+	</int-jpa:retrieving-outbound-gateway>
+
+	<int:channel id="cdw-pie-inbound-channel">
+	</int:channel>
+
+	<int:transformer
+		input-channel="cdw-pie-inbound-channel" id="entity-to-vamodel"
+		output-channel="vamodel-to-filter" ref="entityToVaproviderTransformer" />
+
+	<bean id="entityToVaproviderTransformer"
+		class="gov.va.pie.transformer.EntityToVaproviderTransformer" />
+
+	<int:channel id="vamodel-to-filter"></int:channel>
+
+	<int:filter input-channel="vamodel-to-filter"
+		id="va-provider-filter" output-channel="valid-providers-channel"
+		ref="vaProviderSelector" discard-channel="invalid-providers-channel" />
+	<int:channel id="valid-providers-channel" />
+	<int:channel id="invalid-providers-channel" />
+
+
+	<int:splitter ref="vaProvidersSplitter"
+		id="va-provider-splitter" input-channel="valid-providers-channel"
+		output-channel="split-msgs-channel" />
+	<int:channel id="split-msgs-channel" />
+
+	<int:transformer input-channel="split-msgs-channel"
+		id="va-provider-to-ppms-transformer"
+		output-channel="ppms-providers-channel"
+		ref="vaProviderToPPMSProviderTransformer" />
+
+	<int:channel id="ppms-providers-channel" />
+
+	<int:header-enricher id="add-payload-to-header"
+		input-channel="ppms-providers-channel"
+		output-channel="enriched-header-channel">
+		<int:header name="originalPayload" expression="payload" />
+	</int:header-enricher>
+
+	<int:channel id="enriched-header-channel" />
+
+	<int-xml:marshalling-transformer
+		id="providersToXmlTransformer" input-channel="enriched-header-channel"
+		output-channel="ppms-provider-xml-outbound-channel"
+		marshaller="jaxbMarshaller" result-type="StringResult" />
+
+	<bean id="jaxbMarshaller"
+		class="org.springframework.oxm.jaxb.Jaxb2Marshaller">
+		<property name="contextPath" value="gov.va.pie.ppms.model" />
+	</bean>
+
+	<int:channel id="ppms-provider-xml-outbound-channel" />
+
+
+
+	<int:channel id="xml-to-transid-channel" />
+
+	<int:header-enricher id="add-data-to-header"
+		input-channel="ppms-provider-xml-outbound-channel"
+		output-channel="transId-to-filter">
+		<int:header name="Content-Type" value="application/xml" />
+		<int:header name="X-ConversationID"
+			expression="@ppmsServiceActivator.getTransactionId()" />
+		<int:header name="X-RoutingSenderID" value="VA_Network" />
+		<int:header name="transactionId"
+			expression="@ppmsServiceActivator.getTransactionId()" />
+		<int:header name="X-RoutingReceiverIDs" value="VA_PPMS" />
+		<int:header name="Expect" value="100-continue" />
+		<int:error-channel ref="httpStatusErrorChannel"></int:error-channel>
+	</int:header-enricher>
+
+	<bean id="headerMapper"
+		class="org.springframework.integration.http.support.DefaultHttpHeaderMapper">
+		<property name="outboundHeaderNames"
+			value="Content-Type,X-ConversationID,X-RoutingSenderID,X-RoutingSenderID,transactionId,X-RoutingReceiverIDs, Expect" />
+	</bean>
+
+	<int:channel id="transId-to-filter" />
+	<int:filter input-channel="transId-to-filter"
+		id="add-data-to-filter" output-channel="auto-restcall"
+		ref="manualAutoFilter" discard-channel="manual-fileupload" />
+	<int:channel id="manual-fileupload" />
+	<int:channel id="auto-restcall" />
+
+
+	<int:channel id="manualFileCreator-to-db-activator" />
+	<int:service-activator id="manual-file-creator"
+		output-channel="manualFileCreator-to-db-activator"
+		input-channel="manual-fileupload" ref="manualFileCreators" />
+
+	<int:service-activator id="AdkDbActivator"
+		output-channel="manual-trigger-channel"
+		input-channel="manualFileCreator-to-db-activator"
+		ref="ppmsAckToDatabaseActivator" />
+
+	<int:service-activator
+		id="ppms-service-activator" input-channel="auto-restcall"
+		output-channel="xml-to-transid-channel" ref="ppmsServiceActivator" />
+
+	<int-http:outbound-gateway id='ppms-gateway'
+		header-mapper="headerMapper"
+		error-handler="customResponseErrorHandler"
+		reply-channel="gateway-to-db-activator"
+		request-channel='xml-to-transid-channel'
+		url="https://iws.ppms.va.gov/CcnDataStream/v1" http-method='POST'
+		charset='UTF-8' reply-timeout='60000'>
+	</int-http:outbound-gateway>
+
+	<int:channel id="httpStatusErrorChannel" />
+
+	<int:service-activator id="httpStatusError"
+		input-channel="httpStatusErrorChannel" ref="httpStatusErrorLogger" />
+
+
+	<int:channel id="gateway-to-db-activator" />
+
+	<int:service-activator
+		id="gatewaystatus-to-database-activator"
+		input-channel="gateway-to-db-activator"
+		output-channel="trigger-next-batch" ref="ppmsAckToDatabaseActivator" />
+
+	<int:channel id="trigger-next-batch" />
+
+	<int:filter input-channel="trigger-next-batch"
+		id="trigger-next-batch-filter" output-channel="ppms-outbound-trigger"
+		ref="triggerNextBatchFilter" discard-channel="stop" />
+
+	<int:channel id="stop" />
+
+
+	<int-http:inbound-gateway
+		id='ppms-response-inbound-gateway'
+		request-channel="gateway-loggerunmarshaller"
+		reply-channel="send-ack-output-channel"
+		header-mapper="headerMapperInbound"
+		request-payload-type="java.lang.String" supported-methods='POST'
+		reply-timeout='60000' path="/pie/ppms/providerresponse">
+		<int-http:request-mapping
+			consumes="application/xml" />
+	</int-http:inbound-gateway>
+
+	<bean id="headerMapperInbound"
+		class="org.springframework.integration.http.support.DefaultHttpHeaderMapper">
+		<property name="inboundHeaderNames"
+			value="Content-Type,X-ConversationID" />
+	</bean>
+
+
+
+	<int:channel id="gateway-loggerunmarshaller" />
+
+	<int:service-activator id="logger-unmarshaller"
+		output-channel="ppms-response-request-channel"
+		input-channel="gateway-loggerunmarshaller" ref="loggerUnMashaller" />
+
+
+	<int:publish-subscribe-channel
+		id="ppms-response-request-channel" task-executor="taskExecutor" />
+
+	<bean id="taskExecutor"
+		class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
+		<property name="corePoolSize" value="5" />
+		<property name="maxPoolSize" value="10" />
+		<property name="queueCapacity" value="25" />
+	</bean>
+
+	<int:channel id="send-ack-output-channel" />
+	<int:service-activator ref="sendAck"
+		output-channel="send-ack-output-channel" id="sendAckId"
+		input-channel="ppms-response-request-channel" />
+
+
+	<int:channel id="Update-Corr-ID" />
+	<int:channel id="Process-Response" />
+
+	<int:recipient-list-router
+		input-channel="ppms-response-request-channel">
+		<int:recipient channel="Update-Corr-ID" />
+		<int:recipient channel="Process-Response" />
+	</int:recipient-list-router>
+
+	<int:service-activator
+		ref="correlationIdActivator" id="correlationIdActivatorId"
+		input-channel="Update-Corr-ID" />
+	<int:service-activator
+		ref="providerResponseActivator" id="providerResponseActivatorId"
+		input-channel="Process-Response" />
+
+	<int-http:inbound-gateway
+		id="outbound-ppms-vast-trigger" request-channel="ppms-vast-outbound-trigger"
+		request-payload-type="java.lang.String" supported-methods='POST'
+		reply-timeout-status-code-expression="200"
+		reply-timeout='10000' path="/pie/ppms/triggers/vast/outbound">
+		<int-http:request-mapping consumes="text/xml" />
+	</int-http:inbound-gateway>
+	
+	<int:channel id="ppms-vast-outbound-trigger"></int:channel>
+	
+	<int:service-activator
+		ref="vastActivator" id="vastActivatorId"
+		input-channel="ppms-vast-outbound-trigger" />			
+		
+
+</beans>

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema version="2.0"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           targetNamespace="https://ppms.va.gov/facility/v1"
+           xmlns:f="https://ppms.va.gov/facility/v1">
+    <!-- VERSION 1.0.2 -->
+    <xs:complexType name="Facility">
+        <xs:sequence>
+            <xs:element name="StationNumber" type="xs:string" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="StationName" type="xs:string" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="Facility" type="xs:string" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="FacilityType" type="f:FacilityType" nillable="true" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="Visn" type="xs:string" minOccurs="1" maxOccurs="1"/>
+            <!-- Ex: "VISN 02" -->
+            <xs:element name="Address" type="f:Address" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="Phone" type="xs:string" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="Fax" type="xs:string" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="Rurality" type="f:RuralityType" nillable="true" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="ParentStationNumber" type="xs:string" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="Latitude" type="xs:float" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="Longitude" type="xs:float" minOccurs="0" maxOccurs="1"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="Address">
+        <xs:sequence>
+            <xs:element name="Address1" type="xs:string" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="Address2" type="xs:string" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="Address3" type="xs:string" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="City" type="xs:string" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="State" type="xs:string" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="PostalCode" type="xs:string" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="County" type="xs:string" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="CountryCode" type="xs:string" minOccurs="0" maxOccurs="1"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:simpleType name="FacilityType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="VAMC"/>
+            <xs:enumeration value="PC CBOC"/>
+            <xs:enumeration value="OOS"/>
+            <xs:enumeration value="MS CBOC"/>
+            <xs:enumeration value="HCC"/>
+            <xs:enumeration value="CLC"/>
+            <xs:enumeration value="MH RRTP/DRRTP"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="RuralityType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="U"/>
+            <xs:enumeration value="R"/>
+            <xs:enumeration value="H"/>
+            <xs:enumeration value="I"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:element name="Facilities">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="Facility" type="f:Facility" minOccurs="1" maxOccurs="5000"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+</xs:schema>
+

@@ -1,0 +1,30 @@
+
+Vista Pharmacy Medical Educations
+
+Request URL
+https://dev.dws.ppms.va.gov/v1.0/GetVistaPharmacyMedicalEducations?modifiedOnOrAfterDate=2019-4-1&medicalEducationsPage=1&$expand=medicaleducations
+
+Output:
+
+{
+  "@odata.context": "https://dev.dws.ppms.va.gov/v1.0/$metadata#VistaPharmacyResponse(MedicalEducations())",
+  "value": [
+    {
+      "Status": "Success",
+      "TotalResults": 1,
+      "ReturnedResults": 1,
+      "PageNumber": 1,
+      "TotalPages": 1,
+      "MaxResultsPerPage": 10000,
+      "MedicalEducations": [
+        {
+          "EducationName": "test",
+          "ProviderNPI": "1386028397",
+          "MedicalEducationStatus": "Active",
+          "MedicalEducationStatusReason": "Active",
+          "ModifiedOnDate": "2019-04-26T16:30:06Z"
+        }
+      ]
+    }
+  ]
+}

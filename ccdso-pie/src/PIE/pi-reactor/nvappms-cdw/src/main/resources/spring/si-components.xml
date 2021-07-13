@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:int="http://www.springframework.org/schema/integration"
+	xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+	xmlns:int-jdbc="http://www.springframework.org/schema/integration/jdbc"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:int-xml="http://www.springframework.org/schema/integration/xml"
+	xmlns:int-file="http://www.springframework.org/schema/integration/file"
+	xmlns:int-http="http://www.springframework.org/schema/integration/http"
+	xmlns:jpa="http://www.springframework.org/schema/data/jpa"
+	xmlns:int-jpa="http://www.springframework.org/schema/integration/jpa"
+	xsi:schemaLocation="http://www.springframework.org/schema/integration/jdbc http://www.springframework.org/schema/integration/jdbc/spring-integration-jdbc.xsd
+		http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-3.0.xsd
+		http://www.springframework.org/schema/integration/xml http://www.springframework.org/schema/integration/xml/spring-integration-xml.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd
+		http://www.springframework.org/schema/integration/file http://www.springframework.org/schema/integration/file/spring-integration-file.xsd
+		http://www.springframework.org/schema/data/jpa http://www.springframework.org/schema/data/jpa/spring-jpa-1.8.xsd
+		http://www.springframework.org/schema/integration/http http://www.springframework.org/schema/integration/http/spring-integration-http-5.0.xsd
+		http://www.springframework.org/schema/integration/jpa http://www.springframework.org/schema/integration/jpa/spring-integration-jpa.xsd
+		http://www.springframework.org/schema/integration http://www.springframework.org/schema/integration/spring-integration.xsd">
+
+
+
+	<int-http:inbound-gateway
+		id="nva-ppms-cdw-gateway" request-channel="nva-ppms-cdw-trigger"
+		request-payload-type="java.lang.String" supported-methods='POST'
+		reply-timeout-status-code-expression="200"
+		reply-timeout='10000' path="/pie/ppms/triggers/nvacdw">
+		<int-http:request-mapping consumes="text/xml" />
+	</int-http:inbound-gateway>
+	<int:channel id="nva-ppms-cdw-trigger" />
+
+	<int:service-activator
+		ref="nvaPpmsCdwActivator" id="nvaPpmsCdwActivatorId"
+		input-channel="nva-ppms-cdw-trigger" /><int-http:inbound-gateway
+		request-channel="cerner-trigger" id="cerner-gateway" path="/pie/ppms/triggers/cerner" supported-methods='POST'>
+		<int-http:request-mapping consumes="text/plain"/>
+</int-http:inbound-gateway>
+	<int:channel id="cerner-trigger"></int:channel>
+	<int:service-activator ref="cernerActivator"
+		id="cernerActivatorId"
+		input-channel="cerner-trigger"></int:service-activator>
+<int-http:inbound-gateway
+		request-channel="sftp-trigger" id="sftp-gateway" path="/pie/ppms/triggers/sftp" supported-methods='POST'>
+		<int-http:request-mapping consumes="text/plain"/>
+</int-http:inbound-gateway>
+	<int:channel id="sftp-trigger"></int:channel>
+	<int:service-activator ref="sftpActivator"
+		id="sftpActivatorId"
+		input-channel="sftp-trigger"></int:service-activator>
+<int-http:inbound-gateway
+		request-channel="integration-trigger" id="integration-gateway" path="/pie/ppms/triggers/integration" supported-methods='POST'>
+		<int-http:request-mapping consumes="text/xml"/>
+</int-http:inbound-gateway>
+	<int:channel id="integration-trigger"></int:channel>
+	<int:service-activator ref="integrationActivator"
+		id="integrationActivatorId"
+		input-channel="integration-trigger"></int:service-activator>
+
+</beans>

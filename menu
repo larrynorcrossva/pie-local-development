@@ -1,7 +1,9 @@
+
 #!/usr/bin/env bash
 
-. prerequisites-check.sh
-. app.env
+
+prerequisites-check.sh
+app.env
 
 
 if [ -f composed-services.sh ]; then
@@ -270,7 +272,7 @@ validate_compose_config() {
         return
 	}
 
-	echo "docker-compose.yml successfully resolved"
+	echo "docker-compose_vaos.yml successfully resolved"
 }
 
 # OPTARG The value of the last option argument processed by the getopts builtin command (see SHELL BUILTIN COMMANDS below).
@@ -683,22 +685,22 @@ select opt in "${options[@]}"
 do
     case $opt in
         "All staff")
-            ./run --dev all-staff
+            runx --dev all-staff
             ;;
         "All vet (VAFH)")
-            ./run --dev all-vet
+            runx --dev all-vet
             ;;
         "Build Menu")
              menu_build
              ;;
         "Start var (DEV)")
-            ./run --dev var
+            runx --dev var
             ;;
         "Start sm (DEV)")
-            ./run --dev sm
+            runx --dev sm
             ;;
         "Start vats (DEV)")
-            ./run --dev vats
+            runx --dev vats
             ;;
         "Validate Menu")
             menu_validate
@@ -841,26 +843,26 @@ do
              ;;
         "Start fixtures")
             rm -f var-oracle-db-mock/.cache
-            ./run fixtures
+            runx fixtures
             ;;
         "Check Database")
             validate_fixtures
             ;;
         "Start data core ss")
-            ./run data core ss
+            runx data core ss
             ;;
         "Start vet")
-            ./run vet
+            runx vet
             ;;
         "Start staff")
-            ./run staff
+            runx staff
             ;;
         "Start vista")
             echo -e "Starting vista... Waiting for a healthy status..."
-            ./run vista
+            runx vista
             ;;
         "Start via (after vista is healthy)")
-            ./run via
+            runx via
             ;;
         "Features Flags")
             #printf "Default VAR_DISABLED_FEATURES_SET = %s\n\n" "${VAR_DISABLED_FEATURES_SET}"
@@ -868,16 +870,16 @@ do
             menu_features
             ;;
         "Start var (DEV)")
-            ./run --dev var
+            runx --dev var
             ;;
         "Start sm (DEV)")
-            ./run --dev sm
+            runx --dev sm
             ;;
         "Start vats (DEV)")
-            ./run --dev vats
+            runx --dev vats
             ;;
         "Start All (DEV)")
-            ./run --dev all
+            runx --dev all
             ;;
         "Quit")
             break
@@ -892,7 +894,7 @@ force_gc() {
     docker stats --all --format "table {{.Name}}\t     {{.MemUsage}}" --no-stream --no-trunc
 
     printf "Forcing garbage collection on java containers\n"
-    for ID in $(docker ps -a -q); do docker exec -it $ID bash -c 'for JID in $(jcmd -l); do jcmd $JID GC.run &> /dev/null; done'; done &> /dev/null
+    for ID in $(docker ps -a -q); do docker exec -it $ID bash -c 'for JID in $(jcmd -l); do jcmd $JID GC.runx &> /dev/null; done'; done &> /dev/null
 
     for ID in $(docker ps -a -q); do docker exec -it $ID bash -c 'for JID in $(jcmd -l); do jmap -histo:live $JID  &> /dev/null; done'; done &> /dev/null
 

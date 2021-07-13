@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<DTS:ConnectionManager xmlns:DTS="www.microsoft.com/SqlServer/Dts"
+  DTS:ObjectName="vhacdwdwhsql52.vha.med.va.gov.CC_PIE"
+  DTS:DTSID="{0A0A2980-E06D-472A-9375-36EA03EF4AF2}"
+  DTS:CreationName="OLEDB">
+  <DTS:ObjectData>
+    <DTS:ConnectionManager
+      DTS:ConnectionString="Data Source=vhacdwdwhsql52.vha.med.va.gov;Initial Catalog=CC_PIE;Provider=SQLNCLI11.1;Integrated Security=SSPI;Auto Translate=False;" />
+  </DTS:ObjectData>
+</DTS:ConnectionManager>

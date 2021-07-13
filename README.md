@@ -1,7 +1,7 @@
 # ** DRAFT ** #
 ## NOTE: This is a stripped down version of the [Docker Local Development](https://coderepo.mobilehealth.va.gov/projects/DEV/repos/docker-local-development/browse) code that ONLY stands up the services required for VAR-related development ##
 
-### VAR Development Environment Setup ###
+### PIE Development Environment Setup ###
 For best performance, it is recommended you allocate at least 10GB to Docker in a machine of a minimum 16GB available RAM (I've allocated 14GB, and increased swap size to 2GB). Also, check the Disk tab in your Docker Preferences dialog. You'll need to allocate _at least_ 150GB of disk for your local Docker image repository or you'll see things getting removed.
 
 Before you begin, if you currently have Docker images that were pulled from the AbleVets ECR, you'll want to start fresh, by doing a Docker system prune as follows:
@@ -125,71 +125,8 @@ The stack should be stood up in this order to guarantee all dependencies are met
    
    `./run core`
    
-4. Stand up shared services (use optional --dev argument to run dev images for facility and vmm services):
 
-   `./run [--dev] ss`
-   
-5. Stand up vet services (if running vet apps):
 
-   `./run vet`
-  
-6. Stand up staff services (if running staff apps):
-
-   `./run staff`
-
-7. Stand up vaos-vista container:
-
-   `./run vista`
-
-8. Wait for the vaos-vista container to come up and show a healthy status (this may take two or three minutes)
-
-8. Stand up VIA services:
-
-   `./run via`
-
-9. Stand up necessary applications (use optional --dev argument to run the dev images)
-
-   `./run [--dev] var`
-   
-   `./run [--dev] sm`
-
-   `./run [--dev] vats` [if testing/developing VATS or modifying config]
-
-### Stopping containers ###
-To stop containers, run the stop script, adding additional parameters where necessary.  Note that running ./stop.sh
-will delete the Oracle container cache, and next startup will do a full rebuild
-
-- Stop all containers:
-   
-   `./stop all`
-
-- Stop NextGen Core containers:
-   
-   `./stop core`
-
-- Stop fixtures containers:
-   
-   `./stop fixtures`
-
-- Stop shared services containers:
-   
-   `./stop shared-services`
-
-- Stop VAR containers:
-   
-   `./stop var`
-
-- Stop SM containers:
-   
-   `./stop vm`
-
-- Stop VIA services containers:
-   
-   `./stop via`
-
-- Stop VistA container:
-   
-   `./stop vista`
 
 
 ### Building fixture and seed containers ###

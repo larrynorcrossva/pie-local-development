@@ -1,0 +1,59 @@
+
+Vista Pharmacy Provider Services
+
+Request URL
+https://dev.dws.ppms.va.gov/v1.0/GetVistaPharmacyProviderServices?modifiedOnOrAfterDate=2019-4-26&providerServicesPage=1&$expand=providerservices
+
+Output:
+
+{
+  "@odata.context": "https://dev.dws.ppms.va.gov/v1.0/$metadata#VistaPharmacyResponse(ProviderServices())",
+  "value": [
+    {
+      "Status": "Success",
+      "TotalResults": 2,
+      "ReturnedResults": 2,
+      "PageNumber": 1,
+      "TotalPages": 1,
+      "MaxResultsPerPage": 10000,
+      "ProviderServices": [
+        {
+          "CareSiteId": "e1d0f4ac-ab98-4a3e-afd6-5fc0d72a5054",
+          "ProviderNPI": "1104894468",
+          "CareSitename": null,
+          "CareSiteType": "Clinic",
+          "AddressStreet1": "6098 FM 311",
+          "AddressStreet2": null,
+          "AddressCity": "Spring Branch",
+          "AddressState": "TX",
+          "AddressZip": "78070",
+          "SpecialtyCode": "261QP2300X",
+          "Latitude": 29.82137,
+          "Longitude": -98.3452,
+          "OfficePhone": null,
+          "ProviderServiceStatus": "Active",
+          "ProviderServiceStatusReason": "Active",
+          "ModifiedOnDate": "2019-05-01T14:54:54Z"
+        },
+        {
+          "CareSiteId": "9050c167-7d80-4095-a5b8-e543db320a4c",
+          "ProviderNPI": "1104894468",
+          "CareSitename": null,
+          "CareSiteType": "Clinic",
+          "AddressStreet1": "6098 FM 311",
+          "AddressStreet2": null,
+          "AddressCity": "Spring Branch",
+          "AddressState": "TX",
+          "AddressZip": "78070",
+          "SpecialtyCode": "363L00000X",
+          "Latitude": 29.82137,
+          "Longitude": -98.3452,
+          "OfficePhone": null,
+          "ProviderServiceStatus": "Active",
+          "ProviderServiceStatusReason": "Active",
+          "ModifiedOnDate": "2019-05-01T14:54:54Z"
+        }
+      ]
+    }
+  ]
+}
